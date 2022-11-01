@@ -1,8 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import logo from "../../assets/logo.png";
 
 export default function Navbar() {
-  const location = useLocation();
-
   const logout = () => {
     document.cookie = `token=;`;
     // window.location.href = `${server.app}/logout`;
@@ -10,34 +9,19 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="tab">
-        <Link to="/groupchat">
-          <button
-            id="groupchat-link"
-            className={location.pathname === "/groupchat" ? "selected" : ""}
-          >
-            Group Chat
-          </button>
-        </Link>
-        <Link to="/users">
-          <button
-            id="users-link"
-            className={location.pathname === "/users" ? "selected" : "1"}
-          >
-            Manage Users
-          </button>
-        </Link>
-        <Link to="/doclist">
-          <button
-            id="doclist-link"
-            className={location.pathname === "/doclist" ? "selected" : ""}
-          >
-            Manage Docs
-          </button>
-        </Link>
-        {/* <Link>
-          <button onClick={logout}>Logout</button>
-        </Link> */}
+      <nav className="tab p-4">
+        <img alt="logo.png" className="logo" src={logo} />
+        <div className="tabs mt-3">
+          <Link to="/" className="mr-2">
+            <span>Dashboard</span>
+          </Link>
+          <Link to="/login" className="mr-2">
+            <span>login/register</span>
+          </Link>
+          <Link to="/" className="mr-2">
+            <span onClick={logout}>Logout</span>
+          </Link>
+        </div>
       </nav>
     </>
   );

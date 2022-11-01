@@ -15,7 +15,9 @@ export default function Login() {
             <hr className="line" />
           </div>
           <div>
-            <img alt="logo.png" className="logo" src={logo} />
+            <NavLink to="/">
+              <img alt="logo.png" className="logo" src={logo} />
+            </NavLink>
           </div>
           <Card className=" login-card p-5">
             <div className="text-center mb-3">
