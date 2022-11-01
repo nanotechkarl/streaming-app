@@ -4,7 +4,6 @@ import logo from "../../assets/logo.png";
 export default function Navbar() {
   const logout = () => {
     document.cookie = `token=;`;
-    // window.location.href = `${server.app}/logout`;
   };
 
   return (
