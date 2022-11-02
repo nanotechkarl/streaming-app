@@ -1,0 +1,52 @@
+.reviews-page {
+    color: #abacaf;
+    padding-top: 100px;
+    padding-left: 200px;
+    padding-right: 200px;
+    font-family: 'Bebas Neue';
+
+    .description {
+        margin-top: 40px;
+        font-family: sans-serif;
+    }
+
+    .overall {
+        font-family: 'Bebas Neue';
+    }
+
+    .pic {
+        height: 240px;
+        margin-bottom: 20px;
+    }
+
+    .rate-label {
+        font-size: 28px;
+    }
+
+    .rate-container {
+        margin-bottom: 1px;
+    }
+
+    .comment {
+        background-color: #abacaf;
+        border: 2px solid goldenrod;
+        width: 80vw;
+        height: 100px;
+        font-family: 'Sans serif';
+    }
+
+    .all-reviews {
+        height: 80vh;
+        max-height: 80vh;
+        width: 81vw;
+        overflow-y: auto;
+
+        .review-card {
+            width: 80vw;
+            background-color: transparent;
+            border: 1px solid #2a4252;
+            padding: 5px;
+            min-height: 100px;
+        }
+    }
+}

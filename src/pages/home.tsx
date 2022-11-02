@@ -1,10 +1,18 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { getMovies, searchActor, searchMovie } from "../store/movie.slice";
+import {
+  getMovies,
+  searchActor,
+  searchMovie,
+  searchByMovie,
+} from "../store/movie.slice";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import { Typeahead } from "react-bootstrap-typeahead"; // ES2015
+import useDebounce from "../hooks/useDebounce";
+import { Link } from "react-router-dom";
 
 const responsive = {
   superLargeDesktop: {
@@ -28,9 +36,12 @@ const responsive = {
 export default function Home() {
   //#region - HOOKS
   const dispatch = useAppDispatch();
-  const { movies, searchBy }: { [key: string]: any } = useAppSelector(
+  const { movies, searchBy, searched }: { [key: string]: any } = useAppSelector(
     (state) => state.movie
   );
+  const [count, setCount] = useState(0);
+  const [search, setSearch] = useState("");
+  useDebounce(() => handleSearch(search), 1000, [count]);
   //#endregion
 
   //#region - FETCH
@@ -40,15 +51,20 @@ export default function Home() {
 
   const fetchData = async () => {
     await dispatch(getMovies());
-    // await dispatch(searchActor());
   };
 
   //#endregion
 
+  const handleSearch = (text: any) => {
+    if (text) {
+      dispatch(searchByMovie(text));
+    }
+  };
+
   return (
-    <div className="home-page ml-4">
+    <div className="home-page ml-4 ">
       <div>
-        <h5 className="mb-4"> LATEST MOVIES</h5>
+        <h3 className="mb-4 mt-5"> LATEST MOVIES</h3>
         <Carousel
           responsive={responsive}
           ssr={true}
@@ -58,10 +74,17 @@ export default function Home() {
           {movies.map((data: any) => {
             return (
               <div className="movie-card-container" key={data.id}>
-                <Card className="movie-card">
-                  <img alt={data.title} src={data.imgUrl} />
+                <Card className="movie-card ">
+                  <img className="pic" alt={data.title} src={data.imgUrl} />
+                  <div className="image__overlay image__overlay--primary">
+                    <div className="image__title">{data.title}</div>
+                    <p className="image__description movie-title">
+                      <Link to={`/reviews?${data.id}`} className="mr-2">
+                        <span className="movie-title">Check Reviews</span>
+                      </Link>
+                    </p>
+                  </div>
                 </Card>
-                <h5 className="movie-title">{data.title}</h5>
               </div>
             );
           })}
@@ -70,10 +93,26 @@ export default function Home() {
       <div className="mt-5">
         <div>
           <Form>
-            <div className="mb-3">
+            <div className="mb-5">
               <Form.Group>
-                <h5 className="mr-5">Search by:</h5>
+                <h3 className="mr-5 search-header">Search by:</h3>
+                <Typeahead
+                  dropup={true}
+                  id="id"
+                  placeholder="Search..."
+                  className="search-input mr-5"
+                  labelKey="title"
+                  onInputChange={(text, e) => {
+                    setCount((c) => c + 1);
+                    setSearch(text);
+                  }}
+                  onChange={([selected]) => {
+                    if (selected) handleSearch(selected);
+                  }}
+                  options={movies.map((obj: any) => obj.title)}
+                />
                 <Form.Check
+                  className="radio"
                   inline
                   label="Actor"
                   name="group1"
@@ -84,6 +123,7 @@ export default function Home() {
                   onClick={() => dispatch(searchActor())}
                 />
                 <Form.Check
+                  className="radio"
                   inline
                   label="Movie"
                   name="group1"
@@ -93,16 +133,36 @@ export default function Home() {
                   defaultChecked={searchBy === "movie"}
                   onClick={() => dispatch(searchMovie())}
                 />
-                <Form.Control
-                  type="text"
-                  name="search"
-                  placeholder="Search..."
-                  className="search-input"
-                />
               </Form.Group>
             </div>
           </Form>
         </div>
+      </div>
+
+      <div>
+        {searched.length ? <h3 className="mb-4"> RESULTS:</h3> : <></>}
+        <Carousel
+          responsive={responsive}
+          ssr={true}
+          slidesToSlide={3}
+          className="mr-5"
+        >
+          {searched.map((data: any) => {
+            return (
+              <div className="movie-card-container" key={data.id}>
+                <Card className="movie-card">
+                  <img alt={data.title} src={data.imgUrl} />
+                  <div className="image__overlay image__overlay--primary">
+                    <div className="image__title">{data.title}</div>
+                    <Link to={`/reviews?${data.id}`} className="mr-2">
+                      <span className="movie-title">Check Reviews</span>
+                    </Link>
+                  </div>
+                </Card>
+              </div>
+            );
+          })}
+        </Carousel>
       </div>
     </div>
   );

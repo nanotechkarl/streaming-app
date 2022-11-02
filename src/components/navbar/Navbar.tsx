@@ -19,7 +19,10 @@ export default function Navbar() {
             <span>Dashboard</span>
           </Link>
           <Link to="/login" className="mr-2">
-            <span>login/register</span>
+            <span>Login/Register</span>
+          </Link>
+          <Link to="/control" className="mr-2">
+            <span>Control</span>
           </Link>
           <Link to="/" className="mr-2">
             <span onClick={logout}>Logout</span>

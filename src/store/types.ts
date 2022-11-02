@@ -11,5 +11,8 @@ export interface MovieState {
   loading: boolean;
   movies: [];
   searchBy?: string;
+  selected?: {};
+  searched?: [];
+  reviews?: [];
   error: string | undefined;
 }

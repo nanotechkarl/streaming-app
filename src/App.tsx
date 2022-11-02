@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Login, Register, Home, Error } from "./pages/index";
+import { Login, Register, Home, Error, Control, Reviews } from "./pages/index";
 import Navbar from "./components/navbar/Navbar";
 import { PrivateRoutes } from "./utils/RouteGuard";
 
@@ -18,6 +18,8 @@ function App() {
           }
         >
           <Route index element={<Home />} />
+          <Route path="/control" element={<Control />} />
+          <Route path="/reviews" element={<Reviews />} />
         </Route>
         <Route>
           <Route path="login" element={<Login />} />
