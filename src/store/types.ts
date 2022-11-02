@@ -7,8 +7,9 @@ export interface UserState {
   error: string | undefined;
 }
 
-export interface ChatState {
+export interface MovieState {
   loading: boolean;
-  history: [];
+  movies: [];
+  searchBy?: string;
   error: string | undefined;
 }

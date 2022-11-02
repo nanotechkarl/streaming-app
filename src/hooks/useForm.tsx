@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { omit } from "lodash";
+import { regex } from "../utils/global";
 
 interface ObjectAny {
   [key: string]: any;
@@ -35,19 +36,21 @@ const useForm = ({
     value: string
   ) => {
     switch (name) {
-      case "name":
-        conditionCase(value.length === 0, " Please enter your name", name);
+      case "fName":
+        conditionCase(
+          value.length === 0,
+          " Please enter your first name",
+          name
+        );
         break;
 
-      case "confirmPassword":
-        conditionCase(value.length === 0, " Please enter your name", name);
+      case "lName":
+        conditionCase(value.length === 0, " Please enter your last name", name);
         break;
 
       case "email":
         conditionCase(
-          !new RegExp(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          ).test(value),
+          !new RegExp(regex.email).test(value),
           "Enter a valid email address",
           name
         );
@@ -61,6 +64,13 @@ const useForm = ({
         );
         break;
 
+      case "cPassword":
+        conditionCase(
+          value.length === 0,
+          " Please confirm your password",
+          name
+        );
+        break;
       default:
         break;
     }
@@ -95,7 +105,7 @@ const useForm = ({
       callback();
       errorsEmpty = {};
     } else {
-      customForm(inputType, errorsEmpty);
+      customForm(inputType, errorsEmpty, values);
 
       setErrors({
         ...errors,
@@ -104,11 +114,19 @@ const useForm = ({
     }
   };
 
-  const customForm = (inputType: string, errorsEmpty: ObjectAny) => {
+  const customForm = (
+    inputType: string,
+    errorsEmpty: ObjectAny,
+    values: any
+  ) => {
     switch (inputType) {
       case "register":
-        if (!values.name) {
-          errorsEmpty.name = `Please enter your name`;
+        if (!values.fName) {
+          errorsEmpty.fName = `Please enter your first name`;
+        }
+
+        if (!values.lName) {
+          errorsEmpty.lName = `Please enter your last name`;
         }
 
         if (!values.email) {
@@ -116,11 +134,11 @@ const useForm = ({
         }
 
         if (!values.password) {
-          errorsEmpty.password = `Please enter your password`;
+          errorsEmpty.password = `Password must be 8 characters minimum`;
         }
 
-        if (!values.confirmPassword) {
-          errorsEmpty.confirmPassword = `Please confirm your password`;
+        if (!values.cPassword) {
+          errorsEmpty.cPassword = `Please confirm your password`;
         }
         break;
 

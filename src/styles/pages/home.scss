@@ -1,0 +1,29 @@
+.home-page{
+    color: #abacaf;
+
+    .movie-card-container {
+        margin-left: 40px;
+    }
+
+    .movie-card {
+        max-height: 200px;
+        background-color: transparent;
+
+        img {
+            height: 150px;
+            border-radius: 5px;
+        }
+    }
+
+    .movie-title {
+        text-transform: capitalize;
+
+    }
+
+    .search-input {
+        display: inline;
+        width: 300px;
+        background-color: transparent;
+        height: 30px;
+    }
+}

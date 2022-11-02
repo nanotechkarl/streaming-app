@@ -1,5 +1,11 @@
 .tab {
     background-image: linear-gradient(rgba(254, 254, 254, 0.11), #141414f0);
+    color: #abacaf9c !important;
+    font-size: 18px;
+
+    .user {
+        text-transform: capitalize;
+    }
 
     .logo{
         width: 170px;
