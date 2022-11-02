@@ -15,29 +15,40 @@ export default function Register() {
 
   //#region - REGISTER
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const { name, email, password, confirmPassword } = values as any;
+    const { fName, lName, email, password, cPassword, role } = values as any;
 
-    if (confirmPassword !== password) {
+    if (cPassword !== password) {
       alert("Password does not match");
       return false;
     }
 
-    const register = await dispatch(registerUser({ email, password, name }));
+    const permissions = [role];
+    const register = await dispatch(
+      registerUser({
+        email,
+        password,
+        firstName: fName,
+        lastName: lName,
+        permissions,
+      })
+    );
 
     if (register.payload) {
       navigate(pages.registerSuccess);
+      alert("Registration Success. Please login");
     }
   };
   //#endregion
 
   //#region - CUSTOM HOOKS
-  const inputCount = 5;
+  const inputCount = 6;
 
   const { handleChange, values, errors, handleSubmit } = useForm({
     callback: onSubmit,
     inputCount,
     inputType: "register",
   });
+
   //#endregion
 
   return (
@@ -123,7 +134,37 @@ export default function Register() {
             <span>&nbsp;</span>
           )}
 
-          <div className="text-center">
+          <div>
+            <span> Register as? </span>
+            <Form.Check
+              className="radio"
+              inline
+              label="User"
+              name="role"
+              type="radio"
+              id={`radio-admin`}
+              value="user"
+              onInput={handleChange}
+            />
+            <Form.Check
+              className="radio"
+              inline
+              label="Admin"
+              name="role"
+              type="radio"
+              id={`radio-admin`}
+              value="admin"
+              onInput={handleChange}
+            />
+            {errors.role ? (
+              <span className="input-error err-name">{errors.role}</span>
+            ) : (
+              <span>&nbsp;</span>
+            )}
+          </div>
+
+          <div className="text-center mt-3">
+            <small>*Registering requires admin approval</small>
             <Button className="login-btn mt-3" variant="dark" type="submit">
               Submit
             </Button>

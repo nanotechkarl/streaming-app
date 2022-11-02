@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import React, { useEffect } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 
+//TODO debug error on reload of this page
 export default function Reviews() {
   /* #region - Hooks */
   const params = useParams();
@@ -67,7 +68,7 @@ export default function Reviews() {
               <Row>
                 <Col>{obj.userId}</Col>
                 <Col xs={8}>{obj.message}</Col>
-                <Col>{obj.rating}</Col>
+                <Col>{obj.rating} STARS</Col>
               </Row>
             </Card>
           );

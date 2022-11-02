@@ -79,7 +79,7 @@ export default function Home() {
                   <div className="image__overlay image__overlay--primary">
                     <div className="image__title">{data.title}</div>
                     <p className="image__description movie-title">
-                      <Link to={`/reviews?${data.id}`} className="mr-2">
+                      <Link to={`/reviews/${data.id}`} className="mr-2">
                         <span className="movie-title">Check Reviews</span>
                       </Link>
                     </p>
@@ -154,7 +154,7 @@ export default function Home() {
                   <img alt={data.title} src={data.imgUrl} />
                   <div className="image__overlay image__overlay--primary">
                     <div className="image__title">{data.title}</div>
-                    <Link to={`/reviews?${data.id}`} className="mr-2">
+                    <Link to={`/reviews/${data.id}`} className="mr-2">
                       <span className="movie-title">Check Reviews</span>
                     </Link>
                   </div>

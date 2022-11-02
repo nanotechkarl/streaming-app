@@ -53,20 +53,28 @@ export const registerUser = createAsyncThunk(
   "user/register",
   async (
     {
-      name,
+      firstName,
+      lastName,
       email,
       password,
-    }: { name: string; email: string; password: string },
+      permissions,
+    }: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+      permissions: string[];
+    },
     thunkApi
   ) => {
     try {
       const response = await axios.post(
         `${server.api}/users/register`,
-        { fullName: name, email, password },
+        { firstName, lastName, email, password, permissions },
         { headers }
       );
 
-      if (response.data.message === "User already exists") {
+      if (response.data.message.includes("exist")) {
         alert("User already exists");
         return;
       }

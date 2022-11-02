@@ -71,6 +71,11 @@ const useForm = ({
           name
         );
         break;
+
+      case "role":
+        conditionCase(value.length === 0, " Please choose role", name);
+        break;
+
       default:
         break;
     }
@@ -121,6 +126,9 @@ const useForm = ({
   ) => {
     switch (inputType) {
       case "register":
+        if (!values.role) {
+          errorsEmpty.role = `Please choose role`;
+        }
         if (!values.fName) {
           errorsEmpty.fName = `Please enter your first name`;
         }
@@ -140,6 +148,7 @@ const useForm = ({
         if (!values.cPassword) {
           errorsEmpty.cPassword = `Please confirm your password`;
         }
+
         break;
 
       default:
