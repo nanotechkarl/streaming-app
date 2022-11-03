@@ -114,16 +114,10 @@ const Table = (props) => {
   const customCell = ({ row, key, index }) => {
     if (props.custom?.usersEmail && key === "id") {
       return <td key={index}>{props.custom.usersEmail(row)}</td>;
-    } else if (key === "file") {
+    } else if (key === "cost") {
       return (
-        <td key={index}>
-          <button
-            className="table-options"
-            style={{ color: "blue" }}
-            onClick={() => props.fileDownload(row)}
-          >
-            {row[key]}
-          </button>
+        <td key={index} className="text-center">
+          {row[key]}
         </td>
       );
     } else {

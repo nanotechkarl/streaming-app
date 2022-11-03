@@ -109,7 +109,7 @@ export default function AddMovie(props: any) {
               )}
             </Form.Group>
             <Form.Group controlId="formBasicCost">
-              <Form.Label>Cost</Form.Label>
+              <Form.Label>Cost ($million)</Form.Label>
               <Form.Control
                 type="text"
                 name="cost"

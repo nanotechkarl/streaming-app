@@ -2,10 +2,16 @@ import AddMovie from "../components/modal/AddMovie";
 import AddActor from "../components/modal/AddActor";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
-import { deleteMovie, getAllActors, getMovies } from "../store/movie.slice";
+import {
+  deleteMovie,
+  editMovie,
+  getAllActors,
+  getMovies,
+} from "../store/movie.slice";
 import Table from "../components/table/Table";
 import { Col, Row } from "react-bootstrap";
 import DeleteModal from "../components/modal/DeleteModal";
+import EditMovie from "../components/modal/EditMovie";
 
 export default function Control() {
   /* #region  - HOOKS */
@@ -19,6 +25,9 @@ export default function Control() {
   const [actorsCounter, setActorsCounter] = useState(-1);
   const [deleteModalState, setDeleteModalState] = useState(false);
   const [deleteFile, setdeleteFile] = useState("");
+  const [editModalState, setEditModalState] = useState(false);
+  const [editedFile, setEditedFile] = useState("");
+  const [lastEditedFile, setLastEditedFile] = useState({});
 
   /* #endregion */
 
@@ -26,7 +35,7 @@ export default function Control() {
   useEffect(() => {
     fetchMovies();
     setMoviesCount(movies.length);
-  }, [moviesCounter]); //eslint-disable-line
+  }, [moviesCounter, lastEditedFile]); //eslint-disable-line
 
   useEffect(() => {
     fetchActors();
@@ -43,7 +52,23 @@ export default function Control() {
 
   //#endregion
 
-  const showEdit = () => {};
+  const showEdit = (file: any) => {
+    setEditedFile(file);
+    setEditModalState(true);
+  };
+  const updateMovie = async (file: any) => {
+    console.log("fileExt :", file);
+    //TODO
+    const savedFile = await dispatch(
+      editMovie({
+        movieId: file.movieId,
+        imgUrl: file.imgUrl,
+        cost: file.cost,
+      })
+    );
+    setLastEditedFile(savedFile);
+  };
+
   const showDelete = async (file: any) => {
     setDeleteModalState(true);
     setdeleteFile(file);
@@ -89,9 +114,8 @@ export default function Control() {
         <Col>
           <h3>MOVIES</h3>
           <Table
-            header={["TITLE", "YEAR RELEASE"]}
-            keys={["title", "yearRelease"]}
-            functionKey="id"
+            header={["TITLE", "YEAR RELEASE", "COST($million)"]}
+            keys={["title", "yearRelease", "cost"]}
             data={movies}
             onEdit={showEdit}
             onDelete={showDelete}
@@ -99,6 +123,17 @@ export default function Control() {
             custom={{ disableDelete: { date: new Date() } }}
           />
           <AddMovie add={(x: any) => setMoviesCounter(x)} />
+          <DeleteModal
+            onHide={() => setDeleteModalState(false)}
+            handleDelete={confirmDelete}
+            show={deleteModalState}
+          />
+          <EditMovie
+            onHide={() => setEditModalState(false)}
+            onEdit={updateMovie}
+            show={editModalState}
+            file={editedFile}
+          />
         </Col>
         <Col>
           <h3> ACTORS </h3>
@@ -112,11 +147,6 @@ export default function Control() {
             customRender={renderEmptyRowActor(actorsCount)}
           />
           <AddActor add={(x: any) => setActorsCounter(x)} />
-          <DeleteModal
-            onHide={() => setDeleteModalState(false)}
-            handleDelete={confirmDelete}
-            show={deleteModalState}
-          />
         </Col>
       </Row>
     </div>

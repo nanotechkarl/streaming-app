@@ -229,7 +229,7 @@ export const getAllActors = createAsyncThunk(
 );
 /* #endregion */
 
-/* #region  - Delete move */
+/* #region  - Delete movie */
 export const deleteMovie = createAsyncThunk(
   "movie/deleteMovie",
   async (movieId: string, thunkApi) => {
@@ -237,6 +237,37 @@ export const deleteMovie = createAsyncThunk(
       const response = await axios.delete(`${server.api}/movies/${movieId}`, {
         headers,
       });
+
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - Edit movie */
+export const editMovie = createAsyncThunk(
+  "movie/editMovie",
+  async (
+    {
+      movieId,
+      imgUrl,
+      cost,
+    }: { movieId: string; imgUrl: string; cost: string },
+    thunkApi
+  ) => {
+    try {
+      const response = await axios.patch(
+        `${server.api}/movies/${movieId}`,
+        {
+          imgUrl,
+          cost: parseInt(cost),
+        },
+        {
+          headers,
+        }
+      );
 
       return response.data.data;
     } catch (error: any) {
@@ -398,7 +429,7 @@ const movie = createSlice({
     });
     /* #endregion */
 
-    /* #region - Get all actors*/
+    /* #region - Delete movie*/
     builder.addCase(deleteMovie.pending, (state) => {
       state.loading = true;
     });
@@ -410,6 +441,23 @@ const movie = createSlice({
       }
     );
     builder.addCase(deleteMovie.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Edit movie*/
+    builder.addCase(editMovie.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      editMovie.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = "";
+      }
+    );
+    builder.addCase(editMovie.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
