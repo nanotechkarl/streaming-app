@@ -190,16 +190,12 @@ export const deleteUserById = createAsyncThunk(
 );
 /* #endregion */
 
-//TODO PayloadAction type
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     clear() {
-      //clear store
       storage.removeItem("persist:root");
-
-      // state = {} as RootState;
     },
   },
   extraReducers: (builder) => {

@@ -96,7 +96,17 @@ const Table = (props) => {
 
   //#region - CUSTOM
   const customDisable = (row) => {
-    return props.custom?.disableDelete?.id === row.id
+    let days = 0;
+    if (props.custom?.disableDelete?.date) {
+      const day = 1000 * 60 * 60 * 24;
+
+      const present = props.custom?.disableDelete?.date;
+      const movieRelease = new Date(row.yearRelease);
+      const time = present.getTime() - movieRelease.getTime();
+      days = Math.round(time / day);
+    }
+
+    return props.custom?.disableDelete?.date && days <= 365
       ? "table-options disabled"
       : "table-options";
   };

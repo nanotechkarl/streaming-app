@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
 import { addActor, addActorToMovie } from "../../store/movie.slice";
 import Select from "react-select";
 
-export default function AddActor() {
+export default function AddActor(props: any) {
   /* #region - Hooks */
   const dispatch = useAppDispatch();
   const [showAddModal, setShowActor] = useState(false);
@@ -14,6 +14,7 @@ export default function AddActor() {
   );
   const [selectedMovie, setSelectedMovie] = useState("");
   const [selectedActor, setSelectedActor] = useState("");
+  const [counter, setCounter] = useState(0);
 
   /* #endregion */
 
@@ -43,6 +44,8 @@ export default function AddActor() {
           actorDetailsId,
         })
       );
+      setCounter((prev) => prev + 1);
+      props.add(counter);
     }
   };
 
@@ -63,6 +66,8 @@ export default function AddActor() {
         actorDetailsId: selectedActor,
       })
     );
+    setCounter((prev) => prev + 1);
+    props.add(counter);
   };
   //#endregion
 
@@ -82,7 +87,11 @@ export default function AddActor() {
 
   return (
     <div>
-      <Button className="add-review" variant="dark" onClick={showAddActor}>
+      <Button
+        className="add-review mt-2 mb-3"
+        variant="dark"
+        onClick={showAddActor}
+      >
         Add actors to a movie
       </Button>
       <Modal

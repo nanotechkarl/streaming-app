@@ -8,6 +8,7 @@ export default function AddMovie(props: any) {
   /* #region - Hooks */
   const dispatch = useAppDispatch();
   const [showMovieModal, setShowMovie] = useState(false);
+  const [counter, setCounter] = useState(0);
   /* #endregion */
 
   const onSubmit = async () => {
@@ -28,6 +29,8 @@ export default function AddMovie(props: any) {
     if (res.payload) {
       alert("Successfully added movie");
       setShowMovie(false);
+      setCounter((prev) => prev + 1);
+      props.add(counter);
     }
   };
 
@@ -48,7 +51,11 @@ export default function AddMovie(props: any) {
 
   return (
     <div>
-      <Button className="add-review" variant="dark" onClick={showAddMovie}>
+      <Button
+        className="add-review mt-2 mb-3"
+        variant="dark"
+        onClick={showAddMovie}
+      >
         Add movie
       </Button>
       <Modal show={showMovieModal} onHide={hideAddMovie} backdrop="static">
