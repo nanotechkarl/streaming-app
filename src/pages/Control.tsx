@@ -1,9 +1,17 @@
-import { useAppDispatch } from "../hooks/useTypedSelector";
+import AddMovie from "../components/modal/AddMovie";
+import AddActor from "../components/modal/AddActor";
 
 export default function Control() {
-  /* #region - Hooks */
-  const dispatch = useAppDispatch();
-  /* #endregion */
-
-  return <div>CONTROL</div>;
+  return (
+    <div className="control-page">
+      <div>
+        <h3>MOVIES</h3>
+        <AddMovie />
+      </div>
+      <div>
+        <h3> ACTORS </h3>
+        <AddActor />
+      </div>
+    </div>
+  );
 }

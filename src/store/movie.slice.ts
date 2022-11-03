@@ -91,6 +91,128 @@ export const getMovieReviews = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - Add a movie */
+export const addMovie = createAsyncThunk(
+  "movie/addMovie",
+  async (
+    {
+      title,
+      description,
+      imgUrl,
+      cost,
+      yearRelease,
+    }: {
+      title: string;
+      description: string;
+      imgUrl: string;
+      cost: number;
+      yearRelease: string;
+    },
+    thunkApi
+  ) => {
+    try {
+      const response = await axios.post(
+        `${server.api}/movies`,
+        {
+          title,
+          description,
+          imgUrl,
+          cost,
+          yearRelease,
+        },
+        { headers }
+      );
+
+      if (response.data.message.includes("exist")) {
+        alert("Movie title already exists");
+        return;
+      }
+
+      return response;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - Add Actor */
+export const addActor = createAsyncThunk(
+  "movie/addActor",
+  async (
+    {
+      firstName,
+      lastName,
+      gender,
+      age,
+    }: {
+      firstName: string;
+      lastName: string;
+      gender: string;
+      age: number;
+    },
+    thunkApi
+  ) => {
+    try {
+      const response = await axios.post(
+        `${server.api}/actor-details`,
+        {
+          firstName,
+          lastName,
+          gender,
+          age,
+        },
+        { headers }
+      );
+
+      if (response.data.message.includes("exist")) {
+        alert("Actor already exists");
+        return;
+      }
+
+      return response;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - Add Actor to movie */
+export const addActorToMovie = createAsyncThunk(
+  "movie/addActorToMovie",
+  async (
+    {
+      movieId,
+      actorDetailsId,
+    }: {
+      movieId: string;
+      actorDetailsId: string;
+    },
+    thunkApi
+  ) => {
+    try {
+      const response = await axios.post(
+        `${server.api}/actors`,
+        {
+          movieId,
+          actorDetailsId,
+        },
+        { headers }
+      );
+
+      if (response.data.message.includes("exist")) {
+        return;
+      }
+
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 const movie = createSlice({
   name: "movie",
   initialState,
@@ -175,6 +297,51 @@ const movie = createSlice({
     builder.addCase(getMovieReviews.rejected, (state, action) => {
       state.loading = false;
       state.reviews = [];
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Add a movie*/
+    builder.addCase(addMovie.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addMovie.fulfilled, (state, action: PayloadAction<any>) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(addMovie.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Add Actor*/
+    builder.addCase(addActor.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addActor.fulfilled, (state, action: PayloadAction<any>) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(addActor.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Add Actor to movie*/
+    builder.addCase(addActorToMovie.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      addActorToMovie.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = "";
+      }
+    );
+    builder.addCase(addActorToMovie.rejected, (state, action) => {
+      state.loading = false;
       state.error = action.error.message;
     });
     /* #endregion */

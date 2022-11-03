@@ -36,6 +36,14 @@ const useForm = ({
     value: string
   ) => {
     switch (name) {
+      case "title":
+      case "description":
+      case "imgUrl":
+      case "cost":
+      case "yearRelease":
+        conditionCase(value.length === 0, ` Please enter ${name}`, name);
+        break;
+
       case "fName":
         conditionCase(
           value.length === 0,
@@ -108,7 +116,6 @@ const useForm = ({
       Object.keys(values).length >= inputCount
     ) {
       callback();
-      errorsEmpty = {};
     } else {
       customForm(inputType, errorsEmpty, values);
 
@@ -147,6 +154,28 @@ const useForm = ({
 
         if (!values.cPassword) {
           errorsEmpty.cPassword = `Please confirm your password`;
+        }
+
+        break;
+
+      case "addMovie":
+        if (!values.title) {
+          errorsEmpty.title = `Please enter title`;
+        }
+        if (!values.description) {
+          errorsEmpty.description = `Please enter description`;
+        }
+
+        if (!values.imgUrl) {
+          errorsEmpty.imgUrl = `Please enter image url`;
+        }
+
+        if (!values.cost) {
+          errorsEmpty.cost = `Please enter cost`;
+        }
+
+        if (!values.yearRelease) {
+          errorsEmpty.yearRelease = `Please choose date`;
         }
 
         break;
