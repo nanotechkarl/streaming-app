@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
   deleteMovie,
+  editActor,
   editMovie,
   getAllActors,
   getMovies,
@@ -12,6 +13,7 @@ import Table from "../components/table/Table";
 import { Col, Row } from "react-bootstrap";
 import DeleteModal from "../components/modal/DeleteModal";
 import EditMovie from "../components/modal/EditMovie";
+import EditActor from "../components/modal/EditActor";
 
 export default function Control() {
   /* #region  - HOOKS */
@@ -23,12 +25,16 @@ export default function Control() {
   const [moviesCounter, setMoviesCounter] = useState(-1);
   const [actorsCount, setActorsCount] = useState(0);
   const [actorsCounter, setActorsCounter] = useState(-1);
-  const [deleteModalState, setDeleteModalState] = useState(false);
+  const [deleteMovieState, setDeleteMovieState] = useState(false);
+  const [deleteActorState, setDeleteActorState] = useState(false);
   const [deleteFile, setdeleteFile] = useState("");
-  const [editModalState, setEditModalState] = useState(false);
+  const [deleteActor, setdeleteActor] = useState("");
+  const [editMovieState, setEditMovieState] = useState(false);
+  const [editActorState, setEditActorState] = useState(false);
   const [editedFile, setEditedFile] = useState("");
+  const [editedActor, setEditedActor] = useState("");
   const [lastEditedFile, setLastEditedFile] = useState({});
-
+  const [lastEditedActor, setLastEditedActor] = useState({});
   /* #endregion */
 
   //#region - FETCH
@@ -52,13 +58,13 @@ export default function Control() {
 
   //#endregion
 
-  const showEdit = (file: any) => {
+  /* #region  - MOVIE CONTROLS */
+  const showEditMovie = (file: any) => {
     setEditedFile(file);
-    setEditModalState(true);
+    setEditMovieState(true);
   };
+
   const updateMovie = async (file: any) => {
-    console.log("fileExt :", file);
-    //TODO
     const savedFile = await dispatch(
       editMovie({
         movieId: file.movieId,
@@ -69,17 +75,50 @@ export default function Control() {
     setLastEditedFile(savedFile);
   };
 
-  const showDelete = async (file: any) => {
-    setDeleteModalState(true);
+  const showDeleteMovie = async (file: any) => {
+    setDeleteMovieState(true);
     setdeleteFile(file);
   };
-  const confirmDelete = async () => {
+
+  const confirmDeleteMovie = async () => {
     const movieId = deleteFile;
 
     await dispatch(deleteMovie(movieId));
-    setDeleteModalState(false);
+    setDeleteMovieState(false);
     setMoviesCounter((prev) => prev - 1);
   };
+  /* #endregion */
+
+  /* #region  - //TODO ACTOR CONTROLS */
+  const showEditActor = (file: any) => {
+    setEditedActor(file);
+    setEditActorState(true);
+  };
+
+  const updateActor = async (file: any) => {
+    // const savedFile = await dispatch(
+    //   // editActor({
+    //   //   movieId: file.movieId,
+    //   //   imgUrl: file.imgUrl,
+    //   //   cost: file.cost,
+    //   // })
+    // );
+    // setLastEditedActor(savedFile);
+  };
+
+  const showDeleteActor = async (actor: any) => {
+    setDeleteActorState(true);
+    setdeleteActor(actor);
+  };
+
+  const confirmDeleteActor = async () => {
+    const movieId = deleteActor;
+
+    await dispatch(deleteMovie(movieId));
+    setDeleteActorState(false);
+    setActorsCounter((prev) => prev - 1);
+  };
+  /* #endregion */
 
   //#region - RENDER
   const renderEmptyRowMovie = (count: number) => {
@@ -117,21 +156,21 @@ export default function Control() {
             header={["TITLE", "YEAR RELEASE", "COST($million)"]}
             keys={["title", "yearRelease", "cost"]}
             data={movies}
-            onEdit={showEdit}
-            onDelete={showDelete}
+            onEdit={showEditMovie}
+            onDelete={showDeleteMovie}
             customRender={renderEmptyRowMovie(moviesCount)}
             custom={{ disableDelete: { date: new Date() } }}
           />
           <AddMovie add={(x: any) => setMoviesCounter(x)} />
           <DeleteModal
-            onHide={() => setDeleteModalState(false)}
-            handleDelete={confirmDelete}
-            show={deleteModalState}
+            onHide={() => setDeleteMovieState(false)}
+            handleDelete={confirmDeleteMovie}
+            show={deleteMovieState}
           />
           <EditMovie
-            onHide={() => setEditModalState(false)}
+            onHide={() => setEditMovieState(false)}
             onEdit={updateMovie}
-            show={editModalState}
+            show={editMovieState}
             file={editedFile}
           />
         </Col>
@@ -142,11 +181,22 @@ export default function Control() {
             keys={["firstName", "lastName"]}
             functionKey="id"
             data={actors}
-            onEdit={showEdit}
-            onDelete={showDelete}
+            onEdit={showEditActor}
+            onDelete={showDeleteActor}
             customRender={renderEmptyRowActor(actorsCount)}
           />
           <AddActor add={(x: any) => setActorsCounter(x)} />
+          <DeleteModal
+            onHide={() => setDeleteActorState(false)}
+            handleDelete={confirmDeleteActor}
+            show={deleteActorState}
+          />
+          <EditActor
+            onHide={() => setEditActorState(false)}
+            onEdit={updateActor}
+            show={editActorState}
+            file={editedActor}
+          />
         </Col>
       </Row>
     </div>

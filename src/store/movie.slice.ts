@@ -277,6 +277,47 @@ export const editMovie = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - Edit actor */
+export const editActor = createAsyncThunk(
+  "movie/editActor",
+  async (
+    {
+      actorId,
+      firstName,
+      lastName,
+      gender,
+      age,
+    }: {
+      actorId: string;
+      firstName: string;
+      lastName: string;
+      gender: string;
+      age: string;
+    },
+    thunkApi
+  ) => {
+    try {
+      const response = await axios.patch(
+        `${server.api}/actor-details/${actorId}`,
+        {
+          firstName,
+          lastName,
+          gender,
+          age: parseInt(age),
+        },
+        {
+          headers,
+        }
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 const movie = createSlice({
   name: "movie",
   initialState,
@@ -458,6 +499,23 @@ const movie = createSlice({
       }
     );
     builder.addCase(editMovie.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Edit actor*/
+    builder.addCase(editActor.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      editActor.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = "";
+      }
+    );
+    builder.addCase(editActor.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
