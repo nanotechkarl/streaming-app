@@ -1,0 +1,35 @@
+.control-page {
+    margin: 30px;
+    
+    
+}
+
+.add-actor-component {
+    .add-actor {
+        margin-top: 20px;
+    }
+
+    .or {
+        transform: translate(0, 40%);
+    }
+
+}
+
+.modal-content {
+    background-color: #37383b ;
+    color: white;
+
+    input:focus { 
+        background-color: transparent;
+    }
+
+    .css-1s2u09g-control {
+        background-color: white !important;
+    }
+
+
+    .search-input {
+        color: gray;
+    }
+
+}

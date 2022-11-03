@@ -19,6 +19,7 @@ const initialState: MovieState = {
   searched: [],
   selected: {},
   reviews: [],
+  actors: [],
   error: "",
 };
 /* #endregion */
@@ -213,6 +214,21 @@ export const addActorToMovie = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - get All actors */
+export const getAllActors = createAsyncThunk(
+  "movie/getAllActors",
+  async (args, thunkApi) => {
+    try {
+      const response = await axios.get(`${server.api}/actor-details`);
+
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 const movie = createSlice({
   name: "movie",
   initialState,
@@ -342,6 +358,25 @@ const movie = createSlice({
     );
     builder.addCase(addActorToMovie.rejected, (state, action) => {
       state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Get all actors*/
+    builder.addCase(getAllActors.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      getAllActors.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.actors = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(getAllActors.rejected, (state, action) => {
+      state.loading = false;
+      state.actors = [];
       state.error = action.error.message;
     });
     /* #endregion */
