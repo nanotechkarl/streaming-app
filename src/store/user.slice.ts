@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import storage from "redux-persist/lib/storage";
 import { server, getCookie } from "../utils/global";
 import { UserState } from "./types";
 
@@ -37,7 +38,12 @@ export const loginUser = createAsyncThunk(
       const result = response.data.data;
 
       document.cookie = `token=${result.token}; max-age=${60 * 60 * 24 * 14}`; //2 weeks
-      return { email: result.email, id: result.id, name: result.name };
+      return {
+        email: result.email,
+        id: result.id,
+        name: result.name,
+        permissions: result.permissions,
+      };
     } catch (error: any) {
       if (error.response.data.message.includes("approved")) {
         alert(error.response.data.message);
@@ -188,7 +194,14 @@ export const deleteUserById = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    clear() {
+      //clear store
+      storage.removeItem("persist:root");
+
+      // state = {} as RootState;
+    },
+  },
   extraReducers: (builder) => {
     /* #region - Login */
     builder.addCase(loginUser.pending, (state) => {
@@ -294,4 +307,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { clear } = userSlice.actions;
 export default userSlice.reducer;

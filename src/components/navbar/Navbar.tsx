@@ -1,34 +1,45 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { useAppSelector } from "../../hooks/useTypedSelector";
+import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
+import { clear } from "../../store/user.slice";
 
 export default function Navbar() {
-  const name = useAppSelector((state) => state.user.current.name);
+  const { name, permissions } = useAppSelector((state) => state.user.current);
+  const dispatch = useAppDispatch();
 
   const logout = () => {
     document.cookie = `token=;`;
+    dispatch(clear());
+    window.location.assign("/login");
   };
 
   return (
     <>
       <nav className="tab p-4">
-        <img alt="logo.png" className="logo" src={logo} />
+        <Link to="/" className="mr-2">
+          <img alt="logo.png" className="logo" src={logo} />
+        </Link>
         <div className="tabs mt-3">
-          <span className="mr-3 user">Hi {name},</span>
-          <Link to="/" className="mr-2">
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/login" className="mr-2">
-            <span>Login/Register</span>
-          </Link>
-          <Link to="/control" className="mr-2">
-            <span>Control</span>
-          </Link>
-          <Link to="/" className="mr-2">
-            <span onClick={logout}>Logout</span>
-          </Link>
+          {name && <span className="mr-3 user">Hi {name}</span>}
+          {!name && (
+            <Link to="/login" className="mr-2">
+              <span>Login/Register</span>
+            </Link>
+          )}
+          {permissions?.includes("admin") && (
+            <Link to="/control" className="mr-2">
+              <span>Control</span>
+            </Link>
+          )}
+
+          {name && (
+            <Link to="/login" className="mr-2">
+              <span onClick={logout}>Logout</span>
+            </Link>
+          )}
         </div>
       </nav>
+      <Outlet />
     </>
   );
 }

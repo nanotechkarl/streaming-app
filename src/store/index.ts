@@ -1,8 +1,9 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore, combineReducers, AnyAction } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import userSlice from "./user.slice";
 import movieSlice from "./movie.slice";
+import { Reducer } from "react";
 
 const persistConfig = {
   key: "root",
