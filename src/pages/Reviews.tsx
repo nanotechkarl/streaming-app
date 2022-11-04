@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
   addMovieReview,
+  getAllActorsByMovie,
   getMovieById,
   getMovieReviews,
 } from "../store/movie.slice";
@@ -15,15 +16,13 @@ export default function Reviews() {
   /* #region - Hooks */
   const params = useParams();
   const dispatch = useAppDispatch();
-  const { selected, reviews }: { [key: string]: any } = useAppSelector(
-    (state) => state.movie
-  );
+  const { selected, reviews, selectedActors }: { [key: string]: any } =
+    useAppSelector((state) => state.movie);
   const { current }: { [key: string]: any } = useAppSelector(
     (state) => state.user
   );
   const [rating, setRating] = useState(0);
   const [edit, setEdit] = useState(false);
-  console.log("edit :", edit);
   const [comment, setComment] = useState("");
   const [submitCounter, setSubmitCounter] = useState(0);
   /* #endregion */
@@ -34,8 +33,9 @@ export default function Reviews() {
 
   useEffect(() => {
     //TODO bug here when find is undefined from one then go to another
+    //One solution would be create new endpoint and refetch
     fetchData();
-    const user = reviews.find(
+    const user = reviews?.find(
       (obj: any) => obj.userId === current.id && obj.movieId === params.id
     );
     // console.log("user :", user);
@@ -44,7 +44,6 @@ export default function Reviews() {
     setComment(user?.message);
 
     return () => {
-      console.log("ge");
       setEdit(false);
       setComment("");
     };
@@ -54,6 +53,7 @@ export default function Reviews() {
     if (params?.id) {
       await dispatch(getMovieById(params.id));
       await dispatch(getMovieReviews(params.id));
+      await dispatch(getAllActorsByMovie(params.id));
     }
   };
 
@@ -99,20 +99,31 @@ export default function Reviews() {
     <div className="reviews-page">
       <Row>
         <Col>
-          <h3>{selected?.title}</h3>
-          <div className="pic-container">
-            <img className="pic" alt={selected.title} src={selected.imgUrl} />
+          <div className="title-container">
+            <h3>{selected?.title}</h3>
+            <div className="pic-container">
+              <img className="pic" alt={selected.title} src={selected.imgUrl} />
+            </div>
           </div>
-          <h3> ACTORS </h3>
-          {/* TODO- TEMP */}
-          <p> Jennifer Doe, May Carter, June Duenas</p>
         </Col>
         <Col>
           <div className="description">
-            <p className="overall"> Overall rating: 4.5 *</p>
-            <p> {selected.description} </p>
             {/* TODO- TEMP */}
+            <h3 className="overall"> Overall rating: 4.5 *</h3>
+            <p> {selected.description} </p>
           </div>
+          <h3> ACTORS </h3>
+          {selectedActors?.map((obj: any) => {
+            return (
+              <Card className="actor-card" key={obj.id}>
+                <div>
+                  {obj.firstName} {obj.lastName}
+                </div>
+                <div> gender: {obj.gender}</div>
+                <div> age: {obj.age}</div>
+              </Card>
+            );
+          })}
         </Col>
       </Row>
       <div className="rate-container">
@@ -166,10 +177,15 @@ export default function Reviews() {
       <div className="all-reviews mt-5">
         <h3> ALL REVIEWS </h3>
         {reviews.map((obj: any) => {
+          const date = new Date(obj.datePosted);
+          const format = date.toDateString();
           return (
             <Card className="review-card mb-3" key={obj.id}>
               <Row>
-                <Col>{obj.userId}</Col>
+                <Col>
+                  <div>{obj.userId}</div>
+                  <div>{format}</div>
+                </Col>
                 <Col xs={8}>{obj.message}</Col>
                 <Col>{obj.rating} STARS</Col>
               </Row>

@@ -3,6 +3,7 @@ import AddActor from "../components/modal/AddActor";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
+  deleteCelebrity,
   deleteMovie,
   editActor,
   editMovie,
@@ -14,6 +15,7 @@ import { Col, Row } from "react-bootstrap";
 import DeleteModal from "../components/modal/DeleteModal";
 import EditMovie from "../components/modal/EditMovie";
 import EditActor from "../components/modal/EditActor";
+import { approveUser, getUsers } from "../store/user.slice";
 
 export default function Control() {
   /* #region  - HOOKS */
@@ -21,20 +23,33 @@ export default function Control() {
   const { movies, actors }: { [key: string]: any } = useAppSelector(
     (state) => state.movie
   );
+  const { accounts }: { [key: string]: any } = useAppSelector(
+    (state) => state.user
+  );
   const [moviesCount, setMoviesCount] = useState(0);
   const [moviesCounter, setMoviesCounter] = useState(-1);
   const [actorsCount, setActorsCount] = useState(0);
   const [actorsCounter, setActorsCounter] = useState(-1);
+  const [usersCount, setUsersCount] = useState(0);
+  const [usersCounter, setUsersCounter] = useState(-1);
   const [deleteMovieState, setDeleteMovieState] = useState(false);
   const [deleteActorState, setDeleteActorState] = useState(false);
+  const [deleteUserState, setDeleteUserState] = useState(false);
   const [deleteFile, setdeleteFile] = useState("");
   const [deleteActor, setdeleteActor] = useState("");
+  const [deleteUser, setdeleteUser] = useState("");
   const [editMovieState, setEditMovieState] = useState(false);
   const [editActorState, setEditActorState] = useState(false);
+  const [editUserState, setEditUserState] = useState(false);
+
   const [editedFile, setEditedFile] = useState("");
   const [editedActor, setEditedActor] = useState("");
+  const [editedUser, setEditedUser] = useState("");
+
   const [lastEditedFile, setLastEditedFile] = useState({});
   const [lastEditedActor, setLastEditedActor] = useState({});
+  const [lastEditedUser, setLastEditedUser] = useState({});
+
   /* #endregion */
 
   //#region - FETCH
@@ -45,8 +60,13 @@ export default function Control() {
 
   useEffect(() => {
     fetchActors();
-    setActorsCount(movies.length);
-  }, [actorsCounter]); //eslint-disable-line
+    setActorsCount(actors.length);
+  }, [actorsCounter, lastEditedActor]); //eslint-disable-line
+
+  useEffect(() => {
+    fetchUsers();
+    setUsersCount(accounts.length);
+  }, [usersCounter]); //eslint-disable-line
 
   const fetchMovies = async () => {
     await dispatch(getMovies());
@@ -54,6 +74,10 @@ export default function Control() {
 
   const fetchActors = async () => {
     await dispatch(getAllActors());
+  };
+
+  const fetchUsers = async () => {
+    await dispatch(getUsers());
   };
 
   //#endregion
@@ -90,20 +114,22 @@ export default function Control() {
   /* #endregion */
 
   /* #region  - //TODO ACTOR CONTROLS */
-  const showEditActor = (file: any) => {
-    setEditedActor(file);
+  const showEditActor = (actor: any) => {
+    setEditedActor(actor);
     setEditActorState(true);
   };
 
-  const updateActor = async (file: any) => {
-    // const savedFile = await dispatch(
-    //   // editActor({
-    //   //   movieId: file.movieId,
-    //   //   imgUrl: file.imgUrl,
-    //   //   cost: file.cost,
-    //   // })
-    // );
-    // setLastEditedActor(savedFile);
+  const updateActor = async (actor: any) => {
+    const saveActor = await dispatch(
+      editActor({
+        actorId: actor.actorId,
+        firstName: actor.firstName,
+        lastName: actor.lastName,
+        gender: actor.gender,
+        age: actor.age,
+      })
+    );
+    setLastEditedActor(saveActor);
   };
 
   const showDeleteActor = async (actor: any) => {
@@ -112,11 +138,49 @@ export default function Control() {
   };
 
   const confirmDeleteActor = async () => {
-    const movieId = deleteActor;
+    const actor: any = deleteActor;
 
-    await dispatch(deleteMovie(movieId));
+    await dispatch(deleteCelebrity(actor.id));
     setDeleteActorState(false);
     setActorsCounter((prev) => prev - 1);
+  };
+  /* #endregion */
+
+  /* #region  - //TODO USER CONTROLS */
+  const showEditUser = (file: any) => {
+    setEditedUser(file);
+    setEditUserState(true);
+  };
+
+  const updateUser = async (file: any) => {
+    // const savedFile = await dispatch(
+    //   // editUser({
+    //   //   movieId: file.movieId,
+    //   //   imgUrl: file.imgUrl,
+    //   //   cost: file.cost,
+    //   // })
+    // );
+    // setLastEditedUser(savedFile);
+  };
+
+  const showDeleteUser = async (User: any) => {
+    setDeleteUserState(true);
+    setdeleteUser(User);
+  };
+
+  const confirmDeleteUser = async () => {
+    const movieId = deleteUser;
+
+    await dispatch(deleteMovie(movieId));
+    setDeleteUserState(false);
+    setUsersCounter((prev) => prev - 1);
+  };
+
+  const showApprovedUser = async (userId: string) => {
+    const approved = true;
+    //TODO use confirm modal
+    await dispatch(approveUser({ userId, approved }));
+    setUsersCounter((prev) => prev + 1);
   };
   /* #endregion */
 
@@ -138,6 +202,20 @@ export default function Control() {
     if (emptyRows - count > 0) {
       return [...Array(emptyRows - count)].map((rows, i) => (
         <tr key={i}>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      ));
+    }
+  };
+
+  const renderEmptyRowUser = (count: number) => {
+    const emptyRows = 6;
+    if (emptyRows - count > 0) {
+      return [...Array(emptyRows - count)].map((rows, i) => (
+        <tr key={i}>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -177,9 +255,8 @@ export default function Control() {
         <Col>
           <h3> ACTORS </h3>
           <Table
-            header={["FIRST NAME", "LAST NAME"]}
-            keys={["firstName", "lastName"]}
-            functionKey="id"
+            header={["FIRST NAME", "LAST NAME", "GENDER", "AGE"]}
+            keys={["firstName", "lastName", "gender", "age"]}
             data={actors}
             onEdit={showEditActor}
             onDelete={showDeleteActor}
@@ -195,18 +272,40 @@ export default function Control() {
             onHide={() => setEditActorState(false)}
             onEdit={updateActor}
             show={editActorState}
-            file={editedActor}
+            actor={editedActor}
           />
         </Col>
       </Row>
+      <Row>
+        <Col>
+          <h3>USERS</h3>
+          <Table
+            header={["EMAIL", "APPROVED", "PERMISSIONS"]}
+            keys={["email", "approved", "permissions"]}
+            functionKey="id"
+            data={accounts}
+            onEdit={showEditUser}
+            onDelete={showDeleteUser}
+            onApproval={showApprovedUser}
+            customRender={renderEmptyRowUser(usersCount)}
+          />
+        </Col>
+        <Col></Col>
+      </Row>
+
       <div>
-        <h5 className="todo">TODO: APPROVAL OF USERS</h5>
         <h5 className="todo">
           TODO: REVIEWS IS TEMPORARILY APPROVED. NEEDS ADMIN TO APPROVE
         </h5>
+        <h5 className="todo"> TODO: ALERTS SHOULD BE INTEGRATED TO THE PAGE</h5>
         <h5 className="todo">TODO: CONVERT REVIEW ID TO NAME</h5>
         <h5 className="todo">TODO: OVERALL RATING</h5>
+        <h5 className="todo"> TODO: NAVGUARD</h5>
         <h5 className="todo">TODO: SEARCH BY ACTOR</h5>
+        <h5 className="todo"> TODO: USERS EDIT/DELETE</h5>
+        <h5 className="todo"> TODO: ACTORS DELETE DISABLE</h5>
+        <h5 className="todo"> TODO: PICTURE ACTOR</h5>
+        <h5 className="todo"> TODO: EMAIL TO Altamash.Kazi@cognixia.com</h5>
       </div>
     </div>
   );

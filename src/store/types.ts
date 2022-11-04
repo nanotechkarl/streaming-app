@@ -12,6 +12,7 @@ export interface MovieState {
   movies: [];
   searchBy?: string;
   selected?: {};
+  selectedActors?: [];
   searched?: [];
   reviews?: [];
   actors?: [];

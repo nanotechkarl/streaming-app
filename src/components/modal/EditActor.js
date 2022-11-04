@@ -5,39 +5,48 @@ import useForm from "../../hooks/useForm";
 
 export default function EditActor(props) {
   //#region - PROPS
-  const { onEdit, file, ...otherProps } = props;
+  const { onEdit, actor, ...otherProps } = props;
   //#endregion
 
   //#region - INITIAL INPUT DISPLAY
   useEffect(() => {
-    values.imgUrl = props.file.imgUrl;
-    values.cost = props.file.cost;
+    values.fName = props.actor.fName;
+    values.lName = props.actor.lName;
+    values.gender = props.actor.gender;
+    values.age = props.actor.age;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //#endregion
 
   //#region - SAVE
   function validate() {
-    if (!values.imgUrl && !values.cost) {
+    console.log("values :", values);
+
+    if (!values.fName && !values.lName && !values.gender && !values.age) {
       props.onHide();
       return;
     }
 
     return {
-      imgUrl: values.imgUrl || file.imgUrl,
-      cost: values.cost || file.cost,
+      firstName: values.fName || actor.firstName,
+      lastName: values.lName || actor.lastName,
+      gender: values.gender || actor.gender,
+      age: values.age || actor.age,
     };
   }
 
   const onSubmit = async () => {
     const fileObject = validate();
     if (!fileObject) return;
-    props.onHide();
     props.onEdit({
-      movieId: props.file?.id,
-      imgUrl: fileObject.imgUrl,
-      cost: fileObject.cost,
+      actorId: props.actor?.id,
+      firstName: fileObject.firstName,
+      lastName: fileObject.lastName,
+      gender: fileObject.gender,
+      age: fileObject.age,
     });
+    props.onHide();
   };
   //#endregion
 
@@ -50,39 +59,71 @@ export default function EditActor(props) {
   return (
     <Modal {...otherProps} backdrop="static" centered>
       <Modal.Header>
-        <Modal.Title>Upload</Modal.Title>
+        <Modal.Title>Edit Actor</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <div className="modal-upload">
             <Form.Group>
-              <Form.Label>Image URL</Form.Label>
+              <Form.Label>First Name</Form.Label>
               <Form.Control
-                defaultValue={props.file.imgUrl}
+                defaultValue={props.actor.firstName}
                 type="text"
                 id="file-description"
-                name="imgUrl"
-                placeholder="Enter new image url"
+                name="fName"
+                placeholder="Enter first name"
                 onInput={handleChange}
               />
-              {errors.imgUrl ? (
-                <p className="input-error">{errors.imgUrl}</p>
+              {errors.fName ? (
+                <p className="input-error">{errors.fName}</p>
               ) : (
                 <p>&nbsp;</p>
               )}
             </Form.Group>
             <Form.Group>
-              <Form.Label>Cost ($million)</Form.Label>
+              <Form.Label>Last Name</Form.Label>
               <Form.Control
-                defaultValue={props.file.cost}
+                defaultValue={props.actor.lastName}
                 type="text"
                 id="movie-cost"
-                name="cost"
-                placeholder="Enter cost"
+                name="lName"
+                placeholder="Enter last name"
                 onInput={handleChange}
               />
-              {errors.cost ? (
-                <p className="input-error">{errors.cost}</p>
+              {errors.lName ? (
+                <p className="input-error">{errors.lName}</p>
+              ) : (
+                <p>&nbsp;</p>
+              )}
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Gender</Form.Label>
+              <Form.Control
+                defaultValue={props.actor.gender}
+                type="text"
+                id="movie-cost"
+                name="gender"
+                placeholder="Enter gender"
+                onInput={handleChange}
+              />
+              {errors.gender ? (
+                <p className="input-error">{errors.gender}</p>
+              ) : (
+                <p>&nbsp;</p>
+              )}
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Age</Form.Label>
+              <Form.Control
+                defaultValue={props.actor.age}
+                type="text"
+                id="movie-cost"
+                name="age"
+                placeholder="Enter age"
+                onInput={handleChange}
+              />
+              {errors.age ? (
+                <p className="input-error">{errors.age}</p>
               ) : (
                 <p>&nbsp;</p>
               )}

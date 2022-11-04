@@ -8,6 +8,7 @@
     .description {
         margin-top: 40px;
         font-family: sans-serif;
+        min-width: 300px;
     }
 
     .overall {
@@ -57,5 +58,17 @@
         padding: 5px;
         width: 80vw;
         height: 150px;
+    }
+
+    .actor-card {
+        width: 100px;
+        display: inline-block;
+        margin-right: 5px;
+        min-height: 140px;
+        font-size: 10px;
+        color: black
+    }
+
+    .title-container {
     }
 }

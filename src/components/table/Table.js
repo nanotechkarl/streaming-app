@@ -114,10 +114,28 @@ const Table = (props) => {
   const customCell = ({ row, key, index }) => {
     if (props.custom?.usersEmail && key === "id") {
       return <td key={index}>{props.custom.usersEmail(row)}</td>;
-    } else if (key === "cost") {
+    } else if (key === "cost" || key === "permissions") {
       return (
         <td key={index} className="text-center">
           {row[key]}
+        </td>
+      );
+    } else if (key === "approved") {
+      return (
+        <td key={index} className="text-left">
+          {`${row[key]}`}
+          {!row[key] && props.onApproval && (
+            <button
+              className="table-options"
+              onClick={() =>
+                props.onApproval(
+                  props.functionKey ? row[props.functionKey] : row
+                )
+              }
+            >
+              &nbsp;- Approve?
+            </button>
+          )}
         </td>
       );
     } else {
@@ -149,6 +167,7 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  onApproval: PropTypes.func,
   custom: PropTypes.object,
   customRender: PropTypes.array,
 };

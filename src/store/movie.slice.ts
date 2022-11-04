@@ -289,6 +289,26 @@ export const deleteMovie = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - Delete actor */
+export const deleteCelebrity = createAsyncThunk(
+  "movie/deleteActor",
+  async (actorId: string, thunkApi) => {
+    try {
+      const response = await axios.delete(
+        `${server.api}/actor-details/${actorId}`,
+        {
+          headers,
+        }
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 /* #region  - Edit movie */
 export const editMovie = createAsyncThunk(
   "movie/editMovie",
@@ -353,6 +373,20 @@ export const editActor = createAsyncThunk(
         }
       );
 
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - Get all actors by movie */
+export const getAllActorsByMovie = createAsyncThunk(
+  "movie/getAllActorsByMovie",
+  async (movieId: string, thunkApi) => {
+    try {
+      const response = await axios.get(`${server.api}/actors/${movieId}`);
       return response.data.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
@@ -513,6 +547,25 @@ const movie = createSlice({
     });
     /* #endregion */
 
+    /* #region - Get all actors by movie*/
+    builder.addCase(getAllActorsByMovie.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      getAllActorsByMovie.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.selectedActors = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(getAllActorsByMovie.rejected, (state, action) => {
+      state.loading = false;
+      state.actors = [];
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
     /* #region - Delete movie*/
     builder.addCase(deleteMovie.pending, (state) => {
       state.loading = true;
@@ -525,6 +578,23 @@ const movie = createSlice({
       }
     );
     builder.addCase(deleteMovie.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Delete actor*/
+    builder.addCase(deleteCelebrity.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      deleteCelebrity.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = "";
+      }
+    );
+    builder.addCase(deleteCelebrity.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
