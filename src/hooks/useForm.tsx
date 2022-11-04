@@ -41,6 +41,7 @@ const useForm = ({
       case "imgUrl":
       case "cost":
       case "yearRelease":
+      case "message":
         conditionCase(value.length === 0, ` Please enter ${name}`, name);
         break;
 
@@ -132,6 +133,11 @@ const useForm = ({
     values: any
   ) => {
     switch (inputType) {
+      case "review":
+        if (!values.message) {
+          errorsEmpty.message = `Please enter review`;
+        }
+        break;
       case "register":
         if (!values.role) {
           errorsEmpty.role = `Please choose role`;

@@ -199,6 +199,15 @@ export default function Control() {
           />
         </Col>
       </Row>
+      <div>
+        <h5 className="todo">TODO: APPROVAL OF USERS</h5>
+        <h5 className="todo">
+          TODO: REVIEWS IS TEMPORARILY APPROVED. NEEDS ADMIN TO APPROVE
+        </h5>
+        <h5 className="todo">TODO: CONVERT REVIEW ID TO NAME</h5>
+        <h5 className="todo">TODO: OVERALL RATING</h5>
+        <h5 className="todo">TODO: SEARCH BY ACTOR</h5>
+      </div>
     </div>
   );
 }

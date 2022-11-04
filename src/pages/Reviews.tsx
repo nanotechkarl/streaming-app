@@ -1,8 +1,15 @@
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
-import { getMovieById, getMovieReviews } from "../store/movie.slice";
+import {
+  addMovieReview,
+  getMovieById,
+  getMovieReviews,
+} from "../store/movie.slice";
 import { useParams } from "react-router-dom";
-import React, { useEffect } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import useForm from "../hooks/useForm";
+import { Rating } from "react-simple-star-rating";
+import useDidMountEffect from "../hooks/useDidMountEffect";
 
 export default function Reviews() {
   /* #region - Hooks */
@@ -11,24 +18,88 @@ export default function Reviews() {
   const { selected, reviews }: { [key: string]: any } = useAppSelector(
     (state) => state.movie
   );
+  const { current }: { [key: string]: any } = useAppSelector(
+    (state) => state.user
+  );
+  const [rating, setRating] = useState(0);
+  const [edit, setEdit] = useState(false);
+  console.log("edit :", edit);
+  const [comment, setComment] = useState("");
+  const [submitCounter, setSubmitCounter] = useState(0);
   /* #endregion */
 
-  useEffect(() => {
+  useDidMountEffect(() => {
     fetchData();
+  }, [rating, submitCounter]); //eslint-disable-line
+
+  useEffect(() => {
+    //TODO bug here when find is undefined from one then go to another
+    fetchData();
+    const user = reviews.find(
+      (obj: any) => obj.userId === current.id && obj.movieId === params.id
+    );
+    // console.log("user :", user);
+
+    setRating(user?.rating);
+    setComment(user?.message);
+
+    return () => {
+      console.log("ge");
+      setEdit(false);
+      setComment("");
+    };
   }, []); //eslint-disable-line
 
   const fetchData = async () => {
     if (params?.id) {
-      dispatch(getMovieById(params.id));
-      dispatch(getMovieReviews(params.id));
+      await dispatch(getMovieById(params.id));
+      await dispatch(getMovieReviews(params.id));
     }
   };
+
+  const onSubmit = async () => {
+    const { message }: { message: string } = values as any;
+
+    if (message && params.id) {
+      await dispatch(
+        addMovieReview({
+          message,
+          movieId: params.id,
+          datePosted: new Date(),
+        })
+      );
+    }
+    setSubmitCounter((prev) => prev + 1);
+    setEdit(false);
+    setComment(message);
+  };
+
+  const ratingChanged = async (rate: number) => {
+    if (rate && params.id) {
+      await dispatch(
+        addMovieReview({
+          rating: rate,
+          movieId: params.id,
+        })
+      );
+      setRating(rate);
+    }
+  };
+  //#region - CUSTOM HOOKS
+  const inputCount = 1;
+
+  const { handleChange, values, errors, handleSubmit } = useForm({
+    callback: onSubmit,
+    inputCount,
+    inputType: "review",
+  });
+  //#endregion
 
   return (
     <div className="reviews-page">
       <Row>
         <Col>
-          <h3>{selected.title}</h3>
+          <h3>{selected?.title}</h3>
           <div className="pic-container">
             <img className="pic" alt={selected.title} src={selected.imgUrl} />
           </div>
@@ -46,24 +117,57 @@ export default function Reviews() {
       </Row>
       <div className="rate-container">
         <span className="rate-label">RATE THIS MOVIE </span>
-        {/* TODO-TEMP */}
-        <span> * * * * *</span>
+        {/* RATING */}
+        <Rating onClick={ratingChanged} size={20} initialValue={rating} />
       </div>
       <div>
-        <h3>WRITE A REVIEW</h3>
-        <textarea className="comment" placeholder="Write your review here..." />
-        <div className="add-review-container">
-          <Button className="add-review" variant="dark" type="submit">
-            Submit
-          </Button>
-        </div>
+        {comment && !edit ? (
+          <>
+            <h3> Your Review</h3>
+            <span>&nbsp;</span>
+            <div className="your-review comment">
+              <p> {comment}</p>
+            </div>
+            <div className="add-review-container">
+              <Button
+                className="add-review mt-2"
+                variant="dark"
+                onClick={() => setEdit(true)}
+              >
+                Edit
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3>WRITE A REVIEW</h3>
+            {errors.message ? (
+              <span className="input-error err-name">{errors.message}</span>
+            ) : (
+              <span>&nbsp;</span>
+            )}
+            <Form onSubmit={handleSubmit}>
+              <textarea
+                className="comment"
+                placeholder="Write your review here..."
+                name="message"
+                onInput={handleChange}
+              />
+              <div className="add-review-container">
+                <Button className="add-review" variant="dark" type="submit">
+                  Submit
+                </Button>
+              </div>
+            </Form>
+          </>
+        )}
       </div>
       {/* TODO - PUT THIS IN A NEW COMPONENT */}
       <div className="all-reviews mt-5">
         <h3> ALL REVIEWS </h3>
         {reviews.map((obj: any) => {
           return (
-            <Card className="review-card" key={obj.id}>
+            <Card className="review-card mb-3" key={obj.id}>
               <Row>
                 <Col>{obj.userId}</Col>
                 <Col xs={8}>{obj.message}</Col>

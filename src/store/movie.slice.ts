@@ -92,6 +92,49 @@ export const getMovieReviews = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - Add a movie review or rating*/
+export const addMovieReview = createAsyncThunk(
+  "movie/addMovieReview",
+  async (
+    {
+      movieId,
+      message,
+      rating,
+      datePosted,
+    }: {
+      movieId: string;
+      message?: string;
+      rating?: number;
+      datePosted?: Date;
+    },
+    thunkApi
+  ) => {
+    try {
+      token = getCookie("token");
+      const response = await axios.put(
+        `${server.api}/reviews`,
+        {
+          movieId,
+          message,
+          datePosted,
+          rating,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 /* #region  - Add a movie */
 export const addMovie = createAsyncThunk(
   "movie/addMovie",
