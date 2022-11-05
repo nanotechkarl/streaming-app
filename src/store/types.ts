@@ -1,3 +1,4 @@
+/* #region  - State types */
 export interface UserState {
   loading: boolean;
   accounts: [];
@@ -17,8 +18,26 @@ export interface MovieState {
   reviews?: [];
   actors?: [];
   yourReview?: {};
-  error: string | undefined;
-  moviesOfActor?: [];
-  actorSelected?: {};
   pendingReviews?: [];
+  error: string | undefined;
 }
+
+export interface ActorState {
+  loading: boolean;
+  selectedActors?: [];
+  actors: [];
+  moviesOfActor: [];
+  actorSelected: {};
+  searched: [];
+  error: string | undefined;
+}
+
+export interface ReviewState {
+  loading: boolean;
+  reviews?: [];
+  yourReview?: {};
+  pendingReviews?: [];
+  error: string | undefined;
+}
+
+/* #endregion */

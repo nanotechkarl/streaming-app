@@ -1,9 +1,10 @@
-import { configureStore, combineReducers, AnyAction } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import userSlice from "./user.slice";
 import movieSlice from "./movie.slice";
-import { Reducer } from "react";
+import actorSlice from "./actor.slice";
+import reviewSlice from "./review.slice";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,8 @@ const persistConfig = {
 const reducer = combineReducers({
   user: userSlice,
   movie: movieSlice,
+  actor: actorSlice,
+  review: reviewSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

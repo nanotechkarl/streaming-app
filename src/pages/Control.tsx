@@ -2,16 +2,12 @@ import AddMovie from "../components/modal/AddMovie";
 import AddActor from "../components/modal/AddActor";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
-import {
-  approvePendingReview,
-  deleteCelebrity,
-  deleteMovie,
-  editActor,
-  editMovie,
-  getAllActors,
-  getMovies,
-  getPendingReviews,
-} from "../store/movie.slice";
+import { deleteMovie, editMovie, getMovies } from "../store/movie.slice";
+
+import { approvePendingReview, getPendingReviews } from "../store/review.slice";
+
+import { deleteCelebrity, editActor, getAllActors } from "../store/actor.slice";
+
 import Table from "../components/table/Table";
 import { Col, Row } from "react-bootstrap";
 import DeleteModal from "../components/modal/DeleteModal";
@@ -22,8 +18,18 @@ import { approveUser, getUsers } from "../store/user.slice";
 export default function Control() {
   /* #region  - HOOKS */
   const dispatch = useAppDispatch();
-  const { movies, actors, pendingReviews }: { [key: string]: any } =
-    useAppSelector((state) => state.movie);
+  const { movies }: { [key: string]: any } = useAppSelector(
+    //TODO USE TYPES FROM STORE
+    (state) => state.movie
+  );
+
+  const { pendingReviews }: { [key: string]: any } = useAppSelector(
+    (state) => state.review
+  );
+
+  const { actors }: { [key: string]: any } = useAppSelector(
+    (state) => state.actor
+  );
   const { accounts }: { [key: string]: any } = useAppSelector(
     (state) => state.user
   );
@@ -55,7 +61,7 @@ export default function Control() {
 
   /* #endregion */
 
-  //#region - FETCH
+  //#region - RENDER
   useEffect(() => {
     fetchMovies();
     setMoviesCount(movies.length);
@@ -322,7 +328,9 @@ export default function Control() {
         <h5 className="todo">
           TODO: USERS EDIT/DELETE ALSO EDIT REVIEW COLLECTION(NAME)
         </h5>
+        <h5> Refactor store</h5>
         <h5 className="todo"> TODO: ACTORS DELETE DISABLE</h5>
+        <h5>TODO: Approval UI</h5>
 
         <p>minor</p>
         <h5> EMAIL TO Altamash.Kazi@cognixia.com</h5>

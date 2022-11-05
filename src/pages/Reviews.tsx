@@ -1,12 +1,12 @@
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
+import { clearMovieState, getMovieById } from "../store/movie.slice";
 import {
   addMovieReview,
-  clearState,
-  getAllActorsByMovie,
-  getMovieById,
+  clearReviewState,
   getMovieReviews,
   getmyReviewMovie,
-} from "../store/movie.slice";
+} from "../store/review.slice";
+import { getAllActorsByMovie } from "../store/actor.slice";
 import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
@@ -16,11 +16,20 @@ import useDidMountEffect from "../hooks/useDidMountEffect";
 import { getCookie } from "../utils/global";
 
 export default function Reviews() {
-  /* #region - Hooks */
+  /* #region - HOOKS */
   const params = useParams();
   const dispatch = useAppDispatch();
-  const { selected, reviews, selectedActors }: { [key: string]: any } =
-    useAppSelector((state) => state.movie);
+  const { selected }: { [key: string]: any } = useAppSelector(
+    (state) => state.movie
+  );
+
+  const { reviews }: { [key: string]: any } = useAppSelector(
+    (state) => state.review
+  );
+
+  const { selectedActors }: { [key: string]: any } = useAppSelector(
+    (state) => state.actor
+  );
   const { current }: { [key: string]: any } = useAppSelector(
     (state) => state.user
   );
@@ -31,11 +40,13 @@ export default function Reviews() {
   const [isLoading, setIsLoading] = useState(false);
   /* #endregion */
 
+  /* #region  - RENDER */
   useEffect(() => {
     fetchData();
 
     return () => {
-      dispatch(clearState());
+      dispatch(clearMovieState());
+      dispatch(clearReviewState());
     };
   }, []); //eslint-disable-line
 
@@ -70,6 +81,10 @@ export default function Reviews() {
     }
   };
 
+  /* #endregion */
+
+  /* #region  - SUBMIT */
+
   const onSubmit = async () => {
     const { message }: { message: string } = values as any;
 
@@ -103,6 +118,8 @@ export default function Reviews() {
       setRating(rate);
     }
   };
+  /* #endregion */
+
   //#region - CUSTOM HOOKS
   const inputCount = 1;
 

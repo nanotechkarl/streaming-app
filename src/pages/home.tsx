@@ -1,13 +1,14 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {
-  getMovies,
   searchActor,
   searchMovie,
   searchByMovie,
-  searchActors,
-  getAllActors,
+  getMovies,
 } from "../store/movie.slice";
+
+import { searchActors, getAllActors } from "../store/actor.slice";
+
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
@@ -52,14 +53,17 @@ const responsive = {
 export default function Home() {
   //#region - HOOKS
   const dispatch = useAppDispatch();
-  const { movies, searchBy, searched, actors }: { [key: string]: any } =
-    useAppSelector((state) => state.movie);
+  const { movies, searchBy, searched }: { [key: string]: any } = useAppSelector(
+    (state) => state.movie
+  );
+  const { actors, searched: searchedActors }: { [key: string]: any } =
+    useAppSelector((state) => state.actor);
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
   useDebounce(() => handleSearch(search), 1000, [count]);
   //#endregion
 
-  //#region - FETCH
+  //#region - RENDER
   useEffect(() => {
     fetchData();
   }, []); //eslint-disable-line
@@ -159,7 +163,6 @@ export default function Home() {
       </div>
 
       <div>
-        {searched.length ? <h3 className="mb-4"> Showing results:</h3> : <></>}
         <Carousel responsive={responsive} ssr={true} className="mr-5">
           {searchBy === "movie" &&
             searched.map((data: any) => {
@@ -178,7 +181,7 @@ export default function Home() {
               );
             })}
           {searchBy === "actor" &&
-            searched.map((data: any) => {
+            searchedActors.map((data: any) => {
               return (
                 <Card className="actor-card-container" key={data?.id}>
                   <Row className="actor-col">

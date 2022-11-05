@@ -2,16 +2,44 @@ import { useEffect } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
-import { getActor, getMoviesOfActor } from "../store/movie.slice";
+import {
+  clearActorState,
+  getActor,
+  getMoviesOfActor,
+} from "../store/actor.slice";
 import Carousel from "react-multi-carousel";
 
 export default function Actor() {
+  /* #region  - HOOKS */
   const dispatch = useAppDispatch();
   const params = useParams();
-
   const { moviesOfActor, actorSelected }: { [key: string]: any } =
-    useAppSelector((state) => state.movie);
+    useAppSelector((state) => state.actor);
 
+  /* #endregion */
+
+  /* #region  - RENDER */
+  useEffect(() => {
+    fetchData();
+
+    return () => {
+      dispatch(clearActorState());
+    };
+  }, []); //eslint-disable-line
+
+  const fetchData = async () => {
+    if (params?.id) {
+      //   setIsLoading(true);
+      await dispatch(getMoviesOfActor(params.id));
+      await dispatch(getActor(params.id));
+
+      //   setIsLoading(false);
+    }
+  };
+
+  /* #endregion */
+
+  /* #region  - UTILS */
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -44,20 +72,7 @@ export default function Actor() {
       slidesToSlide: 1,
     },
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []); //eslint-disable-line
-
-  const fetchData = async () => {
-    if (params?.id) {
-      //   setIsLoading(true);
-      await dispatch(getMoviesOfActor(params.id));
-      await dispatch(getActor(params.id));
-
-      //   setIsLoading(false);
-    }
-  };
+  /* #endregion */
 
   return (
     <Container className="home-page">

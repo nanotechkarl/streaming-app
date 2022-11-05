@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
-import { addActor, addActorToMovie } from "../../store/movie.slice";
+import { addActor, addActorToMovie } from "../../store/actor.slice";
 import Select from "react-select";
 
 export default function AddActor(props: any) {

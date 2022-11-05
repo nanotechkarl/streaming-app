@@ -139,7 +139,6 @@ export const getUserById = createAsyncThunk(
         headers,
       });
       const result = response.data;
-      console.log("response :", response);
 
       return result;
     } catch (error: any) {
@@ -164,8 +163,7 @@ export const editUser = createAsyncThunk(
           headers,
         }
       );
-      console.log("response :", response);
-      // return
+      return response.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
     }
@@ -181,8 +179,7 @@ export const deleteUserById = createAsyncThunk(
           authorization: `Bearer ${token}`,
         },
       });
-      console.log("response :", response);
-      // return
+      return response.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
     }
