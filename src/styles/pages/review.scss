@@ -66,9 +66,16 @@
         margin-right: 5px;
         min-height: 140px;
         font-size: 10px;
-        color: black
+        color: black;
+        background-color: whitesmoke;
     }
 
-    .title-container {
+    .pic-actor {
+        width: 98px;
+        height: 90px;
+    }
+
+    .pic-actor-container {
+        height: 90px;
     }
 }

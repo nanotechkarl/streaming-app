@@ -205,6 +205,8 @@ export default function Control() {
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
+          <td></td>
         </tr>
       ));
     }
@@ -294,6 +296,7 @@ export default function Control() {
       </Row>
 
       <div>
+        <h5 className="todo"> actor link with movies </h5>
         <h5 className="todo">
           TODO: REVIEWS IS TEMPORARILY APPROVED. NEEDS ADMIN TO APPROVE
         </h5>

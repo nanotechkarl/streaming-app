@@ -189,11 +189,13 @@ export const addActor = createAsyncThunk(
       lastName,
       gender,
       age,
+      imgUrl,
     }: {
       firstName: string;
       lastName: string;
       gender: string;
       age: number;
+      imgUrl: string;
     },
     thunkApi
   ) => {
@@ -205,6 +207,7 @@ export const addActor = createAsyncThunk(
           lastName,
           gender,
           age,
+          imgUrl,
         },
         { headers }
       );
@@ -395,15 +398,37 @@ export const getAllActorsByMovie = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - Search Actor */
+export const searchActors = createAsyncThunk(
+  "movie/searchActor",
+  async (name: string, thunkApi) => {
+    try {
+      const response = await axios.get(
+        `${server.api}/movies/search/actor/${name}`
+      );
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 const movie = createSlice({
   name: "movie",
   initialState,
   reducers: {
     searchActor(state) {
       state.searchBy = "actor";
+      state.searched = [];
     },
     searchMovie(state) {
       state.searchBy = "movie";
+      state.searched = [];
+    },
+    clearState(state) {
+      state.selected = {};
+      state.selectedActors = [];
     },
   },
   extraReducers: (builder) => {
@@ -633,9 +658,28 @@ const movie = createSlice({
       state.error = action.error.message;
     });
     /* #endregion */
+
+    /* #region - Search actor*/
+    builder.addCase(searchActors.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      searchActors.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.searched = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(searchActors.rejected, (state, action) => {
+      state.loading = false;
+      state.searched = [];
+      state.error = action.error.message;
+    });
+    /* #endregion */
   },
 });
 
-export const { searchActor, searchMovie } = movie.actions;
+export const { searchActor, searchMovie, clearState } = movie.actions;
 
 export default movie.reducer;

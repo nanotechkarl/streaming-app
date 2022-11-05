@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
   addMovieReview,
+  clearState,
   getAllActorsByMovie,
   getMovieById,
   getMovieReviews,
@@ -32,20 +33,18 @@ export default function Reviews() {
   }, [rating, submitCounter]); //eslint-disable-line
 
   useEffect(() => {
-    //TODO bug here when find is undefined from one then go to another
-    //One solution would be create new endpoint and refetch
     fetchData();
     const user = reviews?.find(
       (obj: any) => obj.userId === current.id && obj.movieId === params.id
     );
-    // console.log("user :", user);
 
     setRating(user?.rating);
     setComment(user?.message);
 
     return () => {
-      setEdit(false);
-      setComment("");
+      // setEdit(false);
+      // setComment("");
+      dispatch(clearState());
     };
   }, []); //eslint-disable-line
 
@@ -102,7 +101,11 @@ export default function Reviews() {
           <div className="title-container">
             <h3>{selected?.title}</h3>
             <div className="pic-container">
-              <img className="pic" alt={selected.title} src={selected.imgUrl} />
+              <img
+                className="pic"
+                alt={selected?.title}
+                src={selected?.imgUrl}
+              />
             </div>
           </div>
         </Col>
@@ -110,20 +113,32 @@ export default function Reviews() {
           <div className="description">
             {/* TODO- TEMP */}
             <h3 className="overall"> Overall rating: 4.5 *</h3>
-            <p> {selected.description} </p>
+            <p> {selected?.description} </p>
           </div>
-          <h3> ACTORS </h3>
-          {selectedActors?.map((obj: any) => {
-            return (
-              <Card className="actor-card" key={obj.id}>
-                <div>
-                  {obj.firstName} {obj.lastName}
-                </div>
-                <div> gender: {obj.gender}</div>
-                <div> age: {obj.age}</div>
-              </Card>
-            );
-          })}
+          <h3> CAST </h3>
+          <Row>
+            {selectedActors?.map((obj: any) => {
+              return (
+                <Col xs={2} key={obj.id}>
+                  <Card className="actor-card">
+                    <div className="pic-actor-container">
+                      <img
+                        className="pic-actor"
+                        alt={obj.firstName}
+                        src={obj.imgUrl}
+                      />
+                    </div>
+
+                    <div>
+                      {obj.firstName} {obj.lastName}
+                    </div>
+                    <div> gender: {obj.gender}</div>
+                    <div> age: {obj.age}</div>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
         </Col>
       </Row>
       <div className="rate-container">

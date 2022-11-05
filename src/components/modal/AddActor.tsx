@@ -20,7 +20,7 @@ export default function AddActor(props: any) {
 
   //#region - Add actor
   const onSubmit = async () => {
-    const { fName, lName, gender, age } = values as any;
+    const { fName, lName, gender, age, imgUrl } = values as any;
     if (!selectedMovie) {
       alert("Please select a movie");
       return;
@@ -32,6 +32,7 @@ export default function AddActor(props: any) {
         lastName: lName,
         gender,
         age: parseInt(age),
+        imgUrl,
       })
     );
 
@@ -77,7 +78,7 @@ export default function AddActor(props: any) {
   /* #endregion */
 
   //#region - CUSTOM HOOKS
-  const inputCount = 4;
+  const inputCount = 5;
   const { handleChange, values, errors, handleSubmit } = useForm({
     callback: onSubmit,
     inputCount,
@@ -206,6 +207,22 @@ export default function AddActor(props: any) {
                     />
                     {errors.age ? (
                       <span className="input-error err-name">{errors.age}</span>
+                    ) : (
+                      <span>&nbsp;</span>
+                    )}
+                  </Form.Group>
+                  <Form.Group controlId="formBasicAge">
+                    <Form.Label>Image URL</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="imgUrl"
+                      placeholder="Enter image URL"
+                      onInput={handleChange}
+                    />
+                    {errors.imgUrl ? (
+                      <span className="input-error err-name">
+                        {errors.imgUrl}
+                      </span>
                     ) : (
                       <span>&nbsp;</span>
                     )}

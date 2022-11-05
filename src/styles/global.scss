@@ -60,3 +60,61 @@ background: rgba(180, 169, 169, 0.4);
 .todo {
   color: goldenrod;
 }
+
+
+.image__img {
+  display: block;
+  width: 100%;
+}
+
+.image__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-family: 'Quicksand', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.image__overlay--blur {
+  backdrop-filter: blur(5px);
+}
+
+.image__overlay--primary {
+  background: #e6e9e873;
+  
+}
+
+.image__overlay>* {
+  transform: translateY(20px);
+  transition: transform 0.25s;
+}
+
+.image__overlay:hover {
+  opacity: 1;
+}
+
+.image__overlay:hover>* {
+  transform: translateY(0);
+}
+
+.image__title {
+  font-size: 1.25em;
+  font-weight: bolder;
+  padding-left: 2px;
+  color: #6d0f0f;
+  text-transform: capitalize;
+}
+
+.image__description {
+  font-size: 1.5em;
+  margin-top: 0.25em;
+}
