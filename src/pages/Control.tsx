@@ -3,12 +3,14 @@ import AddActor from "../components/modal/AddActor";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
+  approvePendingReview,
   deleteCelebrity,
   deleteMovie,
   editActor,
   editMovie,
   getAllActors,
   getMovies,
+  getPendingReviews,
 } from "../store/movie.slice";
 import Table from "../components/table/Table";
 import { Col, Row } from "react-bootstrap";
@@ -20,9 +22,8 @@ import { approveUser, getUsers } from "../store/user.slice";
 export default function Control() {
   /* #region  - HOOKS */
   const dispatch = useAppDispatch();
-  const { movies, actors }: { [key: string]: any } = useAppSelector(
-    (state) => state.movie
-  );
+  const { movies, actors, pendingReviews }: { [key: string]: any } =
+    useAppSelector((state) => state.movie);
   const { accounts }: { [key: string]: any } = useAppSelector(
     (state) => state.user
   );
@@ -50,6 +51,8 @@ export default function Control() {
   const [lastEditedActor, setLastEditedActor] = useState({});
   const [lastEditedUser, setLastEditedUser] = useState({});
 
+  const [reviewCounter, setReviewCounter] = useState(0);
+
   /* #endregion */
 
   //#region - FETCH
@@ -68,6 +71,10 @@ export default function Control() {
     setUsersCount(accounts.length);
   }, [usersCounter]); //eslint-disable-line
 
+  useEffect(() => {
+    fetchPendingReviews();
+  }, [reviewCounter]); //eslint-disable-line
+
   const fetchMovies = async () => {
     await dispatch(getMovies());
   };
@@ -78,6 +85,10 @@ export default function Control() {
 
   const fetchUsers = async () => {
     await dispatch(getUsers());
+  };
+
+  const fetchPendingReviews = async () => {
+    await dispatch(getPendingReviews());
   };
 
   //#endregion
@@ -184,6 +195,13 @@ export default function Control() {
   };
   /* #endregion */
 
+  /* #region  - REVIEW CONTROLS */
+  const approveReview = async (reviewId: string) => {
+    await dispatch(approvePendingReview(reviewId));
+    setReviewCounter((prev) => prev + 1);
+  };
+  /* #endregion */
+
   //#region - RENDER
   const renderEmptyRowMovie = (count: number) => {
     const emptyRows = 6;
@@ -279,26 +297,28 @@ export default function Control() {
         </Col>
       </Row>
       <Row>
-        <Col>
-          <h3>USERS</h3>
-          <Table
-            header={["EMAIL", "APPROVED", "PERMISSIONS"]}
-            keys={["email", "approved", "permissions"]}
-            functionKey="id"
-            data={accounts}
-            onEdit={showEditUser}
-            onDelete={showDeleteUser}
-            onApproval={showApprovedUser}
-            customRender={renderEmptyRowUser(usersCount)}
-          />
-        </Col>
+        <h3>USERS</h3>
+        <Table
+          header={["EMAIL", "APPROVED", "PERMISSIONS"]}
+          keys={["email", "approved", "permissions"]}
+          functionKey="id"
+          data={accounts}
+          onEdit={showEditUser}
+          onDelete={showDeleteUser}
+          onApproval={showApprovedUser}
+          customRender={renderEmptyRowUser(usersCount)}
+        />
+        <h3>PENDING REVIEWS</h3>
+        <Table
+          header={["Name", "User", "Movie", "Rating", "Message", "Approval"]}
+          keys={["name", "userId", "movieId", "rating", "message", "approved"]}
+          functionKey="id"
+          data={pendingReviews}
+          onApproval={approveReview}
+        />
       </Row>
 
       <div>
-        <h5 className="todo">
-          TODO: REVIEWS IS TEMPORARILY APPROVED. NEEDS ADMIN TO APPROVE
-        </h5>
-        <h5 className="todo">TODO: Actor page with movies</h5>
         <h5 className="todo">
           TODO: USERS EDIT/DELETE ALSO EDIT REVIEW COLLECTION(NAME)
         </h5>

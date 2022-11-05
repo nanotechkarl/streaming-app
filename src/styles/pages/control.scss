@@ -1,6 +1,13 @@
 .control-page {
     margin: 30px;
     color: white;
+
+    .control-message{
+        height:  120px ;
+        overflow-y: auto;
+        width: 600px;
+        padding: 10px;
+    }
 }
 
 .add-actor-component {

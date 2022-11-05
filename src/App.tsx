@@ -32,7 +32,6 @@ function App() {
     return role.includes("admin") ? (
       <>
         <Navbar />
-        <Outlet />
       </>
     ) : (
       <Navigate to="/page-not-found" />

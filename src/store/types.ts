@@ -20,4 +20,5 @@ export interface MovieState {
   error: string | undefined;
   moviesOfActor?: [];
   actorSelected?: {};
+  pendingReviews?: [];
 }

@@ -24,6 +24,7 @@ const initialState: MovieState = {
   yourReview: {},
   moviesOfActor: [],
   actorSelected: {},
+  pendingReviews: [],
 };
 /* #endregion */
 
@@ -457,14 +458,55 @@ export const getMoviesOfActor = createAsyncThunk(
 );
 /* #endregion */
 
-/* #region  - Get all movies of actor */
+/* #region  - Get Actor details */
 export const getActor = createAsyncThunk(
   "movies/getActor",
   async (actorId: string, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.get(
-        `${server.api}//actor-details/${actorId}`
+        `${server.api}/actor-details/${actorId}`
+      );
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - Get pending reviews */
+export const getPendingReviews = createAsyncThunk(
+  "movies/getPendingReviews",
+  async (args, thunkApi) => {
+    try {
+      token = getCookie("token");
+      const response = await axios.get(`${server.api}/reviews/pending`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - approve pending reviews */
+export const approvePendingReview = createAsyncThunk(
+  "movies/approvePendingReview",
+  async (reviewId: string, thunkApi) => {
+    try {
+      const response = await axios.patch(
+        `${server.api}/reviews/${reviewId}`,
+        {
+          approved: true,
+        },
+        {
+          headers,
+        }
       );
       return response.data.data;
     } catch (error: any) {
@@ -758,7 +800,7 @@ const movie = createSlice({
     });
     /* #endregion */
 
-    /* #region - Search actor*/
+    /* #region - get actor details*/
     builder.addCase(getActor.pending, (state) => {
       state.loading = true;
     });
@@ -770,6 +812,25 @@ const movie = createSlice({
     builder.addCase(getActor.rejected, (state, action) => {
       state.loading = false;
       state.actorSelected = {};
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - get pending reviews*/
+    builder.addCase(getPendingReviews.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      getPendingReviews.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.pendingReviews = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(getPendingReviews.rejected, (state, action) => {
+      state.loading = false;
+      state.pendingReviews = [];
       state.error = action.error.message;
     });
     /* #endregion */
@@ -787,6 +848,23 @@ const movie = createSlice({
       }
     );
     builder.addCase(getmyReviewMovie.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Get own review of movie */
+    builder.addCase(approvePendingReview.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      approvePendingReview.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = "";
+      }
+    );
+    builder.addCase(approvePendingReview.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

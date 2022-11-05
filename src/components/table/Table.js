@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Table = (props) => {
   //#region - RENDER
@@ -136,6 +137,20 @@ const Table = (props) => {
               &nbsp;- Approve?
             </button>
           )}
+        </td>
+      );
+    } else if (key === "movieId") {
+      return (
+        <td key={index}>
+          <Link to={`/reviews/${row[key]}`} className="link">
+            {row[key]}
+          </Link>
+        </td>
+      );
+    } else if (key === "message") {
+      return (
+        <td key={index}>
+          <div className="control-message">{row[key]}</div>
         </td>
       );
     } else {
