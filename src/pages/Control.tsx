@@ -300,15 +300,15 @@ export default function Control() {
         <h5 className="todo">
           TODO: REVIEWS IS TEMPORARILY APPROVED. NEEDS ADMIN TO APPROVE
         </h5>
-        <h5 className="todo"> TODO: ALERTS SHOULD BE INTEGRATED TO THE PAGE</h5>
         <h5 className="todo">TODO: CONVERT REVIEW ID TO NAME</h5>
         <h5 className="todo">TODO: OVERALL RATING</h5>
-        <h5 className="todo"> TODO: NAVGUARD</h5>
-        <h5 className="todo">TODO: SEARCH BY ACTOR</h5>
+        <h5 className="todo">TODO: Actor page with movies</h5>
         <h5 className="todo"> TODO: USERS EDIT/DELETE</h5>
         <h5 className="todo"> TODO: ACTORS DELETE DISABLE</h5>
-        <h5 className="todo"> TODO: PICTURE ACTOR</h5>
-        <h5 className="todo"> TODO: EMAIL TO Altamash.Kazi@cognixia.com</h5>
+
+        <p>minor</p>
+        <h5> EMAIL TO Altamash.Kazi@cognixia.com</h5>
+        <h5 className="todo"> TODO: ALERTS SHOULD BE INTEGRATED TO THE PAGE</h5>
       </div>
     </div>
   );

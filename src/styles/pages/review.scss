@@ -47,9 +47,10 @@
         .review-card {
             width: 80vw;
             background-color: transparent;
-            border: 1px solid #2a4252;
+            border: 1px solid whitesmoke;
             padding: 5px;
             min-height: 100px;
+            font-family: Arial;
         }
     }
 
@@ -66,8 +67,13 @@
         margin-right: 5px;
         min-height: 140px;
         font-size: 10px;
-        color: black;
-        background-color: whitesmoke;
+        color: white;
+        background-color: transparent;
+        border: 1px solid white;
+        font-family: sans-serif;
+        text-transform: capitalize;
+        margin-left: 10px;
+        margin-top: 5px;
     }
 
     .pic-actor {

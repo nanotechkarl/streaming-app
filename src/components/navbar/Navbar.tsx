@@ -1,14 +1,16 @@
 import { Link, Outlet } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
-import { clear } from "../../store/user.slice";
+import { clear, clearUserState } from "../../store/user.slice";
+import Cookies from "js-cookie";
 
 export default function Navbar() {
   const { name, permissions } = useAppSelector((state) => state.user.current);
   const dispatch = useAppDispatch();
 
   const logout = () => {
-    document.cookie = `token=;`;
+    Cookies.remove("token");
+    dispatch(clearUserState());
     dispatch(clear());
     window.location.assign("/login");
   };

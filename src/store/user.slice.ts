@@ -221,6 +221,9 @@ const userSlice = createSlice({
     clear() {
       storage.removeItem("persist:root");
     },
+    clearUserState(state) {
+      state.current = {};
+    },
   },
   extraReducers: (builder) => {
     /* #region - Login */
@@ -344,5 +347,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { clear } = userSlice.actions;
+export const { clear, clearUserState } = userSlice.actions;
 export default userSlice.reducer;

@@ -16,5 +16,6 @@ export interface MovieState {
   searched?: [];
   reviews?: [];
   actors?: [];
+  yourReview?: {};
   error: string | undefined;
 }

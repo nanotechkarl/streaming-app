@@ -5,10 +5,11 @@ import {
   getAllActorsByMovie,
   getMovieById,
   getMovieReviews,
+  getmyReviewMovie,
 } from "../store/movie.slice";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import useForm from "../hooks/useForm";
 import { Rating } from "react-simple-star-rating";
 import useDidMountEffect from "../hooks/useDidMountEffect";
@@ -26,33 +27,41 @@ export default function Reviews() {
   const [edit, setEdit] = useState(false);
   const [comment, setComment] = useState("");
   const [submitCounter, setSubmitCounter] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   /* #endregion */
-
-  useDidMountEffect(() => {
-    fetchData();
-  }, [rating, submitCounter]); //eslint-disable-line
 
   useEffect(() => {
     fetchData();
-    const user = reviews?.find(
-      (obj: any) => obj.userId === current.id && obj.movieId === params.id
-    );
-
-    setRating(user?.rating);
-    setComment(user?.message);
 
     return () => {
-      // setEdit(false);
-      // setComment("");
       dispatch(clearState());
     };
   }, []); //eslint-disable-line
 
+  useDidMountEffect(() => {
+    refetchReview();
+  }, [rating, submitCounter]); //eslint-disable-line
+
   const fetchData = async () => {
     if (params?.id) {
+      setIsLoading(true);
       await dispatch(getMovieById(params.id));
       await dispatch(getMovieReviews(params.id));
       await dispatch(getAllActorsByMovie(params.id));
+      const res = await dispatch(getmyReviewMovie(params.id));
+      await setRating(res.payload?.rating);
+      await setComment(res.payload?.message);
+      setIsLoading(false);
+    }
+  };
+
+  const refetchReview = async () => {
+    const { message }: { message: string } = values as any;
+    if (message) {
+      await setComment(message);
+    }
+    if (params?.id) {
+      await dispatch(getMovieReviews(params.id));
     }
   };
 
@@ -60,17 +69,21 @@ export default function Reviews() {
     const { message }: { message: string } = values as any;
 
     if (message && params.id) {
-      await dispatch(
+      const res = await dispatch(
         addMovieReview({
           message,
           movieId: params.id,
           datePosted: new Date(),
         })
       );
+
+      if (res) {
+        await setEdit(false);
+        await setComment(message);
+      }
     }
-    setSubmitCounter((prev) => prev + 1);
-    setEdit(false);
-    setComment(message);
+
+    await setSubmitCounter((prev) => prev + 1);
   };
 
   const ratingChanged = async (rate: number) => {
@@ -94,7 +107,9 @@ export default function Reviews() {
   });
   //#endregion
 
-  return (
+  return isLoading ? (
+    <Spinner animation="grow" />
+  ) : (
     <div className="reviews-page">
       <Row>
         <Col>
@@ -119,94 +134,107 @@ export default function Reviews() {
           <Row>
             {selectedActors?.map((obj: any) => {
               return (
-                <Col xs={2} key={obj.id}>
-                  <Card className="actor-card">
-                    <div className="pic-actor-container">
-                      <img
-                        className="pic-actor"
-                        alt={obj.firstName}
-                        src={obj.imgUrl}
-                      />
-                    </div>
-
+                <Card className="actor-card" key={obj.id}>
+                  <div className="pic-actor-container">
+                    <img
+                      className="pic-actor"
+                      alt={obj.firstName}
+                      src={obj.imgUrl}
+                    />
+                  </div>
+                  <div className="ml-2">
                     <div>
                       {obj.firstName} {obj.lastName}
                     </div>
                     <div> gender: {obj.gender}</div>
                     <div> age: {obj.age}</div>
-                  </Card>
-                </Col>
+                  </div>
+                </Card>
               );
             })}
           </Row>
         </Col>
       </Row>
-      <div className="rate-container">
-        <span className="rate-label">RATE THIS MOVIE </span>
-        {/* RATING */}
-        <Rating onClick={ratingChanged} size={20} initialValue={rating} />
-      </div>
-      <div>
-        {comment && !edit ? (
-          <>
-            <h3> Your Review</h3>
-            <span>&nbsp;</span>
-            <div className="your-review comment">
-              <p> {comment}</p>
-            </div>
-            <div className="add-review-container">
-              <Button
-                className="add-review mt-2"
-                variant="dark"
-                onClick={() => setEdit(true)}
-              >
-                Edit
-              </Button>
-            </div>
-          </>
-        ) : (
-          <>
-            <h3>WRITE A REVIEW</h3>
-            {errors.message ? (
-              <span className="input-error err-name">{errors.message}</span>
+      {current?.permissions ? (
+        <>
+          <div className="rate-container">
+            <span className="rate-label">RATE THIS MOVIE </span>
+            <Rating onClick={ratingChanged} size={20} initialValue={rating} />
+          </div>
+          <div>
+            {comment && !edit ? (
+              <>
+                <h3> Your Review</h3>
+                <span>&nbsp;</span>
+                <div className="your-review comment">
+                  <p> {comment}</p>
+                </div>
+                <div className="add-review-container">
+                  <Button
+                    className="add-review mt-2"
+                    variant="dark"
+                    onClick={() => setEdit(true)}
+                  >
+                    Edit
+                  </Button>
+                </div>
+              </>
             ) : (
-              <span>&nbsp;</span>
+              <>
+                <h3>WRITE A REVIEW</h3>
+                {errors.message ? (
+                  <span className="input-error err-name">{errors.message}</span>
+                ) : (
+                  <span>&nbsp;</span>
+                )}
+                <Form onSubmit={handleSubmit}>
+                  <textarea
+                    className="comment"
+                    placeholder="Write your review here..."
+                    name="message"
+                    onInput={handleChange}
+                  />
+                  <div className="add-review-container">
+                    <Button className="add-review" variant="dark" type="submit">
+                      Submit
+                    </Button>
+                  </div>
+                </Form>
+              </>
             )}
-            <Form onSubmit={handleSubmit}>
-              <textarea
-                className="comment"
-                placeholder="Write your review here..."
-                name="message"
-                onInput={handleChange}
-              />
-              <div className="add-review-container">
-                <Button className="add-review" variant="dark" type="submit">
-                  Submit
-                </Button>
-              </div>
-            </Form>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <h3 className="err-name">Login/signup to write a review </h3>
+        </>
+      )}
+
       {/* TODO - PUT THIS IN A NEW COMPONENT */}
       <div className="all-reviews mt-5">
-        <h3> ALL REVIEWS </h3>
-        {reviews.map((obj: any) => {
-          const date = new Date(obj.datePosted);
-          const format = date.toDateString();
-          return (
-            <Card className="review-card mb-3" key={obj.id}>
-              <Row>
-                <Col>
-                  <div>{obj.userId}</div>
-                  <div>{format}</div>
-                </Col>
-                <Col xs={8}>{obj.message}</Col>
-                <Col>{obj.rating} STARS</Col>
-              </Row>
-            </Card>
-          );
-        })}
+        {reviews.length ? (
+          <>
+            <h3> ALL REVIEWS </h3>
+            {reviews.map((obj: any) => {
+              const date = new Date(obj.datePosted);
+              const format = date.toDateString();
+              return (
+                <Card className="review-card mb-3" key={obj.id}>
+                  <Row>
+                    <Col>
+                      <div>{obj.userId}</div>
+                      <div>{format}</div>
+                    </Col>
+                    <Col xs={8}>{obj.message}</Col>
+                    <Col>{obj.rating} STARS</Col>
+                  </Row>
+                </Card>
+              );
+            })}
+          </>
+        ) : (
+          <h3>...No reviews yet</h3>
+        )}
       </div>
     </div>
   );

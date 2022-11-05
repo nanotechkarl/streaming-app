@@ -21,6 +21,7 @@ const initialState: MovieState = {
   reviews: [],
   actors: [],
   error: "",
+  yourReview: {},
 };
 /* #endregion */
 
@@ -414,6 +415,28 @@ export const searchActors = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - Get own review of movie */
+export const getmyReviewMovie = createAsyncThunk(
+  "movie/getmyReviewMovie",
+  async (movieId: string, thunkApi) => {
+    try {
+      token = getCookie("token");
+      const response = await axios.get(
+        `${server.api}/reviews/${movieId}/myReview`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 const movie = createSlice({
   name: "movie",
   initialState,
@@ -429,6 +452,7 @@ const movie = createSlice({
     clearState(state) {
       state.selected = {};
       state.selectedActors = [];
+      state.reviews = [];
     },
   },
   extraReducers: (builder) => {
@@ -674,6 +698,24 @@ const movie = createSlice({
     builder.addCase(searchActors.rejected, (state, action) => {
       state.loading = false;
       state.searched = [];
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Get own review of movie */
+    builder.addCase(getmyReviewMovie.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      getmyReviewMovie.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.yourReview = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(getmyReviewMovie.rejected, (state, action) => {
+      state.loading = false;
       state.error = action.error.message;
     });
     /* #endregion */
