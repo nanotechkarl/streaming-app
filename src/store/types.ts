@@ -18,4 +18,6 @@ export interface MovieState {
   actors?: [];
   yourReview?: {};
   error: string | undefined;
+  moviesOfActor?: [];
+  actorSelected?: {};
 }

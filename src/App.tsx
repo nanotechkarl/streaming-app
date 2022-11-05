@@ -6,8 +6,17 @@ import {
   Route,
   Outlet,
   Navigate,
+  useLocation,
 } from "react-router-dom";
-import { Login, Register, Home, Error, Control, Reviews } from "./pages/index";
+import {
+  Login,
+  Register,
+  Home,
+  Error,
+  Control,
+  Reviews,
+  Actor,
+} from "./pages/index";
 import Navbar from "./components/navbar/Navbar";
 import { useAppSelector } from "./hooks/useTypedSelector";
 import { getCookie } from "./utils/global";
@@ -41,6 +50,7 @@ function App() {
         <Route element={<Navbar />}>
           <Route index element={<Home />} />
           <Route path="/reviews/:id" element={<Reviews />} />
+          <Route path="/actors/:id" element={<Actor />} />
         </Route>
         <Route element={loginRoute()}>
           <Route path="login" element={<Login />} />

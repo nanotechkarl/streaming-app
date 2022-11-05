@@ -7,12 +7,13 @@ import {
   getMovieReviews,
   getmyReviewMovie,
 } from "../store/movie.slice";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import useForm from "../hooks/useForm";
 import { Rating } from "react-simple-star-rating";
 import useDidMountEffect from "../hooks/useDidMountEffect";
+import { getCookie } from "../utils/global";
 
 export default function Reviews() {
   /* #region - Hooks */
@@ -48,9 +49,13 @@ export default function Reviews() {
       await dispatch(getMovieById(params.id));
       await dispatch(getMovieReviews(params.id));
       await dispatch(getAllActorsByMovie(params.id));
-      const res = await dispatch(getmyReviewMovie(params.id));
-      await setRating(res.payload?.rating);
-      await setComment(res.payload?.message);
+
+      const token = getCookie("token");
+      if (token) {
+        const res = await dispatch(getmyReviewMovie(params.id));
+        await setRating(res.payload?.rating);
+        await setComment(res.payload?.message);
+      }
       setIsLoading(false);
     }
   };
@@ -74,6 +79,7 @@ export default function Reviews() {
           message,
           movieId: params.id,
           datePosted: new Date(),
+          name: `${current.name}`,
         })
       );
 
@@ -132,26 +138,33 @@ export default function Reviews() {
           </div>
           <h3> CAST </h3>
           <Row>
-            {selectedActors?.map((obj: any) => {
-              return (
-                <Card className="actor-card" key={obj.id}>
-                  <div className="pic-actor-container">
-                    <img
-                      className="pic-actor"
-                      alt={obj.firstName}
-                      src={obj.imgUrl}
-                    />
-                  </div>
-                  <div className="ml-2">
-                    <div>
-                      {obj.firstName} {obj.lastName}
+            {!selectedActors ? (
+              <p className="ml-3 err-name"> No Cast found... </p>
+            ) : (
+              selectedActors?.map((obj: any) => {
+                return (
+                  <Card className="actor-card" key={obj.id}>
+                    <div className="pic-actor-container">
+                      <img
+                        className="pic-actor"
+                        alt={obj.firstName}
+                        src={obj.imgUrl}
+                      />
                     </div>
-                    <div> gender: {obj.gender}</div>
-                    <div> age: {obj.age}</div>
-                  </div>
-                </Card>
-              );
-            })}
+                    <div className="ml-2">
+                      <div>
+                        {obj.firstName} {obj.lastName}
+                      </div>
+                      <div> gender: {obj.gender}</div>
+                      <div> age: {obj.age}</div>
+                      <Link to={`/actors/${obj.id}`} className="mr-2">
+                        <span className="movie-title">Check Movies</span>
+                      </Link>
+                    </div>
+                  </Card>
+                );
+              })
+            )}
           </Row>
         </Col>
       </Row>
@@ -222,7 +235,7 @@ export default function Reviews() {
                 <Card className="review-card mb-3" key={obj.id}>
                   <Row>
                     <Col>
-                      <div>{obj.userId}</div>
+                      <div>{obj.name || "Private User"}</div>
                       <div>{format}</div>
                     </Col>
                     <Col xs={8}>{obj.message}</Col>

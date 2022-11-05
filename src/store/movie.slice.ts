@@ -22,6 +22,8 @@ const initialState: MovieState = {
   actors: [],
   error: "",
   yourReview: {},
+  moviesOfActor: [],
+  actorSelected: {},
 };
 /* #endregion */
 
@@ -102,11 +104,13 @@ export const addMovieReview = createAsyncThunk(
       message,
       rating,
       datePosted,
+      name,
     }: {
       movieId: string;
       message?: string;
       rating?: number;
       datePosted?: Date;
+      name?: string;
     },
     thunkApi
   ) => {
@@ -119,6 +123,7 @@ export const addMovieReview = createAsyncThunk(
           message,
           datePosted,
           rating,
+          name,
         },
         {
           headers: {
@@ -437,6 +442,38 @@ export const getmyReviewMovie = createAsyncThunk(
 );
 /* #endregion */
 
+/* #region  - Get all movies of actor */
+export const getMoviesOfActor = createAsyncThunk(
+  "movies/getMoviesOfActor",
+  async (actorId: string, thunkApi) => {
+    try {
+      token = getCookie("token");
+      const response = await axios.get(`${server.api}/actor/movies/${actorId}`);
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - Get all movies of actor */
+export const getActor = createAsyncThunk(
+  "movies/getActor",
+  async (actorId: string, thunkApi) => {
+    try {
+      token = getCookie("token");
+      const response = await axios.get(
+        `${server.api}//actor-details/${actorId}`
+      );
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
 const movie = createSlice({
   name: "movie",
   initialState,
@@ -698,6 +735,41 @@ const movie = createSlice({
     builder.addCase(searchActors.rejected, (state, action) => {
       state.loading = false;
       state.searched = [];
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Search actor*/
+    builder.addCase(getMoviesOfActor.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      getMoviesOfActor.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.moviesOfActor = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(getMoviesOfActor.rejected, (state, action) => {
+      state.loading = false;
+      state.moviesOfActor = [];
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Search actor*/
+    builder.addCase(getActor.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getActor.fulfilled, (state, action: PayloadAction<any>) => {
+      state.loading = false;
+      state.actorSelected = action.payload;
+      state.error = "";
+    });
+    builder.addCase(getActor.rejected, (state, action) => {
+      state.loading = false;
+      state.actorSelected = {};
       state.error = action.error.message;
     });
     /* #endregion */

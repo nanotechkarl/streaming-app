@@ -292,23 +292,23 @@ export default function Control() {
             customRender={renderEmptyRowUser(usersCount)}
           />
         </Col>
-        <Col></Col>
       </Row>
 
       <div>
-        <h5 className="todo"> actor link with movies </h5>
         <h5 className="todo">
           TODO: REVIEWS IS TEMPORARILY APPROVED. NEEDS ADMIN TO APPROVE
         </h5>
-        <h5 className="todo">TODO: CONVERT REVIEW ID TO NAME</h5>
-        <h5 className="todo">TODO: OVERALL RATING</h5>
         <h5 className="todo">TODO: Actor page with movies</h5>
-        <h5 className="todo"> TODO: USERS EDIT/DELETE</h5>
+        <h5 className="todo">
+          TODO: USERS EDIT/DELETE ALSO EDIT REVIEW COLLECTION(NAME)
+        </h5>
         <h5 className="todo"> TODO: ACTORS DELETE DISABLE</h5>
 
         <p>minor</p>
         <h5> EMAIL TO Altamash.Kazi@cognixia.com</h5>
         <h5 className="todo"> TODO: ALERTS SHOULD BE INTEGRATED TO THE PAGE</h5>
+        <h5 className="todo">TODO: OVERALL RATING</h5>
+        <h5> Seperate slices</h5>
       </div>
     </div>
   );

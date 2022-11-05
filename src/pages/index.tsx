@@ -4,5 +4,5 @@ import Home from "./home";
 import Error from "./Error";
 import Control from "./Control";
 import Reviews from "./Reviews";
-
-export { Login, Register, Home, Error, Control, Reviews };
+import Actor from "./Actor";
+export { Login, Register, Home, Error, Control, Reviews, Actor };

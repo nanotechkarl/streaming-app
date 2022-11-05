@@ -89,5 +89,19 @@
         width: 400px;
     }
     
-    
+    .actor-pic-big {
+        margin: 0px;
+        width: 250px;
+        height: 250px;
+        border-radius: 10px;
+    }
+
+    .card-actor-container {
+        margin-left: 40px;
+        width: 200px;
+    }
+
+    .pic-selected-actor {
+        height: 130px !important;
+    }
 }

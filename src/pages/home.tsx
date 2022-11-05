@@ -72,7 +72,6 @@ export default function Home() {
   //#endregion
 
   const handleSearch = (text: any) => {
-    console.log(searchBy);
     if (text && searchBy === "movie") {
       dispatch(searchByMovie(text));
     } else if (text && searchBy === "actor") {
@@ -194,8 +193,6 @@ export default function Home() {
                       <div className="image__title mt-3">
                         {data.firstName} {data.lastName}
                       </div>
-                      <div className="image__title">Gender: {data.gender}</div>
-                      <div className="image__title">Age: {data.age}</div>
                       <Link to={`/actors/${data.id}`} className="mr-2">
                         <span className="movie-title">Check Movies</span>
                       </Link>
