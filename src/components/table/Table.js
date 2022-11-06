@@ -105,11 +105,17 @@ const Table = (props) => {
       const movieRelease = new Date(row.yearRelease);
       const time = present.getTime() - movieRelease.getTime();
       days = Math.round(time / day);
+
+      return props.custom?.disableDelete?.date && days <= 365
+        ? "table-options disabled"
+        : "table-options";
     }
 
-    return props.custom?.disableDelete?.date && days <= 365
-      ? "table-options disabled"
-      : "table-options";
+    if (props.custom?.disableDelete?.movie) {
+      return row.movies.length ? "table-options disabled" : "table-options";
+    }
+
+    return "table-options";
   };
 
   const customCell = ({ row, key, index }) => {
@@ -134,7 +140,7 @@ const Table = (props) => {
                 )
               }
             >
-              &nbsp;- Approve?
+              &nbsp;- <span className="link">Approve?</span>
             </button>
           )}
         </td>

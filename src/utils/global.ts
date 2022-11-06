@@ -1,4 +1,4 @@
-import { User } from "../types/global";
+import Swal from "sweetalert2";
 
 declare global {
   interface Window {
@@ -46,12 +46,56 @@ export function logout(): void {
   window.href = pages.logout;
 }
 
-/**
- * Get user object from localStorage by user ID
- */
-export function getUserObjectbyId(id: number, usersArray: object[]): object {
-  const userObject: User =
-    usersArray.find((user: User) => user.id === id) || {};
+export function alertSuccess(message: string): void {
+  Swal.fire({
+    icon: "success",
+    title: message,
+    showConfirmButton: false,
+    customClass: "swal-wide",
+    timer: 1500,
+  });
+}
 
-  return userObject;
+export function alertError(message: string): void {
+  Swal.fire({
+    icon: "error",
+    title: message,
+    showConfirmButton: false,
+    customClass: "swal-wide",
+    timer: 1500,
+  });
+}
+
+export function alertWarning(message: string): void {
+  Swal.fire({
+    icon: "warning",
+    title: message,
+    showConfirmButton: false,
+    customClass: "swal-wide",
+    timer: 1500,
+  });
+}
+
+export function alertApprove({
+  key,
+  callback,
+}: {
+  key: string;
+  callback?: any;
+}): any {
+  Swal.fire({
+    title: `Approve ${key}?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Approve",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // callback();
+      Swal.fire(`${key} isApproved`);
+      return true;
+    }
+    return false;
+  });
 }

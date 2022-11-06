@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button, Form } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
+import { alertWarning } from "../../utils/global";
 
 export default function EditActor(props) {
   //#region - PROPS
@@ -21,9 +22,8 @@ export default function EditActor(props) {
 
   //#region - SAVE
   function validate() {
-    console.log("values :", values);
-
     if (!values.fName && !values.lName && !values.gender && !values.age) {
+      alertWarning("No changes made");
       props.onHide();
       return;
     }

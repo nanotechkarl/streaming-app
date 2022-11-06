@@ -23,7 +23,7 @@ export default function Reviews() {
     (state) => state.movie
   );
 
-  const { reviews }: { [key: string]: any } = useAppSelector(
+  const { reviews, yourReview }: { [key: string]: any } = useAppSelector(
     (state) => state.review
   );
 
@@ -78,6 +78,7 @@ export default function Reviews() {
     }
     if (params?.id) {
       await dispatch(getMovieReviews(params.id));
+      await dispatch(getmyReviewMovie(params.id));
     }
   };
 
@@ -190,12 +191,26 @@ export default function Reviews() {
           <div className="rate-container">
             <span className="rate-label">RATE THIS MOVIE </span>
             <Rating onClick={ratingChanged} size={20} initialValue={rating} />
+            {yourReview?.approved === false && (
+              <div className="warning-text">
+                Waiting for approval of administrator
+              </div>
+            )}
           </div>
           <div>
             {comment && !edit ? (
               <>
                 <h3> Your Review</h3>
-                <span>&nbsp;</span>
+                <span className="warning-text">
+                  &nbsp;
+                  {!yourReview?.approved &&
+                    "Waiting for approval of administrator"}
+                  {yourReview?.approved && (
+                    <span className="success-text">
+                      Your review has been approved
+                    </span>
+                  )}
+                </span>
                 <div className="your-review comment">
                   <p> {comment}</p>
                 </div>

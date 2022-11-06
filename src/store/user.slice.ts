@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import storage from "redux-persist/lib/storage";
-import { server, getCookie } from "../utils/global";
+import { server, getCookie, alertError } from "../utils/global";
 import { UserState } from "./types";
+import Swal from "sweetalert2";
 
 //#region - Token
 let token: string = getCookie("token");
@@ -46,9 +47,9 @@ export const loginUser = createAsyncThunk(
       };
     } catch (error: any) {
       if (error.response.data.message.includes("approved")) {
-        alert(error.response.data.message);
+        alertError(error.response?.data?.message);
       } else {
-        alert("Wrong email or password");
+        alertError("Wrong email or password");
       }
       return thunkApi.rejectWithValue(error.message);
     }
@@ -81,7 +82,7 @@ export const registerUser = createAsyncThunk(
       );
 
       if (response.data.message.includes("exist")) {
-        alert("User already exists");
+        alertError("User already exists");
         return;
       }
 

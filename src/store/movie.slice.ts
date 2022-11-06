@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { server, getCookie } from "../utils/global";
+import { server, getCookie, alertError, alertSuccess } from "../utils/global";
 import { MovieState } from "./types";
-
 //#region - Token
 let token: string = getCookie("token");
 let headers = {
@@ -111,7 +110,7 @@ export const addMovie = createAsyncThunk(
       );
 
       if (response.data.message.includes("exist")) {
-        alert("Movie title already exists");
+        alertError("Movie title already exists");
         return;
       }
 
@@ -132,8 +131,10 @@ export const deleteMovie = createAsyncThunk(
         headers,
       });
 
+      alertSuccess("Deleted movie");
       return response.data.data;
     } catch (error: any) {
+      alertError("Failed to delete movie");
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -163,8 +164,10 @@ export const editMovie = createAsyncThunk(
         }
       );
 
+      alertSuccess("Movie updated");
       return response.data.data;
     } catch (error: any) {
+      alertError("Failed to update movie");
       return thunkApi.rejectWithValue(error.message);
     }
   }

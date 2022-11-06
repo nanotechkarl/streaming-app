@@ -42,19 +42,17 @@ const useForm = ({
       case "cost":
       case "yearRelease":
       case "message":
+      case "gender":
+      case "age":
         conditionCase(value.length === 0, ` Please enter ${name}`, name);
         break;
 
       case "fName":
-        conditionCase(
-          value.length === 0,
-          " Please enter your first name",
-          name
-        );
+        conditionCase(value.length === 0, " Please enter first name", name);
         break;
 
       case "lName":
-        conditionCase(value.length === 0, " Please enter your last name", name);
+        conditionCase(value.length === 0, " Please enter last name", name);
         break;
 
       case "email":
@@ -182,6 +180,28 @@ const useForm = ({
 
         if (!values.yearRelease) {
           errorsEmpty.yearRelease = `Please choose date`;
+        }
+
+        break;
+
+      case "addActor":
+        if (!values.fName) {
+          errorsEmpty.fName = `Please enter first name`;
+        }
+        if (!values.lName) {
+          errorsEmpty.lName = `Please enter last name`;
+        }
+
+        if (!values.gender) {
+          errorsEmpty.gender = `Please enter gender`;
+        }
+
+        if (!values.age) {
+          errorsEmpty.age = `Please enter age`;
+        }
+
+        if (!values.imgUrl) {
+          errorsEmpty.imgUrl = `Please enter image url`;
         }
 
         break;

@@ -1,7 +1,14 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { server, getCookie } from "../utils/global";
+import {
+  server,
+  getCookie,
+  alertError,
+  alertSuccess,
+  alertWarning,
+} from "../utils/global";
 import { ActorState } from "./types";
+import Swal from "sweetalert2";
 
 //#region - Token
 let token: string = getCookie("token");
@@ -55,7 +62,7 @@ export const addActor = createAsyncThunk(
       );
 
       if (response.data.message.includes("exist")) {
-        alert("Actor already exists");
+        alertError("Actor already exists");
         return;
       }
 
@@ -91,11 +98,14 @@ export const addActorToMovie = createAsyncThunk(
       );
 
       if (response.data.message.includes("exist")) {
+        alertWarning("Actor already exist in the movie");
         return;
       }
 
+      alertSuccess("Added actor to movie");
       return response.data.data;
     } catch (error: any) {
+      alertError("Failed to Add actor to movie");
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -129,8 +139,10 @@ export const deleteCelebrity = createAsyncThunk(
         }
       );
 
+      alertSuccess("Actor deleted");
       return response.data.data;
     } catch (error: any) {
+      alertError("Failed to delete actor");
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -170,8 +182,10 @@ export const editActor = createAsyncThunk(
         }
       );
 
+      alertSuccess("Actor details updated");
       return response.data.data;
     } catch (error: any) {
+      alertError("Failed to update");
       return thunkApi.rejectWithValue(error.message);
     }
   }

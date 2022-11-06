@@ -4,8 +4,9 @@ import { NavLink } from "react-router-dom";
 import { registerUser } from "../store/user.slice";
 import { useAppDispatch } from "../hooks/useTypedSelector";
 import { useNavigate } from "react-router-dom";
-import { pages } from "../utils/global";
+import { alertError, alertSuccess, pages } from "../utils/global";
 import useForm from "../hooks/useForm";
+import Swal from "sweetalert2";
 
 export default function Register() {
   //#region - HOOKS
@@ -18,7 +19,7 @@ export default function Register() {
     const { fName, lName, email, password, cPassword, role } = values as any;
 
     if (cPassword !== password) {
-      alert("Password does not match");
+      alertError("Password does not match");
       return false;
     }
 
@@ -35,7 +36,7 @@ export default function Register() {
 
     if (register.payload) {
       navigate(pages.registerSuccess);
-      alert("Registration Success. Please login");
+      alertSuccess("Registration Success. Please login");
     }
   };
   //#endregion

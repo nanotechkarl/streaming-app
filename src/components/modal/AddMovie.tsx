@@ -3,6 +3,8 @@ import { Button, Form, Modal } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { addMovie } from "../../store/movie.slice";
 import { useAppDispatch } from "../../hooks/useTypedSelector";
+import Swal from "sweetalert2";
+import { alertSuccess } from "../../utils/global";
 
 export default function AddMovie(props: any) {
   /* #region - Hooks */
@@ -27,7 +29,7 @@ export default function AddMovie(props: any) {
     );
 
     if (res.payload) {
-      alert("Successfully added movie");
+      alertSuccess("Movie added");
       setShowMovie(false);
       setCounter((prev) => prev + 1);
       props.add(counter);

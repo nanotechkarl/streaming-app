@@ -3,17 +3,15 @@ import AddActor from "../components/modal/AddActor";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import { deleteMovie, editMovie, getMovies } from "../store/movie.slice";
-
 import { approvePendingReview, getPendingReviews } from "../store/review.slice";
-
 import { deleteCelebrity, editActor, getAllActors } from "../store/actor.slice";
-
 import Table from "../components/table/Table";
 import { Col, Row } from "react-bootstrap";
 import DeleteModal from "../components/modal/DeleteModal";
 import EditMovie from "../components/modal/EditMovie";
 import EditActor from "../components/modal/EditActor";
 import { approveUser, getUsers } from "../store/user.slice";
+import Swal from "sweetalert2";
 
 export default function Control() {
   /* #region  - HOOKS */
@@ -22,11 +20,9 @@ export default function Control() {
     //TODO USE TYPES FROM STORE
     (state) => state.movie
   );
-
   const { pendingReviews }: { [key: string]: any } = useAppSelector(
     (state) => state.review
   );
-
   const { actors }: { [key: string]: any } = useAppSelector(
     (state) => state.actor
   );
@@ -42,7 +38,7 @@ export default function Control() {
   const [deleteMovieState, setDeleteMovieState] = useState(false);
   const [deleteActorState, setDeleteActorState] = useState(false);
   const [deleteUserState, setDeleteUserState] = useState(false);
-  const [deleteFile, setdeleteFile] = useState("");
+  const [deleteFile, setdeleteFile] = useState({}) as any;
   const [deleteActor, setdeleteActor] = useState("");
   const [deleteUser, setdeleteUser] = useState("");
   const [editMovieState, setEditMovieState] = useState(false);
@@ -61,7 +57,7 @@ export default function Control() {
 
   /* #endregion */
 
-  //#region - RENDER
+  //#region - DYNAMIC FETCH
   useEffect(() => {
     fetchMovies();
     setMoviesCount(movies.length);
@@ -70,7 +66,7 @@ export default function Control() {
   useEffect(() => {
     fetchActors();
     setActorsCount(actors.length);
-  }, [actorsCounter, lastEditedActor]); //eslint-disable-line
+  }, [actorsCounter, lastEditedActor, deleteMovieState]); //eslint-disable-line
 
   useEffect(() => {
     fetchUsers();
@@ -122,7 +118,7 @@ export default function Control() {
   };
 
   const confirmDeleteMovie = async () => {
-    const movieId = deleteFile;
+    const movieId = deleteFile?.id;
 
     await dispatch(deleteMovie(movieId));
     setDeleteMovieState(false);
@@ -130,7 +126,7 @@ export default function Control() {
   };
   /* #endregion */
 
-  /* #region  - //TODO ACTOR CONTROLS */
+  /* #region  - //TODO ACTOR CONTROLS - disable delete */
   const showEditActor = (actor: any) => {
     setEditedActor(actor);
     setEditActorState(true);
@@ -194,18 +190,52 @@ export default function Control() {
   };
 
   const showApprovedUser = async (userId: string) => {
-    const approved = true;
-    //TODO use confirm modal
-    await dispatch(approveUser({ userId, approved }));
-    setUsersCounter((prev) => prev + 1);
+    alertApproveUser(userId);
   };
+
+  const alertApproveUser = async (userId: string) => {
+    Swal.fire({
+      title: `Approve user?`,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Approve",
+      customClass: "swal-confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const approved = true;
+        dispatch(approveUser({ userId, approved }));
+        setUsersCounter((prev) => prev + 1);
+      }
+    });
+  };
+
   /* #endregion */
 
   /* #region  - REVIEW CONTROLS */
   const approveReview = async (reviewId: string) => {
-    await dispatch(approvePendingReview(reviewId));
-    setReviewCounter((prev) => prev + 1);
+    alertApprove(reviewId);
   };
+
+  const alertApprove = async (reviewId: string) => {
+    Swal.fire({
+      title: `Approve review?`,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Approve",
+      customClass: "swal-confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(approvePendingReview(reviewId));
+        setReviewCounter((prev) => prev + 1);
+        Swal.fire(`review is approved`);
+      }
+    });
+  };
+
   /* #endregion */
 
   //#region - RENDER
@@ -287,6 +317,7 @@ export default function Control() {
             onEdit={showEditActor}
             onDelete={showDeleteActor}
             customRender={renderEmptyRowActor(actorsCount)}
+            custom={{ disableDelete: { movie: true } }}
           />
           <AddActor add={(x: any) => setActorsCounter(x)} />
           <DeleteModal
@@ -325,18 +356,15 @@ export default function Control() {
       </Row>
 
       <div>
+        <h5> TODO: reset state of inputs after close modal</h5>
+
+        <p>minor</p>
         <h5 className="todo">
           TODO: USERS EDIT/DELETE ALSO EDIT REVIEW COLLECTION(NAME)
         </h5>
-        <h5> Refactor store</h5>
-        <h5 className="todo"> TODO: ACTORS DELETE DISABLE</h5>
-        <h5>TODO: Approval UI</h5>
-
-        <p>minor</p>
         <h5> EMAIL TO Altamash.Kazi@cognixia.com</h5>
-        <h5 className="todo"> TODO: ALERTS SHOULD BE INTEGRATED TO THE PAGE</h5>
         <h5 className="todo">TODO: OVERALL RATING</h5>
-        <h5> Seperate slices</h5>
+        <h5 className="todo"> TODO: Remove actor from movie</h5>
       </div>
     </div>
   );

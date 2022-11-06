@@ -57,6 +57,14 @@ background: rgba(180, 169, 169, 0.4);
   color: red;
 }
 
+.warning-text {
+  color: goldenrod;
+}
+
+.success-text {
+  color: rgb(103, 150, 43);
+}
+
 .link {
   color: blue;
 }
@@ -121,4 +129,17 @@ background: rgba(180, 169, 169, 0.4);
 .image__description {
   font-size: 1.5em;
   margin-top: 0.25em;
+}
+
+.swal-wide {
+  height: 220px !important;
+  padding: 20px;
+}
+
+button.swal2-cancel {
+  margin-top: 0px !important;
+}
+
+div.swal2-icon {
+  margin-top: 50px;
 }

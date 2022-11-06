@@ -4,14 +4,20 @@ import useForm from "../../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
 import { addActor, addActorToMovie } from "../../store/actor.slice";
 import Select from "react-select";
+import { alertError } from "../../utils/global";
 
 export default function AddActor(props: any) {
   /* #region - Hooks */
   const dispatch = useAppDispatch();
   const [showAddModal, setShowActor] = useState(false);
-  const { movies, actors }: { [key: string]: any } = useAppSelector(
+  const { movies }: { [key: string]: any } = useAppSelector(
     (state) => state.movie
   );
+
+  const { actors }: { [key: string]: any } = useAppSelector(
+    (state) => state.actor
+  );
+
   const [selectedMovie, setSelectedMovie] = useState("");
   const [selectedActor, setSelectedActor] = useState("");
   const [counter, setCounter] = useState(0);
@@ -22,7 +28,7 @@ export default function AddActor(props: any) {
   const onSubmit = async () => {
     const { fName, lName, gender, age, imgUrl } = values as any;
     if (!selectedMovie) {
-      alert("Please select a movie");
+      alertError("Please select a movie");
       return;
     }
 
@@ -38,7 +44,7 @@ export default function AddActor(props: any) {
 
     if (res.payload) {
       const obj: any = res.payload; //REVIEW TECHNIQUE TO BYPASS OBJECT TYPING
-      const actorDetailsId = obj.data.data.id;
+      const actorDetailsId = obj.data?.data?.id;
       await dispatch(
         addActorToMovie({
           movieId: selectedMovie,
@@ -52,12 +58,12 @@ export default function AddActor(props: any) {
 
   const existingSubmit = async () => {
     if (!selectedMovie) {
-      alert("Please select a movie");
+      alertError("Please select a movie");
       return;
     }
 
     if (!selectedActor) {
-      alert("Please select an actor");
+      alertError("Please select an actor");
       return;
     }
 
@@ -173,9 +179,9 @@ export default function AddActor(props: any) {
                       placeholder="Enter Last name"
                       onInput={handleChange}
                     />
-                    {errors.fName ? (
+                    {errors.lName ? (
                       <span className="input-error err-name">
-                        {errors.fName}
+                        {errors.lName}
                       </span>
                     ) : (
                       <span>&nbsp;</span>

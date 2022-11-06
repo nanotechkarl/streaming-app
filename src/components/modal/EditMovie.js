@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button, Form } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
+import { alertError, alertWarning } from "../../utils/global";
 
 export default function EditMovie(props) {
   //#region - PROPS
@@ -19,6 +20,7 @@ export default function EditMovie(props) {
   //#region - SAVE
   function validate() {
     if (!values.imgUrl && !values.cost) {
+      alertWarning("No changes made");
       props.onHide();
       return;
     }

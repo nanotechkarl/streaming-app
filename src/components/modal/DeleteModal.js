@@ -7,7 +7,7 @@ export default function DeleteModal(props) {
   return (
     <Modal {...modalProps} centered size="sm">
       <Modal.Header>
-        <Modal.Title>Confirm User Deletion</Modal.Title>
+        <Modal.Title>Confirm Deletion</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <b>Are you sure ?</b>
