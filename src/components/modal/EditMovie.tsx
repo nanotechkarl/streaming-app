@@ -2,9 +2,17 @@ import { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button, Form } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
-import { alertError, alertWarning } from "../../utils/global";
+import { alertWarning } from "../../utils/global";
+import { Movies } from "../../store/types";
 
-export default function EditMovie(props) {
+interface Edit {
+  onHide: any;
+  onEdit: CallableFunction;
+  show: boolean;
+  file: Movies;
+}
+
+export default function EditMovie(props: Edit) {
   //#region - PROPS
   const { onEdit, file, ...otherProps } = props;
   //#endregion

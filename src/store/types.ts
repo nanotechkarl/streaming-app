@@ -41,3 +41,30 @@ export interface ReviewState {
 }
 
 /* #endregion */
+
+export type Actors = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  age: string;
+  imgUrl: string;
+};
+
+export type Movies = {
+  id: string;
+  title: string;
+  description: string;
+  imgUrl: string;
+  cost: string;
+  yearRelease: string;
+  actors?: Actors[];
+};
+
+export type Users = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  approved: boolean;
+};

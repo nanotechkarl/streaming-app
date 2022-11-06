@@ -3,18 +3,27 @@ import Modal from "react-bootstrap/Modal";
 import { Button, Form } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { alertWarning } from "../../utils/global";
+import { Actors } from "../../store/types";
+import { ActorInputs } from "../../types/inputs";
 
-export default function EditActor(props) {
+interface Edit {
+  onHide: any;
+  onEdit: CallableFunction;
+  show: boolean;
+  actor: Actors;
+}
+
+export default function EditActor(props: Edit) {
   //#region - PROPS
   const { onEdit, actor, ...otherProps } = props;
   //#endregion
 
   //#region - INITIAL INPUT DISPLAY
   useEffect(() => {
-    values.fName = props.actor.fName;
-    values.lName = props.actor.lName;
-    values.gender = props.actor.gender;
-    values.age = props.actor.age;
+    values.fName = actor.firstName;
+    values.lName = actor.lastName;
+    values.gender = actor.gender;
+    values.age = actor.age;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

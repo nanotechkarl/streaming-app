@@ -3,30 +3,31 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
 import { addActor, addActorToMovie } from "../../store/actor.slice";
-import Select from "react-select";
+import Select, { SingleValue } from "react-select";
 import { alertError } from "../../utils/global";
+import { ActorInputs } from "../../types/inputs";
+import { Actors, Movies } from "../../store/types";
 
 export default function AddActor(props: any) {
   /* #region - Hooks */
   const dispatch = useAppDispatch();
-  const [showAddModal, setShowActor] = useState(false);
-  const { movies }: { [key: string]: any } = useAppSelector(
+  const { movies }: { movies: Movies[] } = useAppSelector(
     (state) => state.movie
   );
-
-  const { actors }: { [key: string]: any } = useAppSelector(
+  const { actors }: { actors: Actors[] } = useAppSelector(
     (state) => state.actor
   );
-
-  const [selectedMovie, setSelectedMovie] = useState("");
-  const [selectedActor, setSelectedActor] = useState("");
-  const [counter, setCounter] = useState(0);
+  const [showAddModal, setShowActor] = useState<boolean>(false);
+  const [selectedMovie, setSelectedMovie] = useState<string>("");
+  const [selectedActor, setSelectedActor] = useState<string>("");
+  const [counter, setCounter] = useState<number>(0);
 
   /* #endregion */
 
   //#region - Add actor
   const onSubmit = async () => {
-    const { fName, lName, gender, age, imgUrl } = values as any;
+    const { fName, lName, gender, age, imgUrl } = values as ActorInputs;
+
     if (!selectedMovie) {
       alertError("Please select a movie");
       return;
@@ -43,15 +44,15 @@ export default function AddActor(props: any) {
     );
 
     if (res.payload) {
-      const obj: any = res.payload; //REVIEW TECHNIQUE TO BYPASS OBJECT TYPING
-      const actorDetailsId = obj.data?.data?.id;
+      const obj: any = res.payload;
+      const actorDetailsId: string = obj.data?.data?.id;
       await dispatch(
         addActorToMovie({
           movieId: selectedMovie,
           actorDetailsId,
         })
       );
-      setCounter((prev) => prev + 1);
+      setCounter((prev: number) => prev + 1);
       props.add(counter);
     }
   };
@@ -73,7 +74,7 @@ export default function AddActor(props: any) {
         actorDetailsId: selectedActor,
       })
     );
-    setCounter((prev) => prev + 1);
+    setCounter((prev: number) => prev + 1);
     props.add(counter);
   };
   //#endregion
@@ -84,7 +85,7 @@ export default function AddActor(props: any) {
   /* #endregion */
 
   //#region - CUSTOM HOOKS
-  const inputCount = 5;
+  const inputCount: number = 5;
   const { handleChange, values, errors, handleSubmit } = useForm({
     callback: onSubmit,
     inputCount,
@@ -119,11 +120,11 @@ export default function AddActor(props: any) {
                 id="id"
                 placeholder="Select Movie..."
                 className="search-input"
-                getOptionLabel={(option: any) => option.title}
-                getOptionValue={(option: any) => option.id}
+                getOptionLabel={(option: Movies) => option.title}
+                getOptionValue={(option: Movies) => option.id}
                 options={movies}
-                onChange={({ id }) => {
-                  setSelectedMovie(id);
+                onChange={(option: SingleValue<Movies> | null) => {
+                  if (option) setSelectedMovie(option.id);
                 }}
               />
             </Form.Group>
@@ -135,13 +136,13 @@ export default function AddActor(props: any) {
                     id="id"
                     placeholder="Select Actor..."
                     className="search-input"
-                    getOptionLabel={(option: any) => {
+                    getOptionLabel={(option: Actors) => {
                       return option.firstName + " " + option.lastName;
                     }}
-                    getOptionValue={(option: any) => option.id}
+                    getOptionValue={(option: Actors) => option.id}
                     options={actors}
-                    onChange={({ id }) => {
-                      setSelectedActor(id);
+                    onChange={(option: SingleValue<Actors> | null) => {
+                      if (option) setSelectedActor(option.id);
                     }}
                   />
                   <div className="mt-3">

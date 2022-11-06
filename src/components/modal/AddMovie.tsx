@@ -3,20 +3,20 @@ import { Button, Form, Modal } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { addMovie } from "../../store/movie.slice";
 import { useAppDispatch } from "../../hooks/useTypedSelector";
-import Swal from "sweetalert2";
 import { alertSuccess } from "../../utils/global";
+import { Movies } from "../../store/types";
 
 export default function AddMovie(props: any) {
   /* #region - Hooks */
   const dispatch = useAppDispatch();
-  const [showMovieModal, setShowMovie] = useState(false);
-  const [counter, setCounter] = useState(0);
+  const [showMovieModal, setShowMovie] = useState<boolean>(false);
+  const [counter, setCounter] = useState<number>(0);
   /* #endregion */
 
   const onSubmit = async () => {
-    const { title, description, imgUrl, cost, yearRelease } = values as any;
+    const { title, description, imgUrl, cost, yearRelease } = values as Movies;
     const revenue: number = parseInt(cost);
-    const date = new Date(yearRelease);
+    const date: Date = new Date(yearRelease);
 
     const res = await dispatch(
       addMovie({
@@ -31,7 +31,7 @@ export default function AddMovie(props: any) {
     if (res.payload) {
       alertSuccess("Movie added");
       setShowMovie(false);
-      setCounter((prev) => prev + 1);
+      setCounter((prev: number) => prev + 1);
       props.add(counter);
     }
   };

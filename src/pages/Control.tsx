@@ -12,6 +12,8 @@ import EditMovie from "../components/modal/EditMovie";
 import EditActor from "../components/modal/EditActor";
 import { approveUser, getUsers } from "../store/user.slice";
 import Swal from "sweetalert2";
+import { Users } from "../store/types";
+import { ActorInputs } from "../types/inputs";
 
 export default function Control() {
   /* #region  - HOOKS */
@@ -26,7 +28,7 @@ export default function Control() {
   const { actors }: { [key: string]: any } = useAppSelector(
     (state) => state.actor
   );
-  const { accounts }: { [key: string]: any } = useAppSelector(
+  const { accounts }: { accounts: Users[] } = useAppSelector(
     (state) => state.user
   );
   const [moviesCount, setMoviesCount] = useState(0);
@@ -44,11 +46,9 @@ export default function Control() {
   const [editMovieState, setEditMovieState] = useState(false);
   const [editActorState, setEditActorState] = useState(false);
   const [editUserState, setEditUserState] = useState(false);
-
-  const [editedFile, setEditedFile] = useState("");
-  const [editedActor, setEditedActor] = useState("");
+  const [editedFile, setEditedFile] = useState({}) as any;
+  const [editedActor, setEditedActor] = useState({}) as any;
   const [editedUser, setEditedUser] = useState("");
-
   const [lastEditedFile, setLastEditedFile] = useState({});
   const [lastEditedActor, setLastEditedActor] = useState({});
   const [lastEditedUser, setLastEditedUser] = useState({});
