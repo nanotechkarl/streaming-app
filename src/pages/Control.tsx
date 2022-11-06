@@ -1,19 +1,18 @@
-import AddMovie from "../components/modal/AddMovie";
-import AddActor from "../components/modal/AddActor";
 import { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import { deleteMovie, editMovie, getMovies } from "../store/movie.slice";
 import { approvePendingReview, getPendingReviews } from "../store/review.slice";
 import { deleteCelebrity, editActor, getAllActors } from "../store/actor.slice";
+import { approveUser, getUsers } from "../store/user.slice";
 import Table from "../components/table/Table";
-import { Col, Row } from "react-bootstrap";
+import AddMovie from "../components/modal/AddMovie";
+import AddActor from "../components/modal/AddActor";
 import DeleteModal from "../components/modal/DeleteModal";
 import EditMovie from "../components/modal/EditMovie";
 import EditActor from "../components/modal/EditActor";
-import { approveUser, getUsers } from "../store/user.slice";
 import Swal from "sweetalert2";
 import { Users } from "../store/types";
-import { ActorInputs } from "../types/inputs";
 
 export default function Control() {
   /* #region  - HOOKS */
@@ -57,7 +56,7 @@ export default function Control() {
 
   /* #endregion */
 
-  //#region - DYNAMIC FETCH
+  //#region - EFFECT
   useEffect(() => {
     fetchMovies();
     setMoviesCount(movies.length);
@@ -126,7 +125,7 @@ export default function Control() {
   };
   /* #endregion */
 
-  /* #region  - //TODO ACTOR CONTROLS - disable delete */
+  /* #region  - ACTOR CONTROLS - */
   const showEditActor = (actor: any) => {
     setEditedActor(actor);
     setEditActorState(true);
@@ -207,6 +206,11 @@ export default function Control() {
         const approved = true;
         dispatch(approveUser({ userId, approved }));
         setUsersCounter((prev) => prev + 1);
+        Swal.fire({
+          title: `User is approved`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     });
   };
@@ -231,7 +235,11 @@ export default function Control() {
       if (result.isConfirmed) {
         dispatch(approvePendingReview(reviewId));
         setReviewCounter((prev) => prev + 1);
-        Swal.fire(`review is approved`);
+        Swal.fire({
+          title: `review is approved`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     });
   };

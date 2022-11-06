@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
+import Carousel from "react-multi-carousel";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
   clearActorState,
   getActor,
   getMoviesOfActor,
 } from "../store/actor.slice";
-import Carousel from "react-multi-carousel";
 
 export default function Actor() {
   /* #region  - HOOKS */
@@ -18,7 +18,7 @@ export default function Actor() {
 
   /* #endregion */
 
-  /* #region  - RENDER */
+  /* #region  - EFFECT */
   useEffect(() => {
     fetchData();
 
@@ -29,11 +29,8 @@ export default function Actor() {
 
   const fetchData = async () => {
     if (params?.id) {
-      //   setIsLoading(true);
       await dispatch(getMoviesOfActor(params.id));
       await dispatch(getActor(params.id));
-
-      //   setIsLoading(false);
     }
   };
 

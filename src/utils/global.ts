@@ -75,27 +75,3 @@ export function alertWarning(message: string): void {
     timer: 1500,
   });
 }
-
-export function alertApprove({
-  key,
-  callback,
-}: {
-  key: string;
-  callback?: any;
-}): any {
-  Swal.fire({
-    title: `Approve ${key}?`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Approve",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // callback();
-      Swal.fire(`${key} isApproved`);
-      return true;
-    }
-    return false;
-  });
-}

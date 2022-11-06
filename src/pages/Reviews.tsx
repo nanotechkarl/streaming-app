@@ -9,7 +9,7 @@ import {
 import { getAllActorsByMovie } from "../store/actor.slice";
 import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import useForm from "../hooks/useForm";
 import { Rating } from "react-simple-star-rating";
 import useDidMountEffect from "../hooks/useDidMountEffect";
@@ -22,11 +22,9 @@ export default function Reviews() {
   const { selected }: { [key: string]: any } = useAppSelector(
     (state) => state.movie
   );
-
   const { reviews, yourReview }: { [key: string]: any } = useAppSelector(
     (state) => state.review
   );
-
   const { selectedActors }: { [key: string]: any } = useAppSelector(
     (state) => state.actor
   );
@@ -37,10 +35,9 @@ export default function Reviews() {
   const [edit, setEdit] = useState(false);
   const [comment, setComment] = useState("");
   const [submitCounter, setSubmitCounter] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   /* #endregion */
 
-  /* #region  - RENDER */
+  /* #region  - EFFECTS */
   useEffect(() => {
     fetchData();
 
@@ -56,7 +53,6 @@ export default function Reviews() {
 
   const fetchData = async () => {
     if (params?.id) {
-      setIsLoading(true);
       await dispatch(getMovieById(params.id));
       await dispatch(getMovieReviews(params.id));
       await dispatch(getAllActorsByMovie(params.id));
@@ -64,17 +60,16 @@ export default function Reviews() {
       const token = getCookie("token");
       if (token) {
         const res = await dispatch(getmyReviewMovie(params.id));
-        await setRating(res.payload?.rating);
-        await setComment(res.payload?.message);
+        setRating(res.payload?.rating);
+        setComment(res.payload?.message);
       }
-      setIsLoading(false);
     }
   };
 
   const refetchReview = async () => {
     const { message }: { message: string } = values as any;
     if (message) {
-      await setComment(message);
+      setComment(message);
     }
     if (params?.id) {
       await dispatch(getMovieReviews(params.id));
@@ -131,132 +126,125 @@ export default function Reviews() {
   });
   //#endregion
 
-  return isLoading ? (
-    <Spinner animation="grow" />
-  ) : (
-    <div className="reviews-page">
+  /* #region  - RENDER */
+  const renderCast = () => {
+    return (
       <Row>
-        <Col>
-          <div className="title-container">
-            <h3>{selected?.title}</h3>
-            <div className="pic-container">
-              <img
-                className="pic"
-                alt={selected?.title}
-                src={selected?.imgUrl}
-              />
-            </div>
-          </div>
-        </Col>
-        <Col>
-          <div className="description">
-            {/* TODO- TEMP */}
-            <h3 className="overall"> Overall rating: 4.5 *</h3>
-            <p> {selected?.description} </p>
-          </div>
-          <h3> CAST </h3>
-          <Row>
-            {!selectedActors ? (
-              <p className="ml-3 err-name"> No Cast found... </p>
-            ) : (
-              selectedActors?.map((obj: any) => {
-                return (
-                  <Card className="actor-card" key={obj.id}>
-                    <div className="pic-actor-container">
-                      <img
-                        className="pic-actor"
-                        alt={obj.firstName}
-                        src={obj.imgUrl}
-                      />
-                    </div>
-                    <div className="ml-2">
-                      <div>
-                        {obj.firstName} {obj.lastName}
-                      </div>
-                      <div> gender: {obj.gender}</div>
-                      <div> age: {obj.age}</div>
-                      <Link to={`/actors/${obj.id}`} className="mr-2">
-                        <span className="movie-title">Check Movies</span>
-                      </Link>
-                    </div>
-                  </Card>
-                );
-              })
-            )}
-          </Row>
-        </Col>
-      </Row>
-      {current?.permissions ? (
-        <>
-          <div className="rate-container">
-            <span className="rate-label">RATE THIS MOVIE </span>
-            <Rating onClick={ratingChanged} size={20} initialValue={rating} />
-            {yourReview?.approved === false && (
-              <div className="warning-text">
-                Waiting for approval of administrator
-              </div>
-            )}
-          </div>
-          <div>
-            {comment && !edit ? (
-              <>
-                <h3> Your Review</h3>
-                <span className="warning-text">
-                  &nbsp;
-                  {!yourReview?.approved &&
-                    "Waiting for approval of administrator"}
-                  {yourReview?.approved && (
-                    <span className="success-text">
-                      Your review has been approved
-                    </span>
-                  )}
-                </span>
-                <div className="your-review comment">
-                  <p> {comment}</p>
-                </div>
-                <div className="add-review-container">
-                  <Button
-                    className="add-review mt-2"
-                    variant="dark"
-                    onClick={() => setEdit(true)}
-                  >
-                    Edit
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <>
-                <h3>WRITE A REVIEW</h3>
-                {errors.message ? (
-                  <span className="input-error err-name">{errors.message}</span>
-                ) : (
-                  <span>&nbsp;</span>
-                )}
-                <Form onSubmit={handleSubmit}>
-                  <textarea
-                    className="comment"
-                    placeholder="Write your review here..."
-                    name="message"
-                    onInput={handleChange}
+        {!selectedActors.length ? (
+          <p className="ml-3 err-name"> No Cast found... </p>
+        ) : (
+          selectedActors?.map((obj: any) => {
+            return (
+              <Card className="actor-card" key={obj.id}>
+                <div className="pic-actor-container">
+                  <img
+                    className="pic-actor"
+                    alt={obj.firstName}
+                    src={obj.imgUrl}
                   />
+                </div>
+                <div className="ml-2">
+                  <div>
+                    {obj.firstName} {obj.lastName}
+                  </div>
+                  <div> gender: {obj.gender}</div>
+                  <div> age: {obj.age}</div>
+                  <Link to={`/actors/${obj.id}`} className="mr-2">
+                    <span className="movie-title">Check Movies</span>
+                  </Link>
+                </div>
+              </Card>
+            );
+          })
+        )}
+      </Row>
+    );
+  };
+
+  const renderReviewOption = () => {
+    return (
+      <div>
+        {current?.permissions ? (
+          <>
+            <div className="rate-container">
+              <span className="rate-label">RATE THIS MOVIE </span>
+              <Rating onClick={ratingChanged} size={20} initialValue={rating} />
+              {yourReview?.approved === false && (
+                <div className="warning-text">
+                  Waiting for approval of administrator
+                </div>
+              )}
+            </div>
+            <div>
+              {comment && !edit ? (
+                <>
+                  <h3> Your Review</h3>
+                  <span className="warning-text">
+                    &nbsp;
+                    {!yourReview?.approved &&
+                      "Waiting for approval of administrator"}
+                    {yourReview?.approved && (
+                      <span className="success-text">
+                        Your review has been approved
+                      </span>
+                    )}
+                  </span>
+                  <div className="your-review comment">
+                    <p> {comment}</p>
+                  </div>
                   <div className="add-review-container">
-                    <Button className="add-review" variant="dark" type="submit">
-                      Submit
+                    <Button
+                      className="add-review mt-2"
+                      variant="dark"
+                      onClick={() => setEdit(true)}
+                    >
+                      Edit
                     </Button>
                   </div>
-                </Form>
-              </>
-            )}
-          </div>
-        </>
-      ) : (
-        <>
-          <h3 className="err-name">Login/signup to write a review </h3>
-        </>
-      )}
+                </>
+              ) : (
+                <>
+                  <h3>WRITE A REVIEW</h3>
+                  {errors.message ? (
+                    <span className="input-error err-name">
+                      {errors.message}
+                    </span>
+                  ) : (
+                    <span>&nbsp;</span>
+                  )}
+                  <Form onSubmit={handleSubmit}>
+                    <textarea
+                      className="comment"
+                      placeholder="Write your review here..."
+                      name="message"
+                      onInput={handleChange}
+                    />
+                    <div className="add-review-container">
+                      <Button
+                        className="add-review"
+                        variant="dark"
+                        type="submit"
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </Form>
+                </>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 className="err-name">Login/signup to write a review </h3>
+          </>
+        )}
+      </div>
+    );
+  };
 
-      {/* TODO - PUT THIS IN A NEW COMPONENT */}
-      <div className="all-reviews mt-5">
+  const renderAllReviews = () => {
+    return (
+      <>
         {reviews.length ? (
           <>
             <h3> ALL REVIEWS </h3>
@@ -280,7 +268,38 @@ export default function Reviews() {
         ) : (
           <h3>...No reviews yet</h3>
         )}
-      </div>
+      </>
+    );
+  };
+  /* #endregion */
+
+  return (
+    <div className="reviews-page">
+      <Row>
+        <Col>
+          <div className="title-container">
+            <h3>{selected?.title}</h3>
+            <div className="pic-container">
+              <img
+                className="pic"
+                alt={selected?.title}
+                src={selected?.imgUrl}
+              />
+            </div>
+          </div>
+        </Col>
+        <Col>
+          <div className="description">
+            {/* TODO- TEMP */}
+            <h3 className="overall"> Overall rating: 4.5 *</h3>
+            <p> {selected?.description} </p>
+          </div>
+          <h3> CAST </h3>
+          {renderCast()}
+        </Col>
+      </Row>
+      {renderReviewOption()}
+      <div className="all-reviews mt-5">{renderAllReviews()}</div>
     </div>
   );
 }
