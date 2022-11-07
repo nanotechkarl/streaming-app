@@ -1,12 +1,10 @@
 import Container from "react-bootstrap/Container";
 import { Card, Button, Form } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { registerUser } from "../store/user.slice";
 import { useAppDispatch } from "../hooks/useTypedSelector";
-import { useNavigate } from "react-router-dom";
 import { alertError, alertSuccess, pages } from "../utils/global";
 import useForm from "../hooks/useForm";
-import Swal from "sweetalert2";
 
 export default function Register() {
   //#region - HOOKS
@@ -121,7 +119,7 @@ export default function Register() {
           )}
 
           <Form.Group controlId="formBasicCPassword">
-            <Form.Label>Confirm password</Form.Label>
+            <Form.Label>Confirm Password</Form.Label>
             <Form.Control
               type="password"
               placeholder="*****"

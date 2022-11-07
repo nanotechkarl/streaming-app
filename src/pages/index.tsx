@@ -1,6 +1,6 @@
 import Login from "./Login";
 import Register from "./Register";
-import Home from "./home";
+import Home from "./Home";
 import Error from "./Error";
 import Control from "./Control";
 import Reviews from "./Reviews";
