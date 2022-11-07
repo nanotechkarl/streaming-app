@@ -12,8 +12,6 @@ export default function LoginForm(props: Props) {
   /* #region  - OnSubmit */
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const { email, password } = values as any;
-    console.log("password :", password);
-    console.log("email :", email);
     props.onSubmit(email, password);
   };
   /* #endregion */
@@ -29,14 +27,14 @@ export default function LoginForm(props: Props) {
 
   return (
     <Form data-testid="login-form" onSubmit={handleSubmit}>
-      <Form.Group controlId="formBasicEmail">
+      <Form.Group>
         <Form.Label>Email</Form.Label>
         <Form.Control
           data-testid="email"
           type="email"
           name="email"
           placeholder="Enter email"
-          onInput={handleChange}
+          onChange={handleChange}
         />
         <Form.Text className="text-muted"></Form.Text>
       </Form.Group>
@@ -66,6 +64,7 @@ export default function LoginForm(props: Props) {
           variant="dark"
           type="submit"
           data-testid="submit"
+          disabled={Object.keys(errors).length !== 0}
         >
           Submit
         </Button>

@@ -64,6 +64,7 @@ export default function Register() {
               placeholder="Enter email"
               name="email"
               onInput={handleChange}
+              data-testid="email"
             />
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
@@ -80,6 +81,7 @@ export default function Register() {
               placeholder="Enter first name"
               name="fName"
               onInput={handleChange}
+              data-testid="fName"
             />
           </Form.Group>
           {errors.fName ? (
@@ -95,6 +97,7 @@ export default function Register() {
               placeholder="Enter last name"
               name="lName"
               onInput={handleChange}
+              data-testid="lName"
             />
           </Form.Group>
           {errors.lName ? (
@@ -110,6 +113,7 @@ export default function Register() {
               placeholder="*****"
               name="password"
               onInput={handleChange}
+              data-testid="password"
             />
           </Form.Group>
           {errors.password ? (
@@ -125,6 +129,7 @@ export default function Register() {
               placeholder="*****"
               name="cPassword"
               onInput={handleChange}
+              data-testid="cPassword"
             />
           </Form.Group>
           {errors.cPassword ? (
@@ -144,6 +149,7 @@ export default function Register() {
               id={`radio-admin`}
               value="user"
               onInput={handleChange}
+              data-testid="userRadio"
             />
             <Form.Check
               className="radio"
@@ -154,6 +160,7 @@ export default function Register() {
               id={`radio-admin`}
               value="admin"
               onInput={handleChange}
+              data-testid="adminRadio"
             />
             {errors.role ? (
               <span className="input-error err-name">{errors.role}</span>
@@ -164,7 +171,13 @@ export default function Register() {
 
           <div className="text-center mt-3">
             <small>*Registering requires admin approval</small>
-            <Button className="login-btn mt-3" variant="dark" type="submit">
+            <Button
+              className="login-btn mt-3"
+              variant="dark"
+              type="submit"
+              data-testid="submit"
+              disabled={Object.keys(errors).length !== 0}
+            >
               Submit
             </Button>
             <p className="mt-4">
