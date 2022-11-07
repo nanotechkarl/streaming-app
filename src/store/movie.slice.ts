@@ -97,6 +97,8 @@ export const addMovie = createAsyncThunk(
     thunkApi
   ) => {
     try {
+      token = getCookie("token");
+
       const response = await axios.post(
         `${server.api}/movies`,
         {
@@ -106,7 +108,12 @@ export const addMovie = createAsyncThunk(
           cost,
           yearRelease,
         },
-        { headers }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       if (response.data.message.includes("exist")) {
@@ -127,8 +134,12 @@ export const deleteMovie = createAsyncThunk(
   "movie/deleteMovie",
   async (movieId: string, thunkApi) => {
     try {
+      token = getCookie("token");
       const response = await axios.delete(`${server.api}/movies/${movieId}`, {
-        headers,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       alertSuccess("Deleted movie");
@@ -153,6 +164,7 @@ export const editMovie = createAsyncThunk(
     thunkApi
   ) => {
     try {
+      token = getCookie("token");
       const response = await axios.patch(
         `${server.api}/movies/${movieId}`,
         {
@@ -160,7 +172,10 @@ export const editMovie = createAsyncThunk(
           cost: parseInt(cost),
         },
         {
-          headers,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 

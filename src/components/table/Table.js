@@ -176,8 +176,10 @@ const Table = (props) => {
   //#endregion
 
   return (
-    <>
-      <table id="employee">
+    <div>
+      <table
+        className={props?.custom?.display === "large" ? "table-large" : ""}
+      >
         <thead>
           <tr>{renderHeader(props.header)}</tr>
         </thead>
@@ -186,7 +188,7 @@ const Table = (props) => {
           {props.customRender}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

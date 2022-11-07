@@ -49,6 +49,7 @@ export default function Reviews() {
 
   useDidMountEffect(() => {
     refetchReview();
+    overallrating();
   }, [rating, submitCounter]); //eslint-disable-line
 
   const fetchData = async () => {
@@ -181,8 +182,6 @@ export default function Reviews() {
                   <h3> Your Review</h3>
                   <span className="warning-text">
                     &nbsp;
-                    {!yourReview?.approved &&
-                      "Waiting for approval of administrator"}
                     {yourReview?.approved && (
                       <span className="success-text">
                         Your review has been approved
@@ -277,6 +276,20 @@ export default function Reviews() {
   };
   /* #endregion */
 
+  const overallrating = () => {
+    const apple = reviews?.map((obj: any) => {
+      return obj.rating;
+    });
+
+    const sum = apple?.reduce((a: any, b: any) => {
+      const sam = parseInt(a) + parseInt(b);
+      return sam;
+    }, 0);
+
+    const avg = sum / reviews?.length || 0;
+    return avg;
+  };
+
   return (
     <div className="reviews-page">
       <Row>
@@ -294,7 +307,7 @@ export default function Reviews() {
         </Col>
         <Col>
           <div className="description">
-            {/* TODO- TEMP-rating */}
+            <h3 className="warning-text"> Rating: {overallrating()} stars</h3>
             <p> {selected?.description} </p>
           </div>
           <h3> CAST </h3>

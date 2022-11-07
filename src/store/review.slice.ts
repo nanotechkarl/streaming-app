@@ -128,13 +128,17 @@ export const approvePendingReview = createAsyncThunk(
   "movies/approvePendingReview",
   async (reviewId: string, thunkApi) => {
     try {
+      token = getCookie("token");
       const response = await axios.patch(
         `${server.api}/reviews/${reviewId}`,
         {
           approved: true,
         },
         {
-          headers,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       return response.data.data;

@@ -221,6 +221,7 @@ export default function Control() {
         await dispatch(approveUser({ userId: user.id, approved }));
         setUsersCounter((prev) => prev + 1);
         Swal.fire({
+          icon: "success",
           title: `User is approved`,
           showConfirmButton: false,
           timer: 1500,
@@ -250,6 +251,7 @@ export default function Control() {
         dispatch(approvePendingReview(reviewId));
         setReviewCounter((prev) => prev + 1);
         Swal.fire({
+          icon: "success",
           title: `review is approved`,
           showConfirmButton: false,
           timer: 1500,
@@ -388,6 +390,7 @@ export default function Control() {
           functionKey="id"
           data={pendingReviews}
           onApproval={approveReview}
+          custom={{ display: "large" }}
         />
       </Row>
     </div>
