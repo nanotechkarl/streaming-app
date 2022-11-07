@@ -7,9 +7,9 @@ import {
   getmyReviewMovie,
 } from "../store/review.slice";
 import { getAllActorsByMovie } from "../store/actor.slice";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import useForm from "../hooks/useForm";
 import { Rating } from "react-simple-star-rating";
 import useDidMountEffect from "../hooks/useDidMountEffect";
@@ -17,6 +17,7 @@ import { getCookie } from "../utils/global";
 
 export default function Reviews() {
   /* #region - HOOKS */
+  const navigate = useNavigate();
   const params = useParams();
   const dispatch = useAppDispatch();
   const { selected }: { [key: string]: any } = useAppSelector(
@@ -35,6 +36,7 @@ export default function Reviews() {
   const [edit, setEdit] = useState(false);
   const [comment, setComment] = useState("");
   const [submitCounter, setSubmitCounter] = useState(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   /* #endregion */
 
   /* #region  - EFFECTS */
@@ -54,10 +56,12 @@ export default function Reviews() {
 
   const fetchData = async () => {
     if (params?.id) {
-      await dispatch(getMovieById(params.id));
+      setIsLoading(true);
+      const res = await dispatch(getMovieById(params.id));
+      if (!res.payload) navigate("/page-not-found");
       await dispatch(getMovieReviews(params.id));
       await dispatch(getAllActorsByMovie(params.id));
-
+      setIsLoading(false);
       const token = getCookie("token");
       if (token) {
         const res = await dispatch(getmyReviewMovie(params.id));
@@ -163,7 +167,7 @@ export default function Reviews() {
   const renderReviewOption = () => {
     return (
       <div>
-        {current?.permissions.includes("user") ? (
+        {current?.permissions?.includes("user") ? (
           <>
             <div className="rate-container">
               <span className="rate-label">RATE THIS MOVIE </span>
@@ -232,7 +236,7 @@ export default function Reviews() {
           </>
         ) : (
           <>
-            {current?.permissions.includes("admin") ? (
+            {current?.permissions?.includes("admin") ? (
               <></>
             ) : (
               <h3 className="err-name">Login/signup to write a review </h3>
@@ -274,6 +278,7 @@ export default function Reviews() {
   };
   /* #endregion */
 
+  /* #region  - UTILS */
   const overallrating = () => {
     const apple = reviews?.map((obj: any) => {
       return obj.rating;
@@ -287,8 +292,11 @@ export default function Reviews() {
     const avg = sum / reviews?.length || 0;
     return avg;
   };
+  /* #endregion */
 
-  return (
+  return isLoading ? (
+    <Spinner animation="grow"></Spinner>
+  ) : (
     <div className="reviews-page">
       <Row>
         <Col>

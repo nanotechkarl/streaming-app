@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Card, Col, Container, Row, Spinner } from "react-bootstrap";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
@@ -11,11 +11,12 @@ import {
 
 export default function Actor() {
   /* #region  - HOOKS */
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const params = useParams();
   const { moviesOfActor, actorSelected }: { [key: string]: any } =
     useAppSelector((state) => state.actor);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   /* #endregion */
 
   /* #region  - EFFECT */
@@ -28,10 +29,13 @@ export default function Actor() {
   }, []); //eslint-disable-line
 
   const fetchData = async () => {
+    setIsLoading(true);
     if (params?.id) {
+      const res = await dispatch(getActor(params.id));
+      if (!res.payload) navigate("/page-not-found");
       await dispatch(getMoviesOfActor(params.id));
-      await dispatch(getActor(params.id));
     }
+    setIsLoading(false);
   };
 
   /* #endregion */
@@ -71,7 +75,9 @@ export default function Actor() {
   };
   /* #endregion */
 
-  return (
+  return isLoading ? (
+    <Spinner animation="grow"></Spinner>
+  ) : (
     <Container className="home-page">
       <Row className="ml-4 mb-5">
         <Col xs={6}>
