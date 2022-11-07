@@ -95,12 +95,12 @@ export default function Reviews() {
       );
 
       if (res) {
-        await setEdit(false);
-        await setComment(message);
+        setEdit(false);
+        setComment(message);
       }
     }
 
-    await setSubmitCounter((prev) => prev + 1);
+    setSubmitCounter((prev) => prev + 1);
   };
 
   const ratingChanged = async (rate: number) => {

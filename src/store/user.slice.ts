@@ -3,10 +3,9 @@ import axios from "axios";
 import storage from "redux-persist/lib/storage";
 import { server, getCookie, alertError } from "../utils/global";
 import { UserState } from "./types";
-import Swal from "sweetalert2";
 
 //#region - Token
-let token: string = getCookie("token");
+let token: string | undefined = getCookie("token");
 let headers = {
   "Content-Type": "application/json",
   Authorization: `Bearer ${token}`,

@@ -47,7 +47,7 @@ export default function Home() {
   };
   //#endregion
 
-  //#region  - UTILS
+  /* #region  - UTILS */
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },

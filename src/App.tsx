@@ -6,7 +6,6 @@ import {
   Route,
   Outlet,
   Navigate,
-  useLocation,
 } from "react-router-dom";
 import {
   Login,
