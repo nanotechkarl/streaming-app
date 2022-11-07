@@ -159,6 +159,8 @@ const Table = (props) => {
           <div className="control-message">{row[key]}</div>
         </td>
       );
+    } else if (key === "yearRelease") {
+      return <td key={index}>{row[key]}</td>;
     } else {
       //default
       return <td key={index}>{row[key]}</td>;

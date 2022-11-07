@@ -8,10 +8,9 @@ import {
   alertWarning,
 } from "../utils/global";
 import { ActorState } from "./types";
-import Swal from "sweetalert2";
 
 //#region - Token
-let token: string = getCookie("token");
+let token = getCookie("token");
 let headers = {
   "Content-Type": "application/json",
   Authorization: `Bearer ${token}`,
@@ -49,6 +48,7 @@ export const addActor = createAsyncThunk(
     thunkApi
   ) => {
     try {
+      token = getCookie("token");
       const response = await axios.post(
         `${server.api}/actor-details`,
         {
@@ -58,7 +58,12 @@ export const addActor = createAsyncThunk(
           age,
           imgUrl,
         },
-        { headers }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       if (response.data.message.includes("exist")) {
@@ -88,13 +93,19 @@ export const addActorToMovie = createAsyncThunk(
     thunkApi
   ) => {
     try {
+      token = getCookie("token");
       const response = await axios.post(
         `${server.api}/actors`,
         {
           movieId,
           actorDetailsId,
         },
-        { headers }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       if (response.data.message.includes("exist")) {
@@ -132,10 +143,14 @@ export const deleteCelebrity = createAsyncThunk(
   "actor/deleteActor",
   async (actorId: string, thunkApi) => {
     try {
+      token = getCookie("token");
       const response = await axios.delete(
         `${server.api}/actor-details/${actorId}`,
         {
-          headers,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -169,6 +184,7 @@ export const editActor = createAsyncThunk(
     thunkApi
   ) => {
     try {
+      token = getCookie("token");
       const response = await axios.patch(
         `${server.api}/actor-details/${actorId}`,
         {
@@ -178,7 +194,10 @@ export const editActor = createAsyncThunk(
           age: parseInt(age),
         },
         {
-          headers,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -211,7 +230,6 @@ export const getMoviesOfActor = createAsyncThunk(
   "actor/getMoviesOfActor",
   async (actorId: string, thunkApi) => {
     try {
-      token = getCookie("token");
       const response = await axios.get(`${server.api}/actor/movies/${actorId}`);
       return response.data.data;
     } catch (error: any) {
@@ -226,7 +244,6 @@ export const getActor = createAsyncThunk(
   "actor/getActor",
   async (actorId: string, thunkApi) => {
     try {
-      token = getCookie("token");
       const response = await axios.get(
         `${server.api}/actor-details/${actorId}`
       );

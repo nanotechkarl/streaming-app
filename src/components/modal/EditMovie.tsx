@@ -82,7 +82,7 @@ export default function EditMovie(props: Edit) {
               )}
             </Form.Group>
             <Form.Group>
-              <Form.Label>Cost ($million)</Form.Label>
+              <Form.Label>Cost</Form.Label>
               <Form.Control
                 defaultValue={props.file.cost}
                 type="text"

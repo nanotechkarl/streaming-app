@@ -90,6 +90,7 @@ export default function AddActor(props: any) {
     callback: onSubmit,
     inputCount,
     inputType: "addActor",
+    resetValues: showAddModal,
   });
   //#endregion
 

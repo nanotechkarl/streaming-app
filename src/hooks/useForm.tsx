@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { omit } from "lodash";
 import { regex } from "../utils/global";
 
@@ -11,11 +11,19 @@ const useForm = ({
   inputCount = 1,
   inputType = "",
   useValidation = true,
+  resetValues = false,
 }: any) => {
   //#region - STATES
   const [values, setValues] = useState<ObjectAny>({});
   const [errors, setErrors] = useState<ObjectAny>({});
   //#endregion
+
+  useEffect(() => {
+    if (resetValues) {
+      setValues({});
+      setErrors({});
+    }
+  }, [resetValues]);
 
   //#region - VALIDATE
   const conditionCase = (condition: any, message: string, name: string) => {
@@ -39,12 +47,20 @@ const useForm = ({
       case "title":
       case "description":
       case "imgUrl":
-      case "cost":
       case "yearRelease":
       case "message":
       case "gender":
-      case "age":
         conditionCase(value.length === 0, ` Please enter ${name}`, name);
+        break;
+
+      case "cost":
+      case "age":
+        conditionCase(
+          value.length === 0 || isNaN(parseInt(value)),
+          ` Please enter valid ${name}`,
+          name
+        );
+
         break;
 
       case "fName":

@@ -282,7 +282,6 @@ export default function Control() {
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
         </tr>
       ));
     }
@@ -295,7 +294,7 @@ export default function Control() {
         <Col>
           <h3>MOVIES</h3>
           <Table
-            header={["TITLE", "YEAR RELEASE", "COST($million)"]}
+            header={["TITLE", "YEAR RELEASE", "COST"]}
             keys={["title", "yearRelease", "cost"]}
             data={movies}
             onEdit={showEditMovie}
@@ -348,8 +347,6 @@ export default function Control() {
           keys={["email", "approved", "permissions"]}
           functionKey="id"
           data={accounts}
-          onEdit={showEditUser}
-          onDelete={showDeleteUser}
           onApproval={showApprovedUser}
           customRender={renderEmptyRowUser(usersCount)}
         />

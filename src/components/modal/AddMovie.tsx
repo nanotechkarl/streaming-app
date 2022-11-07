@@ -37,19 +37,23 @@ export default function AddMovie(props: any) {
   };
 
   /* #region  - UTILS */
-  const hideAddMovie = () => setShowMovie(false);
+  const hideAddMovie = () => {
+    setShowMovie(false);
+  };
   const showAddMovie = () => setShowMovie(true);
   /* #endregion */
 
   //#region - CUSTOM HOOKS
   const inputCount = 5;
 
-  const { handleChange, values, errors, handleSubmit } = useForm({
+  let { handleChange, values, errors, handleSubmit } = useForm({
     callback: onSubmit,
     inputCount,
     inputType: "addMovie",
+    resetValues: showMovieModal,
   });
   //#endregion
+  console.log("values :", values);
 
   return (
     <div>
@@ -111,7 +115,7 @@ export default function AddMovie(props: any) {
               )}
             </Form.Group>
             <Form.Group controlId="formBasicCost">
-              <Form.Label>Cost ($million)</Form.Label>
+              <Form.Label>Cost</Form.Label>
               <Form.Control
                 type="text"
                 name="cost"

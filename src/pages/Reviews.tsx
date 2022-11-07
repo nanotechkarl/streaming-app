@@ -95,12 +95,12 @@ export default function Reviews() {
       );
 
       if (res) {
-        await setEdit(false);
-        await setComment(message);
+        setEdit(false);
+        setComment(message);
       }
     }
 
-    await setSubmitCounter((prev) => prev + 1);
+    setSubmitCounter((prev) => prev + 1);
   };
 
   const ratingChanged = async (rate: number) => {
@@ -164,7 +164,7 @@ export default function Reviews() {
   const renderReviewOption = () => {
     return (
       <div>
-        {current?.permissions ? (
+        {current?.permissions.includes("user") ? (
           <>
             <div className="rate-container">
               <span className="rate-label">RATE THIS MOVIE </span>
@@ -235,7 +235,11 @@ export default function Reviews() {
           </>
         ) : (
           <>
-            <h3 className="err-name">Login/signup to write a review </h3>
+            {current?.permissions.includes("admin") ? (
+              <></>
+            ) : (
+              <h3 className="err-name">Login/signup to write a review </h3>
+            )}
           </>
         )}
       </div>
@@ -290,8 +294,7 @@ export default function Reviews() {
         </Col>
         <Col>
           <div className="description">
-            {/* TODO- TEMP */}
-            <h3 className="overall"> Overall rating: 4.5 *</h3>
+            {/* TODO- TEMP-rating */}
             <p> {selected?.description} </p>
           </div>
           <h3> CAST </h3>
