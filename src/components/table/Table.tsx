@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const Table = (props) => {
+const Table = (props: any) => {
   //#region - RENDER
-  const renderHeader = (data) => {
+  const renderHeader = (data: any) => {
     return (
       <>
-        {data.map((key, index) => (
+        {data.map((key: string, index: number) => (
           <React.Fragment key={index}>
             <th key={index}>{key}</th>
           </React.Fragment>
@@ -18,13 +18,13 @@ const Table = (props) => {
     );
   };
 
-  const renderBody = (data) => {
+  const renderBody = (data: any) => {
     const keys = props.keys;
 
-    const table = data.map((row, index) => {
+    const table = data.map((row: string, index: number) => {
       return (
         <tr key={index}>
-          {keys.map((key, index) => {
+          {keys.map((key: string, index: number) => {
             return (
               <React.Fragment key={index}>
                 {customCell({ row, key, index })}
@@ -96,7 +96,7 @@ const Table = (props) => {
   //#endregion
 
   //#region - CUSTOM
-  const customDisable = (row) => {
+  const customDisable = (row: any) => {
     let days = 0;
     if (props.custom?.disableDelete?.date) {
       const day = 1000 * 60 * 60 * 24;
@@ -125,7 +125,15 @@ const Table = (props) => {
     return "table-options";
   };
 
-  const customCell = ({ row, key, index }) => {
+  const customCell = ({
+    row,
+    key,
+    index,
+  }: {
+    row: any;
+    key: string;
+    index: number;
+  }) => {
     if (props.custom?.usersEmail && key === "id") {
       return <td key={index}>{props.custom.usersEmail(row)}</td>;
     } else if (key === "approved") {
