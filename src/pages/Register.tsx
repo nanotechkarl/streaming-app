@@ -36,7 +36,7 @@ export default function Register() {
 
     if (register.payload) {
       navigate(pages.registerSuccess);
-      alertSuccess("Registration Success. Please login");
+      alertSuccess("Registration Success. Please wait for admin to approve");
     }
   };
   //#endregion

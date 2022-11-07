@@ -4,7 +4,12 @@ import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import { deleteMovie, editMovie, getMovies } from "../store/movie.slice";
 import { approvePendingReview, getPendingReviews } from "../store/review.slice";
 import { deleteCelebrity, editActor, getAllActors } from "../store/actor.slice";
-import { approveUser, getUsers } from "../store/user.slice";
+import {
+  approveUser,
+  deleteUserById,
+  editUser,
+  getUsers,
+} from "../store/user.slice";
 import Table from "../components/table/Table";
 import AddMovie from "../components/modal/AddMovie";
 import AddActor from "../components/modal/AddActor";
@@ -13,12 +18,12 @@ import EditMovie from "../components/modal/EditMovie";
 import EditActor from "../components/modal/EditActor";
 import Swal from "sweetalert2";
 import { Users } from "../store/types";
+import EditUser from "../components/modal/EditUser";
 
 export default function Control() {
   /* #region  - HOOKS */
   const dispatch = useAppDispatch();
   const { movies }: { [key: string]: any } = useAppSelector(
-    //TODO USE TYPES FROM STORE
     (state) => state.movie
   );
   const { pendingReviews }: { [key: string]: any } = useAppSelector(
@@ -27,9 +32,8 @@ export default function Control() {
   const { actors }: { [key: string]: any } = useAppSelector(
     (state) => state.actor
   );
-  const { accounts }: { accounts: Users[] } = useAppSelector(
-    (state) => state.user
-  );
+  const { accounts, current }: { accounts: Users[]; current: any } =
+    useAppSelector((state) => state.user);
   const [moviesCount, setMoviesCount] = useState(0);
   const [moviesCounter, setMoviesCounter] = useState(-1);
   const [actorsCount, setActorsCount] = useState(0);
@@ -47,7 +51,7 @@ export default function Control() {
   const [editUserState, setEditUserState] = useState(false);
   const [editedFile, setEditedFile] = useState({}) as any;
   const [editedActor, setEditedActor] = useState({}) as any;
-  const [editedUser, setEditedUser] = useState("");
+  const [editedUser, setEditedUser] = useState({}) as any;
   const [lastEditedFile, setLastEditedFile] = useState({});
   const [lastEditedActor, setLastEditedActor] = useState({});
   const [lastEditedUser, setLastEditedUser] = useState({});
@@ -70,7 +74,7 @@ export default function Control() {
   useEffect(() => {
     fetchUsers();
     setUsersCount(accounts.length);
-  }, [usersCounter]); //eslint-disable-line
+  }, [usersCounter, lastEditedUser]); //eslint-disable-line
 
   useEffect(() => {
     fetchPendingReviews();
@@ -158,41 +162,51 @@ export default function Control() {
   };
   /* #endregion */
 
-  /* #region  - //TODO USER CONTROLS */
-  const showEditUser = (file: any) => {
-    setEditedUser(file);
+  /* #region  - USER CONTROLS */
+  const showEditUser = (user: any) => {
+    setEditedUser(user);
     setEditUserState(true);
   };
 
-  const updateUser = async (file: any) => {
-    // const savedFile = await dispatch(
-    //   // editUser({
-    //   //   movieId: file.movieId,
-    //   //   imgUrl: file.imgUrl,
-    //   //   cost: file.cost,
-    //   // })
-    // );
-    // setLastEditedUser(savedFile);
+  const updateUser = async (user: any) => {
+    const savedUser = await dispatch(
+      editUser({
+        userId: user.userId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        permissions: user.permissions,
+      })
+    );
+    setLastEditedUser(savedUser);
   };
 
-  const showDeleteUser = async (User: any) => {
-    setDeleteUserState(true);
-    setdeleteUser(User);
+  const showDeleteUser = async (user: any) => {
+    confirmDeleteUser(user);
   };
 
-  const confirmDeleteUser = async () => {
-    const movieId = deleteUser;
-
-    await dispatch(deleteMovie(movieId));
-    setDeleteUserState(false);
-    setUsersCounter((prev) => prev - 1);
+  const confirmDeleteUser = async (user: any) => {
+    Swal.fire({
+      title: `Delete user?`,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Delete",
+      customClass: "swal-confirm",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await dispatch(deleteUserById(user.id));
+        setDeleteUserState(false);
+        setUsersCounter((prev) => prev - 1);
+      }
+    });
   };
 
   const showApprovedUser = async (userId: string) => {
     alertApproveUser(userId);
   };
 
-  const alertApproveUser = async (userId: string) => {
+  const alertApproveUser = async (user: any) => {
     Swal.fire({
       title: `Approve user?`,
       icon: "info",
@@ -201,10 +215,10 @@ export default function Control() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Approve",
       customClass: "swal-confirm",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         const approved = true;
-        dispatch(approveUser({ userId, approved }));
+        await dispatch(approveUser({ userId: user.id, approved }));
         setUsersCounter((prev) => prev + 1);
         Swal.fire({
           title: `User is approved`,
@@ -282,6 +296,9 @@ export default function Control() {
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       ));
     }
@@ -343,12 +360,26 @@ export default function Control() {
       <Row>
         <h3>USERS</h3>
         <Table
-          header={["EMAIL", "APPROVED", "PERMISSIONS"]}
-          keys={["email", "approved", "permissions"]}
-          functionKey="id"
+          header={[
+            "EMAIL",
+            "FIRST NAME",
+            "LAST NAME",
+            "APPROVED",
+            "PERMISSIONS",
+          ]}
+          keys={["email", "firstName", "lastName", "approved", "permissions"]}
           data={accounts}
           onApproval={showApprovedUser}
+          onDelete={showDeleteUser}
+          onEdit={showEditUser}
           customRender={renderEmptyRowUser(usersCount)}
+          custom={{ disableDelete: { root: true, user: current } }}
+        />
+        <EditUser
+          onHide={() => setEditUserState(false)}
+          onEdit={updateUser}
+          show={editUserState}
+          user={editedUser}
         />
         <h3>PENDING REVIEWS</h3>
         <Table
@@ -359,18 +390,6 @@ export default function Control() {
           onApproval={approveReview}
         />
       </Row>
-
-      <div>
-        <h5> TODO: reset state of inputs after close modal</h5>
-
-        <p>minor</p>
-        <h5 className="todo">
-          TODO: USERS EDIT/DELETE ALSO EDIT REVIEW COLLECTION(NAME)
-        </h5>
-        <h5> EMAIL TO Altamash.Kazi@cognixia.com</h5>
-        <h5 className="todo">TODO: OVERALL RATING</h5>
-        <h5 className="todo"> TODO: Remove actor from movie</h5>
-      </div>
     </div>
   );
 }

@@ -53,7 +53,6 @@ export default function AddMovie(props: any) {
     resetValues: showMovieModal,
   });
   //#endregion
-  console.log("values :", values);
 
   return (
     <div>

@@ -115,6 +115,13 @@ const Table = (props) => {
       return row.movies.length ? "table-options disabled" : "table-options";
     }
 
+    if (props.custom?.disableDelete?.root) {
+      return row?.permissions?.includes("root") ||
+        props.custom?.disableDelete?.user.id === row.id
+        ? "table-options disabled"
+        : "table-options";
+    }
+
     return "table-options";
   };
 

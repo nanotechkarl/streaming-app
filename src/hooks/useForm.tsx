@@ -50,6 +50,7 @@ const useForm = ({
       case "yearRelease":
       case "message":
       case "gender":
+      case "permissions":
         conditionCase(value.length === 0, ` Please enter ${name}`, name);
         break;
 

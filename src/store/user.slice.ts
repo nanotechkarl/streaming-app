@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import storage from "redux-persist/lib/storage";
-import { server, getCookie, alertError } from "../utils/global";
+import { server, getCookie, alertError, alertSuccess } from "../utils/global";
 import { UserState } from "./types";
 import Swal from "sweetalert2";
 
@@ -153,19 +153,35 @@ export const getUserById = createAsyncThunk(
 export const editUser = createAsyncThunk(
   "user/editUser",
   async (
-    { id, fullName, email }: { id: number; fullName: string; email: string },
+    {
+      userId,
+      firstName,
+      lastName,
+      permissions,
+    }: {
+      userId: any;
+      firstName: any;
+      lastName: any;
+      permissions: any;
+    },
     thunkApi
   ) => {
     try {
-      const response = await axios.put(
-        `${server.api}/users/${id}`,
-        { fullName, email },
+      token = getCookie("token");
+      const response = await axios.patch(
+        `${server.api}/users/${userId}`,
+        { firstName, lastName, permissions },
         {
-          headers,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+      alertSuccess("User edited");
       return response.data;
     } catch (error: any) {
+      alertError(error.response?.data?.message);
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -173,15 +189,18 @@ export const editUser = createAsyncThunk(
 
 export const deleteUserById = createAsyncThunk(
   "user/deleteUser",
-  async ({ id }: { id: number }, thunkApi) => {
+  async (id: string, thunkApi) => {
     try {
+      token = getCookie("token");
       const response = await axios.delete(`${server.api}/users/${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
+      alertSuccess("User deleted");
       return response.data;
     } catch (error: any) {
+      alertError(error.response?.data?.message);
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -196,16 +215,22 @@ export const approveUser = createAsyncThunk(
     thunkApi
   ) => {
     try {
+      token = getCookie("token");
       const response = await axios.patch(
         `${server.api}/users/approval/${userId}`,
         { approved },
         {
-          headers,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
+      alertSuccess("User approved");
       return response.data;
     } catch (error: any) {
+      alertError(error.response?.data?.message);
       return thunkApi.rejectWithValue(error.message);
     }
   }

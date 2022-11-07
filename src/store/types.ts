@@ -63,8 +63,10 @@ export type Movies = {
 
 export type Users = {
   id: string;
+  userId?: string;
   email: string;
   firstName: string;
   lastName: string;
   approved: boolean;
+  permissions: string[];
 };
