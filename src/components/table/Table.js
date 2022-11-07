@@ -128,12 +128,6 @@ const Table = (props) => {
   const customCell = ({ row, key, index }) => {
     if (props.custom?.usersEmail && key === "id") {
       return <td key={index}>{props.custom.usersEmail(row)}</td>;
-    } else if (key === "cost" || key === "permissions") {
-      return (
-        <td key={index} className="text-center">
-          {row[key]}
-        </td>
-      );
     } else if (key === "approved") {
       return (
         <td key={index} className="text-left">

@@ -270,6 +270,8 @@ export default function Control() {
         <tr key={i}>
           <td></td>
           <td></td>
+          <td></td>
+          <td></td>
         </tr>
       ));
     }

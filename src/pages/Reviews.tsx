@@ -148,8 +148,6 @@ export default function Reviews() {
                   <div>
                     {obj.firstName} {obj.lastName}
                   </div>
-                  <div> gender: {obj.gender}</div>
-                  <div> age: {obj.age}</div>
                   <Link to={`/actors/${obj.id}`} className="mr-2">
                     <span className="movie-title">Check Movies</span>
                   </Link>
@@ -302,12 +300,12 @@ export default function Reviews() {
                 alt={selected?.title}
                 src={selected?.imgUrl}
               />
+              <h3 className="warning-text"> Rating: {overallrating()} stars</h3>
             </div>
           </div>
         </Col>
         <Col>
           <div className="description">
-            <h3 className="warning-text"> Rating: {overallrating()} stars</h3>
             <p> {selected?.description} </p>
           </div>
           <h3> CAST </h3>
