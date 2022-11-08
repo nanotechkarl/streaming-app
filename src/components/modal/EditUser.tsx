@@ -5,6 +5,12 @@ import useForm from "../../hooks/useForm";
 import { alertWarning } from "../../utils/global";
 import { Users } from "../../store/types";
 
+interface ValidUser {
+  firstName: string;
+  lastName: string;
+  permissions: string[];
+}
+
 interface Edit {
   onHide: any;
   onEdit: CallableFunction;
@@ -35,6 +41,14 @@ export default function EditUser(props: Edit) {
       return;
     }
 
+    if (values.permissions) {
+      return {
+        firstName: values.fName || user.firstName,
+        lastName: values.lName || user.lastName,
+        permissions: [values.permissions],
+      };
+    }
+
     return {
       firstName: values.fName || user.firstName,
       lastName: values.lName || user.lastName,
@@ -43,13 +57,13 @@ export default function EditUser(props: Edit) {
   }
 
   const onSubmit = async () => {
-    const fileObject = validate();
+    const fileObject: ValidUser | undefined = validate();
     if (!fileObject) return;
     props.onEdit({
       userId: props.user.id,
       firstName: fileObject.firstName,
       lastName: fileObject.lastName,
-      permissions: [fileObject.permissions],
+      permissions: fileObject.permissions,
     });
     props.onHide();
   };

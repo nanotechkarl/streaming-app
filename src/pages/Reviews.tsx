@@ -135,7 +135,7 @@ export default function Reviews() {
   const renderCast = () => {
     return (
       <Row>
-        {!selectedActors.length ? (
+        {!selectedActors?.length ? (
           <p className="ml-3 err-name"> No Cast found... </p>
         ) : (
           selectedActors?.map((obj: any) => {

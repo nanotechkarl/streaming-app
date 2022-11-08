@@ -158,10 +158,10 @@ export const editUser = createAsyncThunk(
       lastName,
       permissions,
     }: {
-      userId: any;
-      firstName: any;
-      lastName: any;
-      permissions: any;
+      userId: string;
+      firstName: string;
+      lastName: string;
+      permissions: string[];
     },
     thunkApi
   ) => {
