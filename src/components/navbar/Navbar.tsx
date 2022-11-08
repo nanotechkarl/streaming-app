@@ -6,7 +6,9 @@ import Cookies from "js-cookie";
 import { clearActorState } from "../../store/actor.slice";
 
 export default function Navbar() {
-  const { name, permissions } = useAppSelector((state) => state.user.current);
+  const { name, permissions } = useAppSelector((state) => {
+    return state.user.current;
+  });
   const dispatch = useAppDispatch();
 
   const logout = () => {

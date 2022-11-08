@@ -114,3 +114,20 @@ export const pendingReviewsMock = [
     userId: "6369d188f9965ee9edc6c502",
   },
 ];
+
+export const currentUserMock = {
+  id: "6369d063f9965ee9edc6c4ff",
+  email: "user1@example.com",
+  approved: true,
+  name: "sammple namme",
+
+  permissions: ["user"],
+};
+
+export const currentUserMockAdmin = {
+  id: "6369d063f9965ee9edc6c4ff",
+  email: "user1@example.com",
+  name: "user3 admin",
+  approved: true,
+  permissions: ["admin"],
+};
