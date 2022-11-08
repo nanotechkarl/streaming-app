@@ -176,7 +176,6 @@ export default function Register() {
               variant="dark"
               type="submit"
               data-testid="submit"
-              disabled={Object.keys(errors).length !== 0}
             >
               Submit
             </Button>

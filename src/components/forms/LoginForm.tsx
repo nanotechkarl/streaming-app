@@ -1,6 +1,7 @@
 import { Button, Form } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import useForm from "../../hooks/useForm";
+import { Users } from "../../store/types";
 
 export interface Props {
   onSubmit: (email: string, password: string) => void;
@@ -62,7 +63,6 @@ export default function LoginForm(props: Props) {
           variant="dark"
           type="submit"
           data-testid="submit"
-          disabled={Object.keys(errors).length !== 0}
         >
           Submit
         </Button>

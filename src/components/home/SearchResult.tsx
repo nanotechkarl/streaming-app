@@ -16,7 +16,7 @@ export default function SearchResult(props: Props) {
   return (
     <Carousel responsive={responsive} ssr={true} className="mr-5">
       {searchBy === "movie" &&
-        searched.map((data: any) => {
+        searched.map((data: Movies) => {
           return (
             <div className="movie-card-container" key={data.id}>
               <Card className="movie-card">
@@ -32,7 +32,7 @@ export default function SearchResult(props: Props) {
           );
         })}
       {searchBy === "actor" &&
-        searchedActors.map((data: any) => {
+        searchedActors.map((data: Actors) => {
           return (
             <Card className="actor-card-container" key={data?.id}>
               <Row className="actor-col">

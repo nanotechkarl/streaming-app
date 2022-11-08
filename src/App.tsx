@@ -21,9 +21,7 @@ import { useAppSelector } from "./hooks/useTypedSelector";
 import { getCookie } from "./utils/global";
 
 function App() {
-  const { current }: { [key: string]: any } = useAppSelector(
-    (state) => state.user
-  );
+  const { current } = useAppSelector((state) => state.user);
 
   const adminRoute = () => {
     const role = current?.permissions || [];
