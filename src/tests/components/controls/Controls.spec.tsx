@@ -5,7 +5,12 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Control } from "../../../pages";
-import { actorsMock, moviesMock, userMock } from "../mockValues";
+import {
+  actorsMock,
+  moviesMock,
+  pendingReviewsMock,
+  userMock,
+} from "../mockValues";
 import thunk from "redux-thunk";
 
 describe("<Controls/>", () => {
@@ -20,7 +25,7 @@ describe("<Controls/>", () => {
         movies: moviesMock,
       },
       review: {
-        pendingReviews: [],
+        pendingReviews: pendingReviewsMock,
       },
       user: {
         accounts: userMock,
@@ -111,7 +116,22 @@ describe("<Controls/>", () => {
     it("Should show approve button if user is not approved", async () => {
       renderApp();
 
-      expect(screen.getAllByText("Approve?").length === 1).toBeTruthy();
+      expect(await screen.findAllByText("Approve?")).not.toBeNull();
+    });
+  });
+
+  describe("Pending reviews table", () => {
+    it("Should show pending details", async () => {
+      renderApp();
+
+      expect(await screen.findByText("appleReview")).not.toBeNull();
+      expect(
+        await screen.findAllByText("6369d10ef9965ee9edc6c501")
+      ).not.toBeNull();
+      expect(await screen.findByText("review1 review")).not.toBeNull();
+      expect(
+        await screen.findAllByText("6369d188f9965ee9edc6c502")
+      ).not.toBeNull();
     });
   });
 });

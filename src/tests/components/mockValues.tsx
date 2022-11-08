@@ -91,3 +91,26 @@ export const userMock = [
     permissions: ["admin"],
   },
 ];
+
+export const pendingReviewsMock = [
+  {
+    id: "636ad948ba0f7812960f42d9",
+    message: "appleReview",
+    rating: 0,
+    approved: false,
+    datePosted: "2022-11-08T16:00:00.000Z",
+    name: "review1 review",
+    movieId: "6369d10ef9965ee9edc6c501",
+    userId: "6369d188f9965ee9edc6c502",
+  },
+  {
+    id: "636ad948ba0f7812960f42d9",
+    message: "bananaReview",
+    rating: 3,
+    approved: false,
+    datePosted: "2022-11-08T16:00:00.000Z",
+    name: "sfdfdsfds1 eqweqeqw900joj",
+    movieId: "6369d10ef9965ee9edc6c501",
+    userId: "6369d188f9965ee9edc6c502",
+  },
+];
