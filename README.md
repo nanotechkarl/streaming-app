@@ -1,5 +1,8 @@
 # Streaming app (Frontend POC)
 
+# Backend link: https://github.com/nanotechkarl/streaming-service
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
