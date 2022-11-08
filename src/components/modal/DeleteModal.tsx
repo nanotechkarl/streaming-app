@@ -2,13 +2,13 @@ import { MouseEventHandler } from "react";
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 
-interface DeleteWindow {
+export interface Props {
   onHide: any;
   handleDelete: MouseEventHandler<HTMLButtonElement>;
   show: boolean;
 }
 
-export default function DeleteModal(props: DeleteWindow) {
+export default function DeleteModal(props: Props) {
   const { handleDelete, ...modalProps } = props;
 
   return (

@@ -11,10 +11,6 @@ import { ActorState } from "./types";
 
 //#region - Token
 let token = getCookie("token");
-let headers = {
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${token}`,
-};
 //#endregion
 
 /* #region  - Initial state */
@@ -279,6 +275,7 @@ const movie = createSlice({
       state.selectedActors = [];
       state.actorSelected = {};
       state.moviesOfActor = [];
+      state.searched = [];
     },
   },
   extraReducers: (builder) => {

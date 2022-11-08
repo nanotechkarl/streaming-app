@@ -42,10 +42,8 @@ export default function Control() {
   const [usersCounter, setUsersCounter] = useState(-1);
   const [deleteMovieState, setDeleteMovieState] = useState(false);
   const [deleteActorState, setDeleteActorState] = useState(false);
-  const [deleteUserState, setDeleteUserState] = useState(false);
   const [deleteFile, setdeleteFile] = useState({}) as any;
   const [deleteActor, setdeleteActor] = useState("");
-  const [deleteUser, setdeleteUser] = useState("");
   const [editMovieState, setEditMovieState] = useState(false);
   const [editActorState, setEditActorState] = useState(false);
   const [editUserState, setEditUserState] = useState(false);
@@ -196,7 +194,6 @@ export default function Control() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await dispatch(deleteUserById(user.id));
-        setDeleteUserState(false);
         setUsersCounter((prev) => prev - 1);
       }
     });

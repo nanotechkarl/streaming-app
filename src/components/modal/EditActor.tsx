@@ -4,7 +4,6 @@ import { Button, Form } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { alertWarning } from "../../utils/global";
 import { Actors } from "../../store/types";
-import { ActorInputs } from "../../types/inputs";
 
 interface Edit {
   onHide: any;

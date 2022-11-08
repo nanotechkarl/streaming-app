@@ -3,14 +3,18 @@ import logo from "../../assets/logo.png";
 import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
 import { clear, clearUserState } from "../../store/user.slice";
 import Cookies from "js-cookie";
+import { clearActorState } from "../../store/actor.slice";
 
 export default function Navbar() {
-  const { name, permissions } = useAppSelector((state) => state.user.current);
+  const { name, permissions } = useAppSelector(
+    (state: any) => state.user.current
+  );
   const dispatch = useAppDispatch();
 
   const logout = () => {
     Cookies.remove("token");
     dispatch(clearUserState());
+    dispatch(clearActorState());
     dispatch(clear());
     window.location.assign("/login");
   };

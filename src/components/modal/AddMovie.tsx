@@ -13,6 +13,7 @@ export default function AddMovie(props: any) {
   const [counter, setCounter] = useState<number>(0);
   /* #endregion */
 
+  /* #region  - SUBMIT */
   const onSubmit = async () => {
     const { title, description, imgUrl, cost, yearRelease } = values as Movies;
     const revenue: number = parseInt(cost);
@@ -35,6 +36,7 @@ export default function AddMovie(props: any) {
       props.add(counter);
     }
   };
+  /* #endregion */
 
   /* #region  - UTILS */
   const hideAddMovie = () => {

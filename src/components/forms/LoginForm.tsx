@@ -1,8 +1,6 @@
 import { Button, Form } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../hooks/useTypedSelector";
+import { NavLink } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { pages } from "../../utils/global";
 
 export interface Props {
   onSubmit: (email: string, password: string) => void;

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Typeahead } from "react-bootstrap-typeahead"; // ES2015
-import { Card, Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import useDebounce from "../hooks/useDebounce";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
