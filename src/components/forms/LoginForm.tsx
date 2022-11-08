@@ -1,7 +1,6 @@
 import { Button, Form } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { Users } from "../../store/types";
 
 export interface Props {
   onSubmit: (email: string, password: string) => void;

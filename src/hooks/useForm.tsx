@@ -154,29 +154,7 @@ const useForm = ({
         }
         break;
       case "register":
-        if (!values.role) {
-          errorsEmpty.role = `Please choose role`;
-        }
-        if (!values.fName) {
-          errorsEmpty.fName = `Please enter your first name`;
-        }
-
-        if (!values.lName) {
-          errorsEmpty.lName = `Please enter your last name`;
-        }
-
-        if (!values.email) {
-          errorsEmpty.email = `Enter a vaild email address`;
-        }
-
-        if (!values.password) {
-          errorsEmpty.password = `Password must be 8 characters minimum`;
-        }
-
-        if (!values.cPassword) {
-          errorsEmpty.cPassword = `Please confirm your password`;
-        }
-
+        registerValidations(values, errorsEmpty);
         break;
 
       case "addMovie":
@@ -202,24 +180,7 @@ const useForm = ({
         break;
 
       case "addActor":
-        if (!values.fName) {
-          errorsEmpty.fName = `Please enter first name`;
-        }
-        if (!values.lName) {
-          errorsEmpty.lName = `Please enter last name`;
-        }
-
-        if (!values.gender) {
-          errorsEmpty.gender = `Please enter gender`;
-        }
-
-        if (!values.age) {
-          errorsEmpty.age = `Please enter age`;
-        }
-
-        if (!values.imgUrl) {
-          errorsEmpty.imgUrl = `Please enter image url`;
-        }
+        addActorValidations(values, errorsEmpty);
 
         break;
 
@@ -235,6 +196,52 @@ const useForm = ({
     handleChange,
     handleSubmit,
   };
+};
+
+const registerValidations = (values: any, errorsEmpty: any) => {
+  if (!values.role) {
+    errorsEmpty.role = `Please choose role`;
+  }
+  if (!values.fName) {
+    errorsEmpty.fName = `Please enter your first name`;
+  }
+
+  if (!values.lName) {
+    errorsEmpty.lName = `Please enter your last name`;
+  }
+
+  if (!values.email) {
+    errorsEmpty.email = `Enter a vaild email address`;
+  }
+
+  if (!values.password) {
+    errorsEmpty.password = `Password must be 8 characters minimum`;
+  }
+
+  if (!values.cPassword) {
+    errorsEmpty.cPassword = `Please confirm your password`;
+  }
+};
+
+const addActorValidations = (values: any, errorsEmpty: any) => {
+  if (!values.fName) {
+    errorsEmpty.fName = `Please enter first name`;
+  }
+  if (!values.lName) {
+    errorsEmpty.lName = `Please enter last name`;
+  }
+
+  if (!values.gender) {
+    errorsEmpty.gender = `Please enter gender`;
+  }
+
+  if (!values.age) {
+    errorsEmpty.age = `Please enter age`;
+  }
+
+  if (!values.imgUrl) {
+    errorsEmpty.imgUrl = `Please enter image url`;
+  }
 };
 
 export default useForm;

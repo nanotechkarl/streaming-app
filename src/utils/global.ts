@@ -13,7 +13,6 @@ export const pages = {
   loginSuccess: "/",
   register: "/register",
   registerSuccess: "/",
-  docList: "/doclist",
   logout: "/logout",
 };
 
