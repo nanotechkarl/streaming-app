@@ -1,4 +1,3 @@
-/* eslint-disable testing-library/prefer-screen-queries */
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
@@ -37,7 +36,7 @@ describe("<LoginForm/>", () => {
     expect(screen.getByText("Password")).not.toBeNull();
   });
 
-  test("should enable submit btn if validation passes", async () => {
+  test("Should print error if password is less than 8 characters", async () => {
     renderApp();
 
     const email = await screen.findByTestId("email");
@@ -45,13 +44,14 @@ describe("<LoginForm/>", () => {
     const submit = await screen.findByTestId("submit");
 
     user.type(email, "example@mail.com");
-    user.type(password, "password123");
-    user.click(submit);
+    user.type(password, "passw");
+    await user.click(submit);
 
-    expect(submit).not.toBeDisabled();
+    const error = screen.getByText(/password must be 8 characters minimum/i);
+    expect(error).not.toBeNull();
   });
 
-  test("should disable submit btn if validation fails", async () => {
+  test("Should print error if email is not valid format", async () => {
     renderApp();
 
     const email = await screen.findByTestId("email");
@@ -60,8 +60,27 @@ describe("<LoginForm/>", () => {
 
     user.type(email, "example@");
     user.type(password, "password123");
-    user.click(submit);
+    await user.click(submit);
 
-    expect(submit).toBeDisabled();
+    const error = screen.getByText(/enter a valid email address/i);
+    expect(error).not.toBeNull();
+  });
+
+  test("Should pass validations and submit", async () => {
+    const onSubmit = jest.fn();
+
+    renderApp({
+      onSubmit,
+    });
+
+    const email = await screen.findByTestId("email");
+    const password = await screen.findByTestId("password");
+    const submit = await screen.findByTestId("submit");
+
+    user.type(email, "example@mail.com");
+    user.type(password, "password123");
+    await user.click(submit);
+
+    expect(onSubmit).toHaveBeenCalledWith("example@mail.com", "password123");
   });
 });

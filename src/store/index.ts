@@ -1,4 +1,8 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  combineReducers,
+  PreloadedState,
+} from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import userSlice from "./user.slice";
@@ -29,8 +33,16 @@ const store = configureStore({
     }),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+//for Testing
+export function setupStore(preloadedState?: PreloadedState<RootState>) {
+  return configureStore({
+    reducer: persistedReducer,
+    preloadedState,
+  });
+}
 
+export type RootState = ReturnType<typeof store.getState>;
+export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

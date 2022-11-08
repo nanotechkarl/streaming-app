@@ -5,7 +5,6 @@ import { useAppDispatch } from "../hooks/useTypedSelector";
 import { loginUser } from "../store/user.slice";
 import { pages } from "../utils/global";
 import LoginForm from "../components/forms/LoginForm";
-import icon from "../assets/logo.png";
 
 export default function Login() {
   /* #region - Hooks */
@@ -27,9 +26,7 @@ export default function Login() {
   return (
     <Container className="login-page">
       <div className="logo-container">
-        <NavLink to="/">
-          <img src={icon} alt="home" className="logo" />
-        </NavLink>
+        <NavLink to="/">home</NavLink>
       </div>
       <Card className=" login-card p-5">
         <div className="text-center mb-3">
