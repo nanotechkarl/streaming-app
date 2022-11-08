@@ -14,6 +14,8 @@ import {
   getMovies,
 } from "../store/movie.slice";
 import { searchActors, getAllActors } from "../store/actor.slice";
+import MovieList from "../components/home/MovieList";
+import SearchResult from "../components/home/SearchResult";
 
 export default function Home() {
   //#region - HOOKS
@@ -83,30 +85,6 @@ export default function Home() {
   /* #endregion */
 
   /* #region  - RENDER */
-  const renderMovies = () => {
-    return (
-      <Carousel responsive={responsive} ssr={true} className="mr-5">
-        {movies.map((data: any) => {
-          return (
-            <div className="movie-card-container" key={data.id}>
-              <Card className="movie-card ">
-                <img className="pic" alt={data.title} src={data.imgUrl} />
-                <div className="image__overlay image__overlay--primary">
-                  <div className="image__title">{data.title}</div>
-                  <p className="image__description movie-title">
-                    <Link to={`/reviews/${data.id}`} className="mr-2">
-                      <span className="movie-title">Check Reviews</span>
-                    </Link>
-                  </p>
-                </div>
-              </Card>
-            </div>
-          );
-        })}
-      </Carousel>
-    );
-  };
-
   const renderSearch = () => {
     return (
       <div>
@@ -163,64 +141,21 @@ export default function Home() {
       </div>
     );
   };
-
-  const renderResult = () => {
-    return (
-      <Carousel responsive={responsive} ssr={true} className="mr-5">
-        {searchBy === "movie" &&
-          searched.map((data: any) => {
-            return (
-              <div className="movie-card-container" key={data.id}>
-                <Card className="movie-card">
-                  <img alt={data.title} src={data.imgUrl} />
-                  <div className="image__overlay image__overlay--primary">
-                    <div className="image__title">{data.title}</div>
-                    <Link to={`/reviews/${data.id}`} className="mr-2">
-                      <span className="movie-title">Check Reviews</span>
-                    </Link>
-                  </div>
-                </Card>
-              </div>
-            );
-          })}
-        {searchBy === "actor" &&
-          searchedActors.map((data: any) => {
-            return (
-              <Card className="actor-card-container" key={data?.id}>
-                <Row className="actor-col">
-                  <Col className="actor-col">
-                    <img
-                      className="actor-pic"
-                      alt={data.firstName}
-                      src={data.imgUrl}
-                    />
-                  </Col>
-                  <Col className="actor-desc-col">
-                    <div className="image__title mt-3">
-                      {data.firstName} {data.lastName}
-                    </div>
-                    <Link to={`/actors/${data.id}`} className="mr-2">
-                      <span className="movie-title">Check Movies</span>
-                    </Link>
-                  </Col>
-                </Row>
-              </Card>
-            );
-          })}
-      </Carousel>
-    );
-  };
-
   /* #endregion */
 
   return (
     <div className="home-page ml-4 ">
       <div>
         <h3 className="mb-4 mt-5"> LATEST MOVIES</h3>
-        {renderMovies()}
+        <MovieList responsive={responsive} movies={movies} />
       </div>
       <div className="mt-5">{renderSearch()}</div>
-      <div>{renderResult()}</div>
+      <SearchResult
+        searchBy={searchBy}
+        searched={searched}
+        searchedActors={searchedActors}
+        responsive={responsive}
+      />
     </div>
   );
 }
