@@ -62,12 +62,6 @@ describe("<MovieList/>", () => {
     renderApp();
   });
 
-  test.skip("should have movie name and link", () => {
-    //Change to carousel bootstrap
-    // expect(screen.getByText("Item 1")).toBeInTheDocument();
-  });
-
-  //should have movie name and link
   test("should render list of movies", () => {
     expect(screen.getByRole("list")).toBeInTheDocument();
   });

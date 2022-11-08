@@ -98,29 +98,27 @@ export default function Actor() {
       <h3 className="ml-4">
         Movies of {actorSelected?.firstName} {actorSelected?.lastName}
       </h3>
-      <Carousel responsive={responsive} ssr={true} className="mr-5">
+      <Row>
         {moviesOfActor?.map((data: any) => {
           return (
-            <div className="card-actor-container" key={data.id}>
-              <Card className="movie-card ">
-                <img
-                  className="pic-selected-actor"
-                  alt={data.title}
-                  src={data.imgUrl}
-                />
-                <div className="image__overlay image__overlay--primary">
-                  <div className="image__title">{data.title}</div>
-                  <p className="image__description movie-title">
-                    <Link to={`/reviews/${data.id}`} className="mr-2">
-                      <span className="movie-title">Check Reviews</span>
-                    </Link>
-                  </p>
-                </div>
-              </Card>
-            </div>
+            <Card className="movie-card" key={data.id}>
+              <img
+                className="pic-selected-actor"
+                alt={data.title}
+                src={data.imgUrl}
+              />
+              <div className="image__overlay image__overlay--primary">
+                <div className="image__title">{data.title}</div>
+                <p className="image__description movie-title">
+                  <Link to={`/reviews/${data.id}`} className="mr-2">
+                    <span className="movie-title">Check Reviews</span>
+                  </Link>
+                </p>
+              </div>
+            </Card>
           );
         })}
-      </Carousel>
+      </Row>
     </Container>
   );
 }

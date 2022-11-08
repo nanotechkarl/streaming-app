@@ -86,26 +86,18 @@ describe("<SearchResult/>", () => {
     );
   }
 
-  test.skip("should have movie name and link", () => {
-    //Change to carousel bootstrap
-    // expect(screen.getByText("Item 1")).toBeInTheDocument();
-  });
-
   test("should render list", () => {
     renderApp();
 
     expect(screen.getByRole("list")).toBeInTheDocument();
   });
 
-  test.skip("Render searched actors if selected is actor search", () => {
-    //change component to carousel bootstrap
-    renderApp({ searchBy: "movies" });
+  test("Render searched actors if selected is actor search", () => {
+    renderApp({ searchBy: "cvcxvxc" });
 
     expect(screen.getByRole("list")).toBeInTheDocument();
   });
-  test.skip("Render searched actors if selected is movie search", () => {
-    //change component to carousel bootstrap
-
+  test("Render searched actors if selected is movie search", () => {
     renderApp({ searchBy: "actor" });
     expect(screen.getByRole("list")).toBeInTheDocument();
   });
