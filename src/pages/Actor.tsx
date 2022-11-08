@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Spinner } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Carousel from "react-multi-carousel";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import {
   clearActorState,
@@ -38,41 +37,6 @@ export default function Actor() {
     setIsLoading(false);
   };
 
-  /* #endregion */
-
-  /* #region  - UTILS */
-  const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-      slidesToSlide: 3,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 5,
-      slidesToSlide: 3,
-    },
-    tablet: {
-      breakpoint: { max: 1600, min: 464 },
-      items: 4,
-      slidesToSlide: 2,
-    },
-    tabletSmall: {
-      breakpoint: { max: 1280, min: 980 },
-      items: 3,
-      slidesToSlide: 2,
-    },
-    mobilelarge: {
-      breakpoint: { max: 980, min: 680 },
-      items: 2,
-      slidesToSlide: 1,
-    },
-    mobileSmall: {
-      breakpoint: { max: 680, min: 0 },
-      items: 1,
-      slidesToSlide: 1,
-    },
-  };
   /* #endregion */
 
   return isLoading ? (
