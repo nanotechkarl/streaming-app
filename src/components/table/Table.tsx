@@ -21,7 +21,7 @@ const Table = (props: any) => {
   const renderBody = (data: any) => {
     const keys = props.keys;
 
-    const table = data.map((row: string, index: number) => {
+    const table = data?.map((row: string, index: number) => {
       return (
         <tr key={index}>
           {keys.map((key: string, index: number) => {
@@ -116,12 +116,12 @@ const Table = (props: any) => {
     }
 
     if (props.custom?.disableDelete?.movie) {
-      return row.movies.length ? "table-options disabled" : "table-options";
+      return row.movies?.length ? "table-options disabled" : "table-options";
     }
 
     if (props.custom?.disableDelete?.root) {
       return row?.permissions?.includes("root") ||
-        props.custom?.disableDelete?.user.id === row.id
+        props.custom?.disableDelete?.user?.id === row?.id
         ? "table-options disabled"
         : "table-options";
     }

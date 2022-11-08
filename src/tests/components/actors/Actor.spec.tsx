@@ -8,60 +8,21 @@ import configureStore from "redux-mock-store";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Actor } from "../../../pages";
 import thunk from "redux-thunk";
+import {
+  actorsMock,
+  moviesOfActorMock,
+  actorSelectedMock,
+} from "../mockValues";
 
 describe("<Actor/>", () => {
   afterEach(cleanup);
-
-  const actorSelected = {
-    id: "6369d2cdf9965ee9edc6c503",
-    firstName: "admin",
-    lastName: "test",
-    gender: "male",
-    age: 123,
-    imgUrl:
-      "https://wallpapers.com/images/hd/inspirational-short-quotes-desktop-7o2nmgbytnvvz6sv.jpg",
-  };
-
-  const moviesOfActor = [
-    {
-      id: "6369d2cdf9965ee9edc6c504",
-      actorDetailsId: "6369d2cdf9965ee9edc6c503",
-      movieId: "6369d10ef9965ee9edc6c501",
-    },
-    {
-      id: "6369d2cdf9965ee9edc6c501",
-      actorDetailsId: "6369d2cdf9965ee9edc6c503",
-      movieId: "6369d10ef9965ee9edc6c503",
-    },
-  ];
-
-  const actorsMock = [
-    {
-      id: "6369d2cdf9965ee9edc6c503",
-      firstName: "admin",
-      lastName: "test",
-      gender: "male",
-      age: 123,
-      imgUrl:
-        "https://wallpapers.com/images/hd/inspirational-short-quotes-desktop-7o2nmgbytnvvz6sv.jpg",
-    },
-    {
-      id: "6369d2cdf9965ee9edc6c503",
-      firstName: "user",
-      lastName: "test",
-      gender: "female",
-      age: 123,
-      imgUrl:
-        "https://wallpapers.com/images/hd/inspirational-short-quotes-desktop-7o2nmgbytnvvz6sv.jpg",
-    },
-  ];
 
   function renderApp() {
     const initialState = {
       actor: {
         actors: actorsMock,
-        moviesOfActor,
-        actorSelected,
+        moviesOfActor: moviesOfActorMock,
+        actorSelected: actorSelectedMock,
       },
     };
     const mockStore = configureStore([thunk]);
@@ -92,6 +53,6 @@ describe("<Actor/>", () => {
 
   it("Should display movies of actor and their link", () => {
     const count = screen.getAllByText("Check Reviews");
-    expect(count.length === moviesOfActor.length).toBeTruthy();
+    expect(count.length === moviesOfActorMock.length).toBeTruthy();
   });
 });

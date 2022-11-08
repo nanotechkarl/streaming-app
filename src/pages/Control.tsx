@@ -71,7 +71,7 @@ export default function Control() {
 
   useEffect(() => {
     fetchUsers();
-    setUsersCount(accounts.length);
+    setUsersCount(accounts?.length);
   }, [usersCounter, lastEditedUser]); //eslint-disable-line
 
   useEffect(() => {
