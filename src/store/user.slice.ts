@@ -123,8 +123,7 @@ export const getUserObject = createAsyncThunk(
         },
       });
 
-      const result = response.data;
-      return result;
+      return response.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
     }
@@ -138,9 +137,8 @@ export const getUserById = createAsyncThunk(
       const response = await axios.get(`${server.api}/users/property/${id}`, {
         headers,
       });
-      const result = response.data;
 
-      return result;
+      return response.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
     }

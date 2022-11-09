@@ -45,7 +45,7 @@ describe("<LoginForm/>", () => {
 
     user.type(email, "example@mail.com");
     user.type(password, "passw");
-    await user.click(submit);
+    user.click(submit);
 
     const error = screen.getByText(/password must be 8 characters minimum/i);
     expect(error).not.toBeNull();
@@ -60,7 +60,7 @@ describe("<LoginForm/>", () => {
 
     user.type(email, "example@");
     user.type(password, "password123");
-    await user.click(submit);
+    user.click(submit);
 
     const error = screen.getByText(/enter a valid email address/i);
     expect(error).not.toBeNull();
@@ -79,7 +79,7 @@ describe("<LoginForm/>", () => {
 
     user.type(email, "example@mail.com");
     user.type(password, "password123");
-    await user.click(submit);
+    user.click(submit);
 
     expect(onSubmit).toHaveBeenCalledWith("example@mail.com", "password123");
   });

@@ -61,9 +61,9 @@ export default function Reviews() {
       await dispatch(getAllActorsByMovie(params.id));
       const token = getCookie("token");
       if (token) {
-        const res = await dispatch(getmyReviewMovie(params.id));
-        setRating(res.payload?.rating);
-        setComment(res.payload?.message);
+        const myReview = await dispatch(getmyReviewMovie(params.id));
+        setRating(myReview.payload?.rating);
+        setComment(myReview.payload?.message);
       }
     }
   };
@@ -162,85 +162,23 @@ export default function Reviews() {
   };
 
   const renderReviewOption = () => {
-    return (
-      <div>
-        {current?.permissions?.includes("user") ? (
-          <>
-            <div className="rate-container">
-              <span className="rate-label">RATE THIS MOVIE </span>
-              <Rating onClick={ratingChanged} size={20} initialValue={rating} />
-              {yourReview?.approved === false && (
-                <div className="warning-text">
-                  Waiting for approval of administrator
-                </div>
-              )}
+    return current?.permissions?.includes("user") ? (
+      <>
+        <div className="rate-container">
+          <span className="rate-label">RATE THIS MOVIE </span>
+          <Rating onClick={ratingChanged} size={20} initialValue={rating} />
+          {yourReview?.approved === false && (
+            <div className="warning-text">
+              Waiting for approval of administrator
             </div>
-            <div>
-              {comment && !edit ? (
-                <>
-                  <h3> Your Review</h3>
-                  <span className="warning-text">
-                    &nbsp;
-                    {yourReview?.approved && (
-                      <span className="success-text">
-                        Your review has been approved
-                      </span>
-                    )}
-                  </span>
-                  <div className="your-review comment">
-                    <p> {comment}</p>
-                  </div>
-                  <div className="add-review-container">
-                    <Button
-                      className="add-review mt-2"
-                      variant="dark"
-                      onClick={() => setEdit(true)}
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h3>WRITE A REVIEW</h3>
-                  {errors.message ? (
-                    <span className="input-error err-name">
-                      {errors.message}
-                    </span>
-                  ) : (
-                    <span>&nbsp;</span>
-                  )}
-                  <Form onSubmit={handleSubmit}>
-                    <textarea
-                      className="comment"
-                      placeholder="Write your review here..."
-                      name="message"
-                      onInput={handleChange}
-                    />
-                    <div className="add-review-container">
-                      <Button
-                        className="add-review"
-                        variant="dark"
-                        type="submit"
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </Form>
-                </>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            {current?.permissions?.includes("admin") ? (
-              <></>
-            ) : (
-              <h3 className="err-name">Login/signup to write a review </h3>
-            )}
-          </>
-        )}
-      </div>
+          )}
+        </div>
+        <div>{renderMyReview()}</div>
+      </>
+    ) : (
+      !current?.permissions?.includes("admin") && (
+        <h3 className="err-name">Login/signup to write a review </h3>
+      )
     );
   };
 
@@ -273,6 +211,58 @@ export default function Reviews() {
       </>
     );
   };
+
+  const renderMyReview = () => {
+    return comment && !edit ? (
+      <>
+        <h3> Your Review</h3>
+        <span className="warning-text">
+          &nbsp;
+          {yourReview?.approved && (
+            <span className="success-text">Your review has been approved</span>
+          )}
+        </span>
+        <div className="your-review comment">
+          <p> {comment}</p>
+        </div>
+        <div className="add-review-container">
+          <Button
+            className="add-review mt-2"
+            variant="dark"
+            onClick={() => setEdit(true)}
+          >
+            Edit
+          </Button>
+        </div>
+      </>
+    ) : (
+      <>
+        <h3>WRITE A REVIEW</h3>
+        {renderErrorMessage()}
+        <Form onSubmit={handleSubmit}>
+          <textarea
+            className="comment"
+            placeholder="Write your review here..."
+            name="message"
+            onInput={handleChange}
+          />
+          <div className="add-review-container">
+            <Button className="add-review" variant="dark" type="submit">
+              Submit
+            </Button>
+          </div>
+        </Form>
+      </>
+    );
+  };
+
+  const renderErrorMessage = () => {
+    return errors.message ? (
+      <span className="input-error err-name">{errors.message}</span>
+    ) : (
+      <span>&nbsp;</span>
+    );
+  };
   /* #endregion */
 
   /* #region  - UTILS */
@@ -282,12 +272,10 @@ export default function Reviews() {
     });
 
     const sum = apple?.reduce((a: any, b: any) => {
-      const sam = parseInt(a) + parseInt(b);
-      return sam;
+      return parseInt(a) + parseInt(b);
     }, 0);
 
-    const avg = sum / reviews?.length || 0;
-    return avg;
+    return sum / reviews?.length || 0;
   };
   /* #endregion */
 

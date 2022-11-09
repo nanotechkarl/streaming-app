@@ -20,12 +20,18 @@ import {
 } from "../mockValues";
 import user from "@testing-library/user-event";
 
-const onHide = () => {};
-const handleDelete = () => {};
-const show: boolean = false;
-
 describe("<DeleteModal/>", () => {
-  function renderApp(props: Props) {
+  function renderApp(props: Partial<Props> = {}) {
+    const defaultProps: Props = {
+      onHide() {
+        return;
+      },
+      handleDelete() {
+        return;
+      },
+      show: true,
+    };
+
     const initialState = {
       actor: {
         actors: actorsMock,
@@ -47,25 +53,21 @@ describe("<DeleteModal/>", () => {
       <Provider store={store}>
         <Router>
           <Control />
-          <DeleteModal {...props} />
+          <DeleteModal {...defaultProps} {...props} />
         </Router>
       </Provider>
     );
   }
 
   beforeEach(() => {
-    renderApp({
-      onHide,
-      handleDelete,
-      show,
-    });
+    renderApp({ show: false });
   });
 
   it("Should show modal", async () => {
     const deleteBtn = screen.getAllByRole("button", {
       name: /\| delete/i,
     });
-    await user.click(deleteBtn[0]);
+    user.click(deleteBtn[0]);
 
     const confirm = screen.getByText(/confirm deletion/i);
     const ok = screen.getByText(/ok/i);
@@ -80,10 +82,9 @@ describe("<DeleteModal/>", () => {
     const deleteBtn = screen.getAllByRole("button", {
       name: /\| delete/i,
     });
-    await user.click(deleteBtn[0]);
-
+    user.click(deleteBtn[0]);
     const cancel = await screen.findByText(/cancel/i);
-    await user.click(cancel);
+    user.click(cancel);
     await waitForElementToBeRemoved(() =>
       screen.queryByText(/confirm deletion/i)
     );

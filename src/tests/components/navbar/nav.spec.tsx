@@ -67,7 +67,7 @@ describe("Navbar(ADMIN)", () => {
   it("Should not show Control link", async () => {
     renderAppAdmin();
 
-    expect(screen.getByText("Control")).not.toBeNull();
+    expect(await screen.findByText("Control")).not.toBeNull();
   });
 });
 
@@ -95,8 +95,8 @@ describe("Navbar(GUEST)", () => {
 
   it("Should not show Control link", async () => {
     renderApp();
-
-    expect(screen.queryByText("Control")).toBeNull();
+    const link = screen.queryByRole("Control");
+    expect(link).toBeNull();
   });
 
   it("Should not show Logout link", async () => {

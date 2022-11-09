@@ -1,6 +1,5 @@
 .login-page {
     height: 100vh;
-    color: #abacaf;
     margin: 0;
     max-width: 100vw;
     background-image:
@@ -20,7 +19,7 @@
 
     .content {
         font-size: 100px !important;
-        font-family: 'Bebas Neue';
+        font-family: 'Bebas Neue', sans-serif;
         transform: translate(-700px,300px);
         color: white;
     }

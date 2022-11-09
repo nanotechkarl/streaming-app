@@ -31,8 +31,7 @@ export const server = {
  * Get value by cookie name
  */
 export function getCookie(name: string): string {
-  const token = Cookies.get(name) ?? "";
-  return token;
+  return Cookies.get(name) ?? "";
 }
 
 /**

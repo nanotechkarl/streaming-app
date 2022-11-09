@@ -53,8 +53,8 @@ describe("<Register/>", () => {
     user.type(cPassword, "password123");
     user.type(fName, "password123");
     user.type(lName, "password123");
-    await user.click(userRadio);
-    await user.click(submit);
+    user.click(userRadio);
+    user.click(submit);
 
     const error = screen.getByText(/password must be 8 characters minimum/i);
     expect(error).not.toBeNull();

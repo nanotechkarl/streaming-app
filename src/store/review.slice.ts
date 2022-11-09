@@ -57,7 +57,7 @@ export const addMovieReview = createAsyncThunk(
   ) => {
     try {
       token = getCookie("token");
-      const response = await axios.put(
+      return await axios.put(
         `${server.api}/reviews`,
         {
           movieId,
@@ -73,8 +73,6 @@ export const addMovieReview = createAsyncThunk(
           },
         }
       );
-
-      return response;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
     }

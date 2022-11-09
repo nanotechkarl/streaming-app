@@ -31,12 +31,10 @@ export default function AddActor(props: Props) {
   //#region - Add actor
   const onSubmit = async () => {
     const { fName, lName, gender, age, imgUrl } = values as ActorInputs;
-
     if (!selectedMovie) {
       alertError("Please select a movie");
       return;
     }
-
     const res = await dispatch(
       addActor({
         firstName: fName,
@@ -97,6 +95,14 @@ export default function AddActor(props: Props) {
     resetValues: showAddModal,
   });
   //#endregion
+
+  const renderError = (error: any, name: string) => {
+    return error[name] ? (
+      <span className="input-error err-name">{error[name]}</span>
+    ) : (
+      <span>&nbsp;</span>
+    );
+  };
 
   return (
     <div>
@@ -169,13 +175,7 @@ export default function AddActor(props: Props) {
                       placeholder="Enter first name"
                       onInput={handleChange}
                     />
-                    {errors.fName ? (
-                      <span className="input-error err-name">
-                        {errors.fName}
-                      </span>
-                    ) : (
-                      <span>&nbsp;</span>
-                    )}
+                    {renderError(errors, "fName")}
                   </Form.Group>
                   <Form.Group controlId="formBasicLastName">
                     <Form.Label>Last Name</Form.Label>
@@ -185,13 +185,7 @@ export default function AddActor(props: Props) {
                       placeholder="Enter Last name"
                       onInput={handleChange}
                     />
-                    {errors.lName ? (
-                      <span className="input-error err-name">
-                        {errors.lName}
-                      </span>
-                    ) : (
-                      <span>&nbsp;</span>
-                    )}
+                    {renderError(errors, "lName")}
                   </Form.Group>
                   <Form.Group controlId="formBasicLastName">
                     <Form.Label>gender</Form.Label>
@@ -201,13 +195,7 @@ export default function AddActor(props: Props) {
                       placeholder="Enter gender"
                       onInput={handleChange}
                     />
-                    {errors.gender ? (
-                      <span className="input-error err-name">
-                        {errors.gender}
-                      </span>
-                    ) : (
-                      <span>&nbsp;</span>
-                    )}
+                    {renderError(errors, "gender")}
                   </Form.Group>
                   <Form.Group controlId="formBasicAge">
                     <Form.Label>Age</Form.Label>
@@ -217,11 +205,7 @@ export default function AddActor(props: Props) {
                       placeholder="Enter age"
                       onInput={handleChange}
                     />
-                    {errors.age ? (
-                      <span className="input-error err-name">{errors.age}</span>
-                    ) : (
-                      <span>&nbsp;</span>
-                    )}
+                    {renderError(errors, "age")}
                   </Form.Group>
                   <Form.Group controlId="formBasicAge">
                     <Form.Label>Image URL</Form.Label>
@@ -231,13 +215,7 @@ export default function AddActor(props: Props) {
                       placeholder="Enter image URL"
                       onInput={handleChange}
                     />
-                    {errors.imgUrl ? (
-                      <span className="input-error err-name">
-                        {errors.imgUrl}
-                      </span>
-                    ) : (
-                      <span>&nbsp;</span>
-                    )}
+                    {renderError(errors, "imgUrl")}
                   </Form.Group>
                   <Button
                     variant="dark"

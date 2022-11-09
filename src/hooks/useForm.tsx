@@ -142,52 +142,6 @@ const useForm = ({
     }
   };
 
-  const customForm = (
-    inputType: string,
-    errorsEmpty: ObjectAny,
-    values: any
-  ) => {
-    switch (inputType) {
-      case "review":
-        if (!values.message) {
-          errorsEmpty.message = `Please enter review`;
-        }
-        break;
-      case "register":
-        registerValidations(values, errorsEmpty);
-        break;
-
-      case "addMovie":
-        if (!values.title) {
-          errorsEmpty.title = `Please enter title`;
-        }
-        if (!values.description) {
-          errorsEmpty.description = `Please enter description`;
-        }
-
-        if (!values.imgUrl) {
-          errorsEmpty.imgUrl = `Please enter image url`;
-        }
-
-        if (!values.cost) {
-          errorsEmpty.cost = `Please enter cost`;
-        }
-
-        if (!values.yearRelease) {
-          errorsEmpty.yearRelease = `Please choose date`;
-        }
-
-        break;
-
-      case "addActor":
-        addActorValidations(values, errorsEmpty);
-
-        break;
-
-      default:
-        break;
-    }
-  };
   //#endregion
 
   return {
@@ -196,6 +150,49 @@ const useForm = ({
     handleChange,
     handleSubmit,
   };
+};
+
+const customForm = (iType: string, errorsEmpty: ObjectAny, inputs: any) => {
+  switch (iType) {
+    case "review":
+      if (!inputs.message) {
+        errorsEmpty.message = `Please enter review`;
+      }
+      break;
+    case "register":
+      registerValidations(inputs, errorsEmpty);
+      break;
+
+    case "addMovie":
+      if (!inputs.title) {
+        errorsEmpty.title = `Please enter title`;
+      }
+      if (!inputs.description) {
+        errorsEmpty.description = `Please enter description`;
+      }
+
+      if (!inputs.imgUrl) {
+        errorsEmpty.imgUrl = `Please enter image url`;
+      }
+
+      if (!inputs.cost) {
+        errorsEmpty.cost = `Please enter cost`;
+      }
+
+      if (!inputs.yearRelease) {
+        errorsEmpty.yearRelease = `Please choose date`;
+      }
+
+      break;
+
+    case "addActor":
+      addActorValidations(inputs, errorsEmpty);
+
+      break;
+
+    default:
+      break;
+  }
 };
 
 const registerValidations = (values: any, errorsEmpty: any) => {

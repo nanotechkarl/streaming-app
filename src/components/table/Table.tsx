@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { customButtons } from "./table-custom";
 
 const Table = (props: any) => {
   //#region - RENDER
@@ -12,8 +13,7 @@ const Table = (props: any) => {
             <th key={index}>{key}</th>
           </React.Fragment>
         ))}
-        {props.onEdit && props.onDelete && <th></th>}
-        {props.onRemove && <th>Action</th>}
+        {props.onEdit && <th></th>}
       </>
     );
   };
@@ -21,114 +21,24 @@ const Table = (props: any) => {
   const renderBody = (data: any) => {
     const keys = props.keys;
 
-    const table = data?.map((row: string, index: number) => {
+    return data?.map((row: string, index: number) => {
       return (
         <tr key={index}>
-          {keys.map((key: string, index: number) => {
+          {keys?.map((key: string, iKeys: number) => {
             return (
-              <React.Fragment key={index}>
-                {customCell({ row, key, index })}
+              <React.Fragment key={iKeys}>
+                {customCell({ row, key, index: iKeys })}
               </React.Fragment>
             );
           })}
-          {customButtons(row, index)}
+          {customButtons(row, index, props)}
         </tr>
       );
     });
-    return table;
   };
   //#endregion
 
-  const customButtons = (row: string, index: number) => {
-    return (
-      <>
-        {(props.onEdit ||
-          props.onDelete ||
-          props.onShare ||
-          props.onRemove) && (
-          <td key={`edit-${index}`}>
-            {props.onEdit && (
-              <button
-                className="table-options"
-                onClick={() =>
-                  props.onEdit(props.functionKey ? row[props.functionKey] : row)
-                }
-              >
-                Edit
-              </button>
-            )}
-            {props.onDelete && (
-              <button
-                className={customDisable(row)}
-                onClick={() =>
-                  props.onDelete(
-                    props.functionKey ? row[props.functionKey] : row
-                  )
-                }
-              >
-                &nbsp;|&nbsp;Delete
-              </button>
-            )}
-            {props.onShare && (
-              <button
-                className="table-options"
-                onClick={() =>
-                  props.onShare(
-                    props.functionKey ? row[props.functionKey] : row
-                  )
-                }
-              >
-                &nbsp;|&nbsp;Share
-              </button>
-            )}
-            {props.onRemove && (
-              <button
-                className="table-options"
-                onClick={() =>
-                  props.onRemove(
-                    props.functionKey ? row[props.functionKey] : row
-                  )
-                }
-              >
-                Remove
-              </button>
-            )}
-          </td>
-        )}
-      </>
-    );
-  };
-
   //#region - CUSTOM
-  const customDisable = (row: any) => {
-    let days = 0;
-    if (props.custom?.disableDelete?.date) {
-      const day = 1000 * 60 * 60 * 24;
-
-      const present = props.custom?.disableDelete?.date;
-      const movieRelease = new Date(row.yearRelease);
-      const time = present.getTime() - movieRelease.getTime();
-      days = Math.round(time / day);
-
-      return props.custom?.disableDelete?.date && days <= 365
-        ? "table-options disabled"
-        : "table-options";
-    }
-
-    if (props.custom?.disableDelete?.movie) {
-      return row.movies?.length ? "table-options disabled" : "table-options";
-    }
-
-    if (props.custom?.disableDelete?.root) {
-      return row?.permissions?.includes("root") ||
-        props.custom?.disableDelete?.user?.id === row?.id
-        ? "table-options disabled"
-        : "table-options";
-    }
-
-    return "table-options";
-  };
-
   const customCell = ({
     row,
     key,
@@ -138,9 +48,7 @@ const Table = (props: any) => {
     key: string;
     index: number;
   }) => {
-    if (props.custom?.usersEmail && key === "id") {
-      return <td key={index}>{props.custom.usersEmail(row)}</td>;
-    } else if (key === "approved") {
+    if (key === "approved") {
       return (
         <td key={index} className="text-left">
           {`${row[key]}`}
@@ -175,7 +83,6 @@ const Table = (props: any) => {
     } else if (key === "yearRelease") {
       return <td key={index}>{row[key]}</td>;
     } else {
-      //default
       return <td key={index}>{row[key]}</td>;
     }
   };
@@ -210,14 +117,3 @@ Table.propTypes = {
   customRender: PropTypes.array,
 };
 export default Table;
-
-//#region - Sample
-// {/* <Table
-// header={["Code", "Name", "Category", "Amount"]}
-// keys={["pCode", "pName", "category", "pAmount"]}
-// functionKey="pCode"
-// data={flatItems}
-// onEdit={redirectEdit}
-// onDelete={showDelete}
-// /> */}
-//#endregion

@@ -1,24 +1,23 @@
 /* eslint-disable testing-library/no-render-in-setup */
 /* eslint-disable testing-library/prefer-screen-queries */
 import React from "react";
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Control } from "../../../pages";
 import thunk from "redux-thunk";
 import { actorsMock, moviesMock } from "../mockValues";
 import user from "@testing-library/user-event";
 import AddActor, { Props } from "../../../components/modal/AddActor";
 
-const add = () => {};
-
 describe("<AddActor/>", () => {
-  function renderApp(props: Props) {
+  function renderApp(props: Partial<Props> = {}) {
+    const defaultProps: Props = {
+      add() {
+        return;
+      },
+    };
+
     const initialState = {
       actor: {
         actors: actorsMock,
@@ -39,36 +38,34 @@ describe("<AddActor/>", () => {
     return render(
       <Provider store={store}>
         <Router>
-          <AddActor {...props} />
+          <AddActor {...defaultProps} {...props} />
         </Router>
       </Provider>
     );
   }
 
   beforeEach(() => {
-    renderApp({
-      add,
-    });
+    renderApp();
   });
 
   it("Should show add actor modal", async () => {
-    const addBtn = screen.getByText(/Add actors to a movie/i);
-    await user.click(addBtn);
+    const addMovie = screen.getByText(/Add actors to a movie/i);
+    user.click(addMovie);
 
     const header = screen.getByText(/ADD NEW ACTOR/i);
     const headerExist = screen.getByText(/ADD EXISTING ACTOR/i);
-    const add = screen.getAllByRole("button", {
+    const addActor = screen.getAllByRole("button", {
       name: /add actor/i,
     });
 
     expect(header).not.toBeNull();
     expect(headerExist).not.toBeNull();
-    expect(add).not.toBeNull();
+    expect(addActor).not.toBeNull();
   });
 
   it("Should show Form", async () => {
-    const addBtn = screen.getByText(/Add actors to a movie/i);
-    await user.click(addBtn);
+    const addActor = screen.getByText(/Add actors to a movie/i);
+    user.click(addActor);
 
     expect(screen.getByText(/First Name/i)).not.toBeNull();
     expect(screen.getByText(/Last Name/i)).not.toBeNull();
@@ -78,8 +75,8 @@ describe("<AddActor/>", () => {
   });
 
   it("Should show select movie and add existing actor", async () => {
-    const addBtn = screen.getByText(/Add actors to a movie/i);
-    await user.click(addBtn);
+    const addActor = screen.getByText(/Add actors to a movie/i);
+    user.click(addActor);
 
     expect(screen.getAllByRole("combobox")).not.toBeNull();
   });
