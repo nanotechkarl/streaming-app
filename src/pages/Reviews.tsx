@@ -247,10 +247,10 @@ export default function Reviews() {
   const renderAllReviews = () => {
     return (
       <>
-        {reviews.length ? (
+        {reviews?.length ? (
           <>
             <h3> ALL REVIEWS </h3>
-            {reviews.map((obj: any) => {
+            {reviews?.map((obj: any) => {
               const date = new Date(obj.datePosted);
               const format = date.toDateString();
               return (

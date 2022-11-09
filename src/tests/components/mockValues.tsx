@@ -73,6 +73,29 @@ export const moviesMock = [
   },
 ];
 
+export const selectedMovieMock = {
+  id: "6369d10ef9965ee9edc6c503",
+  title: "movie3",
+  description: "desc3",
+  imgUrl:
+    "https://occ.a.nflxso.net/dnm/api/v6/6gmvu2hxdfnQ55LZZjyzYR4kzGk/AAAABZs5BpWP48pgeeZZKvJygz2bPRyEMHHPVrcaxkhGXC1bzfW7iao9Fqwv4AZGMsXCT4ZX7SIKpmvumaVC2h_Yyo2OjJ8wHL0xQIjZ.jpg?r=326",
+  cost: 2345,
+  yearRelease: "2021-11-02T00:00:00.000Z",
+};
+
+export const selectedMovieReviewMock = [
+  {
+    id: "6369d483f9965ee9edc6c50e",
+    message: "This is a review",
+    rating: 4,
+    approved: true,
+    datePosted: "2022-11-07T16:00:00.000Z",
+    name: "sfdfdsfds1 eqweqeqw900joj",
+    movieId: "6369d10ef9965ee9edc6c503",
+    userId: "6369d063f9965ee9edc6c4ff",
+  },
+];
+
 export const userMock = [
   {
     id: "6369d063f9965ee9edc6c4ff",
