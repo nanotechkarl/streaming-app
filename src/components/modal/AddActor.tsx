@@ -8,7 +8,11 @@ import { alertError } from "../../utils/global";
 import { ActorInputs } from "../../types/inputs";
 import { Actors, Movies } from "../../store/types";
 
-export default function AddActor(props: any) {
+export interface Props {
+  add: any;
+}
+
+export default function AddActor(props: Props) {
   /* #region - Hooks */
   const dispatch = useAppDispatch();
   const { movies }: { movies: Movies[] } = useAppSelector(
