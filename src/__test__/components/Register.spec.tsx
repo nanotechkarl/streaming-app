@@ -35,8 +35,6 @@ describe("<Register/>", () => {
     expect(screen.getByText("Last Name")).not.toBeNull();
     expect(screen.getByText("Password")).not.toBeNull();
     expect(screen.getByText("Confirm Password")).not.toBeNull();
-    expect(screen.getByText("User")).not.toBeNull();
-    expect(screen.getByText("Admin")).not.toBeNull();
   });
 
   test("Should print error if password is less than 8 characters", async () => {
@@ -45,7 +43,6 @@ describe("<Register/>", () => {
     const cPassword = await screen.findByTestId("cPassword");
     const fName = await screen.findByTestId("fName");
     const lName = await screen.findByTestId("lName");
-    const userRadio = await screen.findByTestId("userRadio");
     const submit = await screen.findByTestId("submit");
 
     user.type(email, "example@mail.com");
@@ -53,7 +50,6 @@ describe("<Register/>", () => {
     user.type(cPassword, "password123");
     user.type(fName, "password123");
     user.type(lName, "password123");
-    user.click(userRadio);
     user.click(submit);
 
     const error = screen.getByText(/password must be 8 characters minimum/i);
@@ -66,7 +62,6 @@ describe("<Register/>", () => {
     const cPassword = await screen.findByTestId("cPassword");
     const fName = await screen.findByTestId("fName");
     const lName = await screen.findByTestId("lName");
-    const adminRadio = await screen.findByTestId("adminRadio");
     const submit = await screen.findByTestId("submit");
 
     user.type(email, "example@");
@@ -74,7 +69,6 @@ describe("<Register/>", () => {
     user.type(cPassword, "password123");
     user.type(fName, "test");
     user.type(lName, "test");
-    user.click(adminRadio);
     user.click(submit);
 
     const error = screen.getByText(/Enter a valid email address/i);
@@ -87,7 +81,6 @@ describe("<Register/>", () => {
     const cPassword = await screen.findByTestId("cPassword");
     const fName = await screen.findByTestId("fName");
     const lName = await screen.findByTestId("lName");
-    const adminRadio = await screen.findByTestId("adminRadio");
     const submit = await screen.findByTestId("submit");
 
     user.type(email, "example@mail.com");
@@ -95,7 +88,6 @@ describe("<Register/>", () => {
     user.type(cPassword, "password123");
     user.type(fName, "test");
     user.type(lName, "test");
-    user.click(adminRadio);
     user.click(submit);
 
     const error = screen.getByText(/Password does not match/i);

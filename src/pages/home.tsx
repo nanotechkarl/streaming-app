@@ -10,7 +10,11 @@ import {
   searchByMovie,
   getMovies,
 } from "../store/movie.slice";
-import { searchActors, getAllActors } from "../store/actor.slice";
+import {
+  searchActors,
+  getAllActors,
+  clearActorState,
+} from "../store/actor.slice";
 import MovieList from "../components/home/MovieList";
 import SearchResult from "../components/home/SearchResult";
 
@@ -50,7 +54,7 @@ export default function Home() {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 4,
+      items: 5,
       slidesToSlide: 3,
     },
     desktop: {
@@ -119,7 +123,10 @@ export default function Home() {
                 id={`radio-actor`}
                 value="actor"
                 defaultChecked={searchBy === "actor"}
-                onClick={() => dispatch(searchActor())}
+                onChange={() => {
+                  dispatch(clearActorState());
+                  dispatch(searchActor());
+                }}
               />
               <Form.Check
                 className="radio"
@@ -150,7 +157,7 @@ export default function Home() {
       <SearchResult
         searchBy={searchBy}
         searched={searched}
-        searchedActors={searchedActors}
+        searchedActors={searchedActors?.length ? searchedActors : actors}
         responsive={responsive}
       />
     </div>

@@ -34,7 +34,7 @@ export default function Navbar() {
           )}
           {permissions?.includes("admin") && (
             <Link to="/control" className="mr-2">
-              <span>Control</span>
+              <span>Dashboard</span>
             </Link>
           )}
 

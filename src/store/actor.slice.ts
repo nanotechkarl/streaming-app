@@ -256,6 +256,9 @@ export const searchActors = createAsyncThunk(
   "actor/searchActor",
   async (name: string, thunkApi) => {
     try {
+      if (!name) {
+        return;
+      }
       const response = await axios.get(
         `${server.api}/movies/search/actor/${name}`
       );
@@ -275,6 +278,9 @@ const movie = createSlice({
       state.selectedActors = [];
       state.actorSelected = {};
       state.moviesOfActor = [];
+      state.searched = [];
+    },
+    clearSearchState(state) {
       state.searched = [];
     },
   },

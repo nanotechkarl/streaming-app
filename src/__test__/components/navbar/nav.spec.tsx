@@ -64,10 +64,10 @@ describe("Navbar(ADMIN)", () => {
     );
   }
 
-  it("Should not show Control link", async () => {
+  it("Should not show Dashboard link", async () => {
     renderAppAdmin();
 
-    expect(await screen.findByText("Control")).not.toBeNull();
+    expect(await screen.findByText("Dashboard")).not.toBeNull();
   });
 });
 
@@ -93,9 +93,9 @@ describe("Navbar(GUEST)", () => {
     );
   }
 
-  it("Should not show Control link", async () => {
+  it("Should not show Dashboard link", async () => {
     renderApp();
-    const link = screen.queryByRole("Control");
+    const link = screen.queryByRole("Dashboard");
     expect(link).toBeNull();
   });
 
