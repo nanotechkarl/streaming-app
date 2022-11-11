@@ -50,7 +50,7 @@ export default function Home() {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 5,
+      items: 4,
       slidesToSlide: 3,
     },
     desktop: {

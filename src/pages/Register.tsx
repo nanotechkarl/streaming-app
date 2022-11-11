@@ -14,21 +14,19 @@ export default function Register() {
 
   //#region - REGISTER
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const { fName, lName, email, password, cPassword, role } = values as any;
+    const { fName, lName, email, password, cPassword } = values as any;
 
     if (cPassword !== password) {
       alertError("Password does not match");
       return false;
     }
 
-    const permissions = [role];
     const register = await dispatch(
       registerUser({
         email,
         password,
         firstName: fName,
         lastName: lName,
-        permissions,
       })
     );
 
@@ -40,7 +38,7 @@ export default function Register() {
   //#endregion
 
   //#region - CUSTOM HOOKS
-  const inputCount = 6;
+  const inputCount = 5;
 
   const { handleChange, values, errors, handleSubmit } = useForm({
     callback: onSubmit,
@@ -137,37 +135,6 @@ export default function Register() {
           ) : (
             <span>&nbsp;</span>
           )}
-
-          <div>
-            <span> Register as? </span>
-            <Form.Check
-              className="radio"
-              inline
-              label="User"
-              name="role"
-              type="radio"
-              id={`radio-admin`}
-              value="user"
-              onInput={handleChange}
-              data-testid="userRadio"
-            />
-            <Form.Check
-              className="radio"
-              inline
-              label="Admin"
-              name="role"
-              type="radio"
-              id={`radio-admin`}
-              value="admin"
-              onInput={handleChange}
-              data-testid="adminRadio"
-            />
-            {errors.role ? (
-              <span className="input-error err-name">{errors.role}</span>
-            ) : (
-              <span>&nbsp;</span>
-            )}
-          </div>
 
           <div className="text-center mt-3">
             <small>*Registering requires admin approval</small>

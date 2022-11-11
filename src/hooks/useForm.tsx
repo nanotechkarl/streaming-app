@@ -196,9 +196,6 @@ const customForm = (iType: string, errorsEmpty: ObjectAny, inputs: any) => {
 };
 
 const registerValidations = (values: any, errorsEmpty: any) => {
-  if (!values.role) {
-    errorsEmpty.role = `Please choose role`;
-  }
   if (!values.fName) {
     errorsEmpty.fName = `Please enter your first name`;
   }
