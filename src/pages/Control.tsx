@@ -17,36 +17,33 @@ import DeleteModal from "../components/modal/DeleteModal";
 import EditMovie from "../components/modal/EditMovie";
 import EditActor from "../components/modal/EditActor";
 import Swal from "sweetalert2";
-import { Users } from "../store/types";
+import { ActorState, MovieState, Users } from "../store/types";
 import EditUser from "../components/modal/EditUser";
+import { User } from "../types/global";
 
 export default function Control() {
   /* #region  - HOOKS */
   const dispatch = useAppDispatch();
-  const { movies }: { [key: string]: any } = useAppSelector(
-    (state) => state.movie
-  );
+  const { movies }: MovieState = useAppSelector((state) => state.movie);
   const { pendingReviews }: { [key: string]: any } = useAppSelector(
     (state) => state.review
   );
-  const { actors }: { [key: string]: any } = useAppSelector(
-    (state) => state.actor
-  );
-  const { accounts, current }: { accounts: Users[]; current: any } =
+  const { actors }: ActorState = useAppSelector((state) => state.actor);
+  const { accounts, current }: { accounts: Users[]; current: User } =
     useAppSelector((state) => state.user);
-  const [moviesCount, setMoviesCount] = useState(0);
-  const [moviesCounter, setMoviesCounter] = useState(-1);
-  const [actorsCount, setActorsCount] = useState(0);
-  const [actorsCounter, setActorsCounter] = useState(-1);
-  const [usersCount, setUsersCount] = useState(0);
-  const [usersCounter, setUsersCounter] = useState(-1);
-  const [deleteMovieState, setDeleteMovieState] = useState(false);
-  const [deleteActorState, setDeleteActorState] = useState(false);
+  const [moviesCount, setMoviesCount] = useState<number>(0);
+  const [moviesCounter, setMoviesCounter] = useState<number>(-1);
+  const [actorsCount, setActorsCount] = useState<number>(0);
+  const [actorsCounter, setActorsCounter] = useState<number>(-1);
+  const [usersCount, setUsersCount] = useState<number>(0);
+  const [usersCounter, setUsersCounter] = useState<number>(-1);
+  const [deleteMovieState, setDeleteMovieState] = useState<boolean>(false);
+  const [deleteActorState, setDeleteActorState] = useState<boolean>(false);
   const [deleteFile, setdeleteFile] = useState({}) as any;
-  const [deleteActor, setdeleteActor] = useState("");
-  const [editMovieState, setEditMovieState] = useState(false);
-  const [editActorState, setEditActorState] = useState(false);
-  const [editUserState, setEditUserState] = useState(false);
+  const [deleteActor, setdeleteActor] = useState<string>("");
+  const [editMovieState, setEditMovieState] = useState<boolean>(false);
+  const [editActorState, setEditActorState] = useState<boolean>(false);
+  const [editUserState, setEditUserState] = useState<boolean>(false);
   const [editedFile, setEditedFile] = useState({}) as any;
   const [editedActor, setEditedActor] = useState({}) as any;
   const [editedUser, setEditedUser] = useState({}) as any;
@@ -344,7 +341,7 @@ export default function Control() {
             customRender={renderEmptyRowActor(actorsCount)}
             custom={{ disableDelete: { movie: true } }}
           />
-          <AddActor add={(x: any) => setActorsCounter(x)} />
+          <AddActor add={(x: number) => setActorsCounter(x)} />
           <DeleteModal
             onHide={() => setDeleteActorState(false)}
             handleDelete={confirmDeleteActor}

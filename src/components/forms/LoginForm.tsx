@@ -1,6 +1,7 @@
 import { Button, Form } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import useForm from "../../hooks/useForm";
+import { Credentials } from "../../store/types";
 
 export interface Props {
   onSubmit: (email: string, password: string) => void;
@@ -9,7 +10,7 @@ export interface Props {
 export default function LoginForm(props: Props) {
   /* #region  - OnSubmit */
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const { email, password } = values as any;
+    const { email = "", password = "" }: Partial<Credentials> = values;
     props.onSubmit(email, password);
   };
   /* #endregion */

@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import storage from "redux-persist/lib/storage";
 import { server, getCookie, alertError, alertSuccess } from "../utils/global";
-import { Credentials, Response, Users, UserState } from "./types";
+import { Credentials, Users, UserState } from "./types";
 
 //#region - Token
 let token: string | undefined = getCookie("token");

@@ -1,13 +1,10 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { server, getCookie, alertError, alertSuccess } from "../utils/global";
 import { Movies, MovieState } from "./types";
+
 //#region - Token
 let token: string = getCookie("token");
-let headers = {
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${token}`,
-};
 //#endregion
 
 /* #region  - Initial state */
