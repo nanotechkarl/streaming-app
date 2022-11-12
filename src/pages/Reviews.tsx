@@ -112,6 +112,8 @@ export default function Reviews() {
         addMovieReview({
           rating: rate,
           movieId: params.id,
+          name: `${current.name}`,
+          movieTitle: selected.title,
         })
       );
       setRating(rate);
