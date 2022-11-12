@@ -47,7 +47,7 @@ export type Actors = {
   firstName: string;
   lastName: string;
   gender: string;
-  age: string;
+  age: number;
   imgUrl: string;
 };
 
@@ -56,7 +56,7 @@ export type Movies = {
   title: string;
   description: string;
   imgUrl: string;
-  cost: string;
+  cost: number;
   yearRelease: string;
   actors?: Actors[];
 };

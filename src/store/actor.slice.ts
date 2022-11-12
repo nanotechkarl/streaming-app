@@ -27,7 +27,10 @@ const initialState: ActorState = {
 /* #region  - Add Actor */
 export const addActor = createAsyncThunk(
   "actor/addActor",
-  async ({ firstName, lastName, gender, age, imgUrl }: Actors, thunkApi) => {
+  async (
+    { firstName, lastName, gender, age, imgUrl }: Partial<Actors>,
+    thunkApi
+  ) => {
     try {
       token = getCookie("token");
       const response = await axios.post(
@@ -63,7 +66,7 @@ export const addActor = createAsyncThunk(
 /* #region  - Add Actor to movie */
 export const addActorToMovie = createAsyncThunk(
   "actor/addActorToMovie",
-  async ({ movieId, actorDetailsId }: ActorConnection, thunkApi) => {
+  async ({ movieId, actorDetailsId }: Partial<ActorConnection>, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.post(
@@ -139,7 +142,10 @@ export const deleteCelebrity = createAsyncThunk(
 /* #region  - Edit actor */
 export const editActor = createAsyncThunk(
   "actor/editActor",
-  async ({ id, firstName, lastName, gender, age }: Actors, thunkApi) => {
+  async (
+    { id, firstName, lastName, gender, age }: Partial<Actors>,
+    thunkApi
+  ) => {
     try {
       token = getCookie("token");
       const response = await axios.patch(
@@ -148,7 +154,7 @@ export const editActor = createAsyncThunk(
           firstName,
           lastName,
           gender,
-          age: parseInt(age),
+          age,
         },
         {
           headers: {

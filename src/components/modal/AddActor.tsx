@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelector";
 import { addActor, addActorToMovie } from "../../store/actor.slice";
 import Select, { SingleValue } from "react-select";
 import { alertError } from "../../utils/global";
-import { ActorInputs } from "../../types/inputs";
 import { Actors, Movies } from "../../store/types";
 
 export interface Props {
@@ -30,7 +29,7 @@ export default function AddActor(props: Props) {
 
   //#region - Add actor
   const onSubmit = async () => {
-    const { fName, lName, gender, age, imgUrl } = values as ActorInputs;
+    const { fName, lName, gender, age, imgUrl } = values;
     if (!selectedMovie) {
       alertError("Please select a movie");
       return;
@@ -40,7 +39,7 @@ export default function AddActor(props: Props) {
         firstName: fName,
         lastName: lName,
         gender,
-        age: parseInt(age),
+        age,
         imgUrl,
       })
     );
@@ -50,7 +49,7 @@ export default function AddActor(props: Props) {
       const actorDetailsId: string = obj.data?.data?.id;
       await dispatch(
         addActorToMovie({
-          movieId: selectedMovie,
+          id: selectedMovie,
           actorDetailsId,
         })
       );

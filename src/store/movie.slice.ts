@@ -81,7 +81,7 @@ export const getMovieById = createAsyncThunk(
 export const addMovie = createAsyncThunk(
   "movie/addMovie",
   async (
-    { title, description, imgUrl, cost, yearRelease }: Movies,
+    { title, description, imgUrl, cost, yearRelease }: Partial<Movies>,
     thunkApi
   ) => {
     try {
@@ -143,14 +143,14 @@ export const deleteMovie = createAsyncThunk(
 /* #region  - Edit movie */
 export const editMovie = createAsyncThunk(
   "movie/editMovie",
-  async ({ id, imgUrl, cost }: Movies, thunkApi) => {
+  async ({ id, imgUrl, cost }: Partial<Movies>, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.patch(
         `${server.api}/movies/${id}`,
         {
           imgUrl,
-          cost: parseInt(cost),
+          cost,
         },
         {
           headers: {

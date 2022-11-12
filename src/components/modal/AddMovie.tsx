@@ -16,7 +16,6 @@ export default function AddMovie(props: any) {
   /* #region  - SUBMIT */
   const onSubmit = async () => {
     const { title, description, imgUrl, cost, yearRelease } = values as Movies;
-    const revenue: number = parseInt(cost);
     const date: Date = new Date(yearRelease);
 
     const res = await dispatch(
@@ -24,7 +23,7 @@ export default function AddMovie(props: any) {
         title,
         description,
         imgUrl,
-        cost: revenue,
+        cost,
         yearRelease: date.toISOString(),
       })
     );

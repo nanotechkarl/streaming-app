@@ -105,7 +105,7 @@ export default function Control() {
   const updateMovie = async (file: any) => {
     const savedFile = await dispatch(
       editMovie({
-        movieId: file.movieId,
+        id: file.movieId,
         imgUrl: file.imgUrl,
         cost: file.cost,
       })
@@ -136,7 +136,7 @@ export default function Control() {
   const updateActor = async (actor: any) => {
     const saveActor = await dispatch(
       editActor({
-        actorId: actor.actorId,
+        id: actor.actorId,
         firstName: actor.firstName,
         lastName: actor.lastName,
         gender: actor.gender,

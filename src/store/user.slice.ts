@@ -136,7 +136,10 @@ export const getUserById = createAsyncThunk(
 /* #region - Edit/Delete */
 export const editUser = createAsyncThunk(
   "user/editUser",
-  async ({ userId, firstName, lastName, permissions }: Users, thunkApi) => {
+  async (
+    { userId, firstName, lastName, permissions }: Partial<Users>,
+    thunkApi
+  ) => {
     try {
       token = getCookie("token");
       const response = await axios.patch(
