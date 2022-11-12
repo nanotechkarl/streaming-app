@@ -46,12 +46,14 @@ export const addMovieReview = createAsyncThunk(
       rating,
       datePosted,
       name,
+      movieTitle,
     }: {
       movieId: string;
       message?: string;
       rating?: number;
       datePosted?: Date;
       name?: string;
+      movieTitle?: string;
     },
     thunkApi
   ) => {
@@ -65,6 +67,7 @@ export const addMovieReview = createAsyncThunk(
           datePosted,
           rating,
           name,
+          movieTitle,
         },
         {
           headers: {

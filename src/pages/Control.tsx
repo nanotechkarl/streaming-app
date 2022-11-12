@@ -359,7 +359,7 @@ export default function Control() {
         </Col>
       </Row>
       <Row>
-        <h3>USERS</h3>
+        <h3 className="mt-5">USERS</h3>
         <Table
           header={[
             "EMAIL",
@@ -382,7 +382,7 @@ export default function Control() {
           show={editUserState}
           user={editedUser}
         />
-        <h3>PENDING REVIEWS</h3>
+        <h3 className="mt-5">PENDING REVIEWS</h3>
         <Table
           header={["Name", "User", "Movie", "Rating", "Message", "Approval"]}
           keys={["name", "userId", "movieId", "rating", "message", "approved"]}

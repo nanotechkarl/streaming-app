@@ -70,7 +70,7 @@ const Table = (props: any) => {
       return (
         <td key={index}>
           <Link to={`/reviews/${row[key]}`} className="link">
-            {row[key]}
+            {row["movieTitle"]}
           </Link>
         </td>
       );
@@ -81,7 +81,7 @@ const Table = (props: any) => {
         </td>
       );
     } else if (key === "yearRelease") {
-      return <td key={index}>{row[key]}</td>;
+      return <td key={index}>{row[key].split("T")[0]}</td>;
     } else {
       return <td key={index}>{row[key]}</td>;
     }

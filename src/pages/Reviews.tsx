@@ -93,6 +93,7 @@ export default function Reviews() {
           movieId: params.id,
           datePosted: new Date(),
           name: `${current.name}`,
+          movieTitle: selected.title,
         })
       );
 
