@@ -83,7 +83,7 @@ export default function EditActor(props: Edit) {
                 onInput={handleChange}
               />
               {errors.fName ? (
-                <p className="input-error">{errors.fName}</p>
+                <p className="input-error err-name">{errors.fName}</p>
               ) : (
                 <p>&nbsp;</p>
               )}
@@ -99,7 +99,7 @@ export default function EditActor(props: Edit) {
                 onInput={handleChange}
               />
               {errors.lName ? (
-                <p className="input-error">{errors.lName}</p>
+                <p className="input-error err-name">{errors.lName}</p>
               ) : (
                 <p>&nbsp;</p>
               )}
@@ -115,7 +115,7 @@ export default function EditActor(props: Edit) {
                 onInput={handleChange}
               />
               {errors.gender ? (
-                <p className="input-error">{errors.gender}</p>
+                <p className="input-error err-name">{errors.gender}</p>
               ) : (
                 <p>&nbsp;</p>
               )}
@@ -131,7 +131,7 @@ export default function EditActor(props: Edit) {
                 onInput={handleChange}
               />
               {errors.age ? (
-                <p className="input-error">{errors.age}</p>
+                <p className="input-error err-name">{errors.age}</p>
               ) : (
                 <p>&nbsp;</p>
               )}

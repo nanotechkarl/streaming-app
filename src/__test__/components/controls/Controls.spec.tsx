@@ -125,9 +125,6 @@ describe("<Controls/>", () => {
       renderApp();
 
       expect(await screen.findByText("appleReview")).not.toBeNull();
-      expect(
-        await screen.findAllByText("6369d10ef9965ee9edc6c501")
-      ).not.toBeNull();
       expect(await screen.findByText("review1 review")).not.toBeNull();
       expect(
         await screen.findAllByText("6369d188f9965ee9edc6c502")

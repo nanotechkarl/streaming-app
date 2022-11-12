@@ -57,7 +57,7 @@ const useForm = ({
       case "cost":
       case "age":
         conditionCase(
-          value.length === 0 || isNaN(parseInt(value)),
+          value.length === 0 || !new RegExp(regex.number).test(value),
           ` Please enter valid ${name}`,
           name
         );

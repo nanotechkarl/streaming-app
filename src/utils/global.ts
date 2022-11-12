@@ -20,6 +20,7 @@ export const regex = {
   email:
     // eslint-disable-next-line
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+  number: /^[0-9]*$/,
 };
 
 export const server = {
