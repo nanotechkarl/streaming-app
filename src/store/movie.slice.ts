@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { server, getCookie, alertError, alertSuccess } from "../utils/global";
-import { MovieState } from "./types";
+import { Movies, MovieState } from "./types";
 //#region - Token
 let token: string = getCookie("token");
 let headers = {
@@ -81,19 +81,7 @@ export const getMovieById = createAsyncThunk(
 export const addMovie = createAsyncThunk(
   "movie/addMovie",
   async (
-    {
-      title,
-      description,
-      imgUrl,
-      cost,
-      yearRelease,
-    }: {
-      title: string;
-      description: string;
-      imgUrl: string;
-      cost: number;
-      yearRelease: string;
-    },
+    { title, description, imgUrl, cost, yearRelease }: Movies,
     thunkApi
   ) => {
     try {
@@ -155,18 +143,11 @@ export const deleteMovie = createAsyncThunk(
 /* #region  - Edit movie */
 export const editMovie = createAsyncThunk(
   "movie/editMovie",
-  async (
-    {
-      movieId,
-      imgUrl,
-      cost,
-    }: { movieId: string; imgUrl: string; cost: string },
-    thunkApi
-  ) => {
+  async ({ id, imgUrl, cost }: Movies, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.patch(
-        `${server.api}/movies/${movieId}`,
+        `${server.api}/movies/${id}`,
         {
           imgUrl,
           cost: parseInt(cost),
@@ -232,14 +213,11 @@ const movie = createSlice({
     builder.addCase(getMovies.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getMovies.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.movies = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getMovies.fulfilled, (state, action) => {
+      state.loading = false;
+      state.movies = action.payload;
+      state.error = "";
+    });
     builder.addCase(getMovies.rejected, (state, action) => {
       state.loading = false;
       state.movies = [];
@@ -251,14 +229,11 @@ const movie = createSlice({
     builder.addCase(searchByMovie.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      searchByMovie.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.searched = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(searchByMovie.fulfilled, (state, action) => {
+      state.loading = false;
+      state.searched = action.payload;
+      state.error = "";
+    });
     builder.addCase(searchByMovie.rejected, (state, action) => {
       state.loading = false;
       state.searched = [];
@@ -270,14 +245,11 @@ const movie = createSlice({
     builder.addCase(getMovieById.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getMovieById.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.selected = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getMovieById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.selected = action.payload;
+      state.error = "";
+    });
     builder.addCase(getMovieById.rejected, (state, action) => {
       state.loading = false;
       state.selected = {};
@@ -289,7 +261,7 @@ const movie = createSlice({
     builder.addCase(addMovie.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(addMovie.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(addMovie.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
     });
@@ -303,13 +275,10 @@ const movie = createSlice({
     builder.addCase(deleteMovie.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      deleteMovie.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(deleteMovie.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(deleteMovie.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -320,13 +289,10 @@ const movie = createSlice({
     builder.addCase(editMovie.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      editMovie.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(editMovie.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(editMovie.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;

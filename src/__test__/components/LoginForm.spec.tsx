@@ -6,6 +6,7 @@ import user from "@testing-library/user-event";
 
 import LoginForm, { Props } from "../../components/forms/LoginForm";
 import { BrowserRouter as Router } from "react-router-dom";
+import { renderWithProviders } from "../test-utils";
 
 describe("<LoginForm/>", () => {
   function renderApp(props: Partial<Props> = {}) {
@@ -20,12 +21,10 @@ describe("<LoginForm/>", () => {
       },
     };
 
-    return render(
-      <Provider store={store}>
-        <Router>
-          <LoginForm {...defaultProps} {...props} />
-        </Router>
-      </Provider>
+    return renderWithProviders(
+      <Router>
+        <LoginForm {...defaultProps} {...props} />
+      </Router>
     );
   }
 

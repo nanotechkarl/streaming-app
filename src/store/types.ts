@@ -70,3 +70,31 @@ export type Users = {
   approved: boolean;
   permissions: string[];
 };
+
+export type Credentials = {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+};
+
+export interface Response<T> {
+  status: string;
+  data?: T | T[] | null;
+  message?: string;
+}
+
+export type Reviews = {
+  movieId: string;
+  message?: string;
+  rating?: number;
+  datePosted?: Date;
+  name?: string;
+  movieTitle?: string;
+};
+
+export type ActorConnection = {
+  id: string;
+  actorDetailsId: string;
+  movieId: string;
+};

@@ -1,8 +1,13 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  PayloadAction,
+  ActionReducerMapBuilder,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 import storage from "redux-persist/lib/storage";
 import { server, getCookie, alertError, alertSuccess } from "../utils/global";
-import { UserState } from "./types";
+import { Credentials, Response, Users, UserState } from "./types";
 
 //#region - Token
 let token: string | undefined = getCookie("token");
@@ -24,10 +29,7 @@ const initialState: UserState = {
 /* #region - Login/Register */
 export const loginUser = createAsyncThunk(
   "user/login",
-  async (
-    { email, password }: { email: string; password: string },
-    thunkApi
-  ) => {
+  async ({ email, password }: Partial<Credentials>, thunkApi) => {
     try {
       const response = await axios.post(
         `${server.api}/users/login`,
@@ -57,20 +59,7 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   "user/register",
-  async (
-    {
-      firstName,
-      lastName,
-      email,
-      password,
-    }: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      password: string;
-    },
-    thunkApi
-  ) => {
+  async ({ firstName, lastName, email, password }: Credentials, thunkApi) => {
     try {
       const response = await axios.post(
         `${server.api}/users/register`,
@@ -130,7 +119,7 @@ export const getUserObject = createAsyncThunk(
 
 export const getUserById = createAsyncThunk(
   "user/getUserById",
-  async ({ id }: { id: number }, thunkApi) => {
+  async ({ id }: Partial<Users>, thunkApi) => {
     try {
       const response = await axios.get(`${server.api}/users/property/${id}`, {
         headers,
@@ -147,20 +136,7 @@ export const getUserById = createAsyncThunk(
 /* #region - Edit/Delete */
 export const editUser = createAsyncThunk(
   "user/editUser",
-  async (
-    {
-      userId,
-      firstName,
-      lastName,
-      permissions,
-    }: {
-      userId: string;
-      firstName: string;
-      lastName: string;
-      permissions: string[];
-    },
-    thunkApi
-  ) => {
+  async ({ userId, firstName, lastName, permissions }: Users, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.patch(
@@ -205,10 +181,7 @@ export const deleteUserById = createAsyncThunk(
 /* #region  -  Approval*/
 export const approveUser = createAsyncThunk(
   "user/approveUser",
-  async (
-    { userId, approved }: { userId: string; approved: boolean },
-    thunkApi
-  ) => {
+  async ({ userId, approved }: Partial<Users>, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.patch(
@@ -243,19 +216,16 @@ const userSlice = createSlice({
       state.current = {};
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: (builder: ActionReducerMapBuilder<UserState>) => {
     /* #region - Login */
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      loginUser.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.current = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.current = action.payload;
+      state.error = "";
+    });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
       state.current = {};
@@ -281,7 +251,7 @@ const userSlice = createSlice({
     builder.addCase(getUsers.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getUsers.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(getUsers.fulfilled, (state, action) => {
       state.loading = false;
       state.accounts = action.payload;
       state.error = "";
@@ -316,13 +286,10 @@ const userSlice = createSlice({
     builder.addCase(getUserById.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getUserById.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(getUserById.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(getUserById.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -333,13 +300,10 @@ const userSlice = createSlice({
     builder.addCase(deleteUserById.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      deleteUserById.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(deleteUserById.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(deleteUserById.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -350,13 +314,10 @@ const userSlice = createSlice({
     builder.addCase(approveUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      approveUser.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(approveUser.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(approveUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;

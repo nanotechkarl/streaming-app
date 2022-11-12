@@ -1,6 +1,6 @@
 import Container from "react-bootstrap/Container";
 import { Card } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/useTypedSelector";
 import { loginUser } from "../store/user.slice";
 import { pages } from "../utils/global";
@@ -25,9 +25,7 @@ export default function Login() {
 
   return (
     <Container className="login-page">
-      <div className="logo-container">
-        <NavLink to="/">home</NavLink>
-      </div>
+      <div className="logo-container"></div>
       <Card className=" login-card p-5">
         <div className="text-center mb-3">
           <h4>LOGIN</h4>

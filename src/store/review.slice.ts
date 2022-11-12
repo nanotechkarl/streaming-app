@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { server, getCookie } from "../utils/global";
-import { ReviewState } from "./types";
+import { Reviews, ReviewState } from "./types";
 
 //#region - Token
 let token: string = getCookie("token");
@@ -40,21 +40,7 @@ export const getMovieReviews = createAsyncThunk(
 export const addMovieReview = createAsyncThunk(
   "movie/addMovieReview",
   async (
-    {
-      movieId,
-      message,
-      rating,
-      datePosted,
-      name,
-      movieTitle,
-    }: {
-      movieId: string;
-      message?: string;
-      rating?: number;
-      datePosted?: Date;
-      name?: string;
-      movieTitle?: string;
-    },
+    { movieId, message, rating, datePosted, name, movieTitle }: Reviews,
     thunkApi
   ) => {
     try {
@@ -164,14 +150,11 @@ const review = createSlice({
     builder.addCase(getMovieReviews.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getMovieReviews.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.reviews = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getMovieReviews.fulfilled, (state, action) => {
+      state.loading = false;
+      state.reviews = action.payload;
+      state.error = "";
+    });
     builder.addCase(getMovieReviews.rejected, (state, action) => {
       state.loading = false;
       state.reviews = [];
@@ -183,14 +166,11 @@ const review = createSlice({
     builder.addCase(getPendingReviews.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getPendingReviews.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.pendingReviews = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getPendingReviews.fulfilled, (state, action) => {
+      state.loading = false;
+      state.pendingReviews = action.payload;
+      state.error = "";
+    });
     builder.addCase(getPendingReviews.rejected, (state, action) => {
       state.loading = false;
       state.pendingReviews = [];
@@ -202,14 +182,11 @@ const review = createSlice({
     builder.addCase(getmyReviewMovie.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getmyReviewMovie.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.yourReview = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getmyReviewMovie.fulfilled, (state, action) => {
+      state.loading = false;
+      state.yourReview = action.payload;
+      state.error = "";
+    });
     builder.addCase(getmyReviewMovie.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -220,13 +197,10 @@ const review = createSlice({
     builder.addCase(approvePendingReview.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      approvePendingReview.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(approvePendingReview.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(approvePendingReview.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;

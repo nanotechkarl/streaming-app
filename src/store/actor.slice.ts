@@ -7,7 +7,7 @@ import {
   alertSuccess,
   alertWarning,
 } from "../utils/global";
-import { ActorState } from "./types";
+import { ActorConnection, Actors, ActorState } from "./types";
 
 //#region - Token
 let token = getCookie("token");
@@ -27,22 +27,7 @@ const initialState: ActorState = {
 /* #region  - Add Actor */
 export const addActor = createAsyncThunk(
   "actor/addActor",
-  async (
-    {
-      firstName,
-      lastName,
-      gender,
-      age,
-      imgUrl,
-    }: {
-      firstName: string;
-      lastName: string;
-      gender: string;
-      age: number;
-      imgUrl: string;
-    },
-    thunkApi
-  ) => {
+  async ({ firstName, lastName, gender, age, imgUrl }: Actors, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.post(
@@ -78,16 +63,7 @@ export const addActor = createAsyncThunk(
 /* #region  - Add Actor to movie */
 export const addActorToMovie = createAsyncThunk(
   "actor/addActorToMovie",
-  async (
-    {
-      movieId,
-      actorDetailsId,
-    }: {
-      movieId: string;
-      actorDetailsId: string;
-    },
-    thunkApi
-  ) => {
+  async ({ movieId, actorDetailsId }: ActorConnection, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.post(
@@ -163,26 +139,11 @@ export const deleteCelebrity = createAsyncThunk(
 /* #region  - Edit actor */
 export const editActor = createAsyncThunk(
   "actor/editActor",
-  async (
-    {
-      actorId,
-      firstName,
-      lastName,
-      gender,
-      age,
-    }: {
-      actorId: string;
-      firstName: string;
-      lastName: string;
-      gender: string;
-      age: string;
-    },
-    thunkApi
-  ) => {
+  async ({ id, firstName, lastName, gender, age }: Actors, thunkApi) => {
     try {
       token = getCookie("token");
       const response = await axios.patch(
-        `${server.api}/actor-details/${actorId}`,
+        `${server.api}/actor-details/${id}`,
         {
           firstName,
           lastName,
@@ -289,7 +250,7 @@ const movie = createSlice({
     builder.addCase(addActor.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(addActor.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(addActor.fulfilled, (state) => {
       state.loading = false;
       state.error = "";
     });
@@ -303,13 +264,10 @@ const movie = createSlice({
     builder.addCase(addActorToMovie.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      addActorToMovie.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(addActorToMovie.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(addActorToMovie.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -320,14 +278,11 @@ const movie = createSlice({
     builder.addCase(getAllActors.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getAllActors.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.actors = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getAllActors.fulfilled, (state, action) => {
+      state.loading = false;
+      state.actors = action.payload;
+      state.error = "";
+    });
     builder.addCase(getAllActors.rejected, (state, action) => {
       state.loading = false;
       state.actors = [];
@@ -339,14 +294,11 @@ const movie = createSlice({
     builder.addCase(getAllActorsByMovie.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getAllActorsByMovie.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.selectedActors = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getAllActorsByMovie.fulfilled, (state, action) => {
+      state.loading = false;
+      state.selectedActors = action.payload;
+      state.error = "";
+    });
     builder.addCase(getAllActorsByMovie.rejected, (state, action) => {
       state.loading = false;
       state.actors = [];
@@ -358,13 +310,10 @@ const movie = createSlice({
     builder.addCase(deleteCelebrity.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      deleteCelebrity.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(deleteCelebrity.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(deleteCelebrity.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -375,13 +324,10 @@ const movie = createSlice({
     builder.addCase(editActor.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      editActor.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = "";
-      }
-    );
+    builder.addCase(editActor.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
     builder.addCase(editActor.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -392,14 +338,11 @@ const movie = createSlice({
     builder.addCase(searchActors.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      searchActors.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.searched = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(searchActors.fulfilled, (state, action) => {
+      state.loading = false;
+      state.searched = action.payload;
+      state.error = "";
+    });
     builder.addCase(searchActors.rejected, (state, action) => {
       state.loading = false;
       state.searched = [];
@@ -411,14 +354,11 @@ const movie = createSlice({
     builder.addCase(getMoviesOfActor.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(
-      getMoviesOfActor.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.moviesOfActor = action.payload;
-        state.error = "";
-      }
-    );
+    builder.addCase(getMoviesOfActor.fulfilled, (state, action) => {
+      state.loading = false;
+      state.moviesOfActor = action.payload;
+      state.error = "";
+    });
     builder.addCase(getMoviesOfActor.rejected, (state, action) => {
       state.loading = false;
       state.moviesOfActor = [];
@@ -430,7 +370,7 @@ const movie = createSlice({
     builder.addCase(getActor.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getActor.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(getActor.fulfilled, (state, action) => {
       state.loading = false;
       state.actorSelected = action.payload;
       state.error = "";

@@ -69,6 +69,9 @@ export default function LoginForm(props: Props) {
           No account yet? &nbsp;
           <NavLink to="/register">Register</NavLink>
         </p>
+        <p>
+          <NavLink to="/">Home</NavLink>
+        </p>
       </div>
     </Form>
   );
