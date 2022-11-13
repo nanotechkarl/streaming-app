@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../hooks/useTypedSelector";
 import { deleteMovie, editMovie, getMovies } from "../store/movie.slice";
-import { approvePendingReview, getPendingReviews } from "../store/review.slice";
+import {
+  approvePendingReview,
+  deletePendingReview,
+  getPendingReviews,
+} from "../store/review.slice";
 import { deleteCelebrity, editActor, getAllActors } from "../store/actor.slice";
 import {
   approveUser,
@@ -254,6 +258,28 @@ export default function Control() {
     });
   };
 
+  const deleteReview = async (reviewId: string) => {
+    Swal.fire({
+      title: `Delete pending review?`,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Approve",
+      customClass: "swal-confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deletePendingReview(reviewId));
+        setReviewCounter((prev) => prev - 1);
+        Swal.fire({
+          icon: "success",
+          title: `review is deleted`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
   /* #endregion */
 
   //#region - RENDER
@@ -387,6 +413,7 @@ export default function Control() {
           data={pendingReviews}
           onApproval={approveReview}
           custom={{ display: "large" }}
+          onDelete={deleteReview}
         />
       </Row>
     </div>

@@ -19,7 +19,7 @@ const initialState: ReviewState = {
 
 /* #region  - Get reviews of a movie */
 export const getMovieReviews = createAsyncThunk(
-  "movie/getMovieReviews",
+  "review/getMovieReviews",
   async (id: string, thunkApi) => {
     try {
       const response = await axios.get(`${server.api}/reviews/movie/${id}`);
@@ -34,7 +34,7 @@ export const getMovieReviews = createAsyncThunk(
 
 /* #region  - Add a movie review or rating*/
 export const addMovieReview = createAsyncThunk(
-  "movie/addMovieReview",
+  "review/addMovieReview",
   async (
     { movieId, message, rating, datePosted, name, movieTitle }: Reviews,
     thunkApi
@@ -67,7 +67,7 @@ export const addMovieReview = createAsyncThunk(
 
 /* #region  - Get own review of movie */
 export const getmyReviewMovie = createAsyncThunk(
-  "movie/getmyReviewMovie",
+  "review/getmyReviewMovie",
   async (movieId: string, thunkApi) => {
     try {
       token = getCookie("token");
@@ -108,7 +108,7 @@ export const getPendingReviews = createAsyncThunk(
 
 /* #region  - Approve pending reviews */
 export const approvePendingReview = createAsyncThunk(
-  "movies/approvePendingReview",
+  "review/approvePendingReview",
   async (reviewId: string, thunkApi) => {
     try {
       token = getCookie("token");
@@ -124,6 +124,26 @@ export const approvePendingReview = createAsyncThunk(
           },
         }
       );
+      return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+/* #endregion */
+
+/* #region  - Delete pending reviews */
+export const deletePendingReview = createAsyncThunk(
+  "review/deletePendingReview",
+  async (reviewId: string, thunkApi) => {
+    try {
+      token = getCookie("token");
+      const response = await axios.delete(`${server.api}/reviews/${reviewId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
@@ -198,6 +218,20 @@ const review = createSlice({
       state.error = "";
     });
     builder.addCase(approvePendingReview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - delete pending reviews */
+    builder.addCase(deletePendingReview.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deletePendingReview.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(deletePendingReview.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

@@ -1,6 +1,7 @@
 import { getPendingReviews } from "../../store/movie.slice";
 import reducer, {
   approvePendingReview,
+  deletePendingReview,
   getMovieReviews,
   getmyReviewMovie,
 } from "../../store/review.slice";
@@ -183,6 +184,50 @@ describe("Review Slice ExtraReducers", () => {
     it("rejected", () => {
       const action = {
         type: approvePendingReview.rejected.type,
+        error: { message: "error" },
+      };
+      const state = reducer(initialState, action);
+      expect(state).toEqual({
+        loading: false,
+        reviews: [],
+        yourReview: {},
+        pendingReviews: [],
+        error: "error",
+      });
+    });
+  });
+
+  describe("deletePendingReview", () => {
+    it("pending", () => {
+      const action = { type: deletePendingReview.pending.type };
+      const state = reducer(initialState, action);
+      expect(state).toEqual({
+        loading: true,
+        reviews: [],
+        yourReview: {},
+        pendingReviews: [],
+        error: "",
+      });
+    });
+
+    it("fulfilled", () => {
+      const action = {
+        type: deletePendingReview.fulfilled.type,
+        payload: actorsMock,
+      };
+      const state = reducer(initialState, action);
+      expect(state).toEqual({
+        loading: false,
+        reviews: [],
+        yourReview: {},
+        pendingReviews: [],
+        error: "",
+      });
+    });
+
+    it("rejected", () => {
+      const action = {
+        type: deletePendingReview.rejected.type,
         error: { message: "error" },
       };
       const state = reducer(initialState, action);

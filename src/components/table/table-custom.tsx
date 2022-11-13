@@ -29,7 +29,7 @@ export const customDisable = (row: any, props: any) => {
 
 export const customButtons = (row: string, index: number, props: any) => {
   return (
-    props.onEdit && (
+    (props.onEdit || props.onDelete) && (
       <td key={`edit-${index}`}>
         {props.onEdit && (
           <button

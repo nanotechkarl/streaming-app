@@ -13,7 +13,7 @@ const Table = (props: any) => {
             <th key={index}>{key}</th>
           </React.Fragment>
         ))}
-        {props.onEdit && <th></th>}
+        {(props.onEdit || props.onDelete) && <th></th>}
       </>
     );
   };
