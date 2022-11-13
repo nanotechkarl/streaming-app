@@ -1,4 +1,4 @@
-# Streaming app (Frontend POC)
+# Movie-Review (Frontend POC)
 
 # Backend link: https://github.com/nanotechkarl/streaming-service
 
