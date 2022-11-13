@@ -27,9 +27,5 @@ module.exports = {
   transform: {
     ".+\\.(css|scss|png|jpg|svg)$": "jest-transform-stub",
   },
-  collectCoverageFrom: [
-    "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/**/*.slice.ts",
-  ],
+  collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
 };

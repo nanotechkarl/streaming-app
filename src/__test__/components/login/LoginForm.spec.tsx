@@ -1,20 +1,13 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
+import { screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
 
-import LoginForm, { Props } from "../../components/forms/LoginForm";
+import LoginForm, { Props } from "../../../components/forms/LoginForm";
 import { BrowserRouter as Router } from "react-router-dom";
-import { renderWithProviders } from "../test-utils";
+import { renderWithProviders } from "../../test-utils";
 
 describe("<LoginForm/>", () => {
   function renderApp(props: Partial<Props> = {}) {
-    const initialState = {};
-    const mockStore = configureStore();
-    let store;
-    store = mockStore(initialState);
-
     const defaultProps: Props = {
       onSubmit() {
         return;

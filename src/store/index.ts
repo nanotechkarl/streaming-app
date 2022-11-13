@@ -23,7 +23,7 @@ const reducer = combineReducers({
   review: reviewSlice,
 });
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+export const persistedReducer = persistReducer(persistConfig, reducer);
 
 const store = configureStore({
   reducer: persistedReducer,
@@ -33,16 +33,7 @@ const store = configureStore({
     }),
 });
 
-//for Testing
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
-  return configureStore({
-    reducer: persistedReducer,
-    preloadedState,
-  });
-}
-
 export type RootState = ReturnType<typeof store.getState>;
-export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

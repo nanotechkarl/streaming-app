@@ -1,14 +1,10 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { server, getCookie } from "../utils/global";
 import { Reviews, ReviewState } from "./types";
 
 //#region - Token
 let token: string = getCookie("token");
-let headers = {
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${token}`,
-};
 //#endregion
 
 /* #region  - Initial state */

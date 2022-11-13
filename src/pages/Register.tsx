@@ -13,7 +13,7 @@ export default function Register() {
   //#endregion
 
   //#region - REGISTER
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async () => {
     const { fName, lName, email, password, cPassword } = values as any;
 
     if (cPassword !== password) {

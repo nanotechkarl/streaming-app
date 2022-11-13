@@ -21,6 +21,7 @@ const initialState: ActorState = {
   actorSelected: {},
   searched: [],
   error: "",
+  selectedActors: [],
 };
 /* #endregion */
 

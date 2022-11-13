@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 
 import { BrowserRouter as Router } from "react-router-dom";
-import { Error } from "../../pages";
+import { Error } from "../../../pages";
 
 describe("<Error/>", () => {
   function renderApp() {

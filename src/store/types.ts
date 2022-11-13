@@ -24,12 +24,12 @@ export interface MovieState {
 
 export interface ActorState {
   loading: boolean;
-  selectedActors?: [];
+  selectedActors: [];
   actors: [];
   moviesOfActor: [];
   actorSelected: {};
-  searched: [];
-  error: string | undefined;
+  searched?: [];
+  error?: string | undefined;
 }
 
 export interface ReviewState {
