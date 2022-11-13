@@ -7,14 +7,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Register } from "../../../pages";
 import { renderWithProviders } from "../../test-utils";
 
-// jest.mock("../../store/user.slice", () => {
-//   return {
-//     async registerUser({ firstName, lastName, email, password }: Credentials) {
-//       return [];
-//     },
-//   };
-// });
-
 describe("<Register/>", () => {
   function renderApp() {
     return renderWithProviders(

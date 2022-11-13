@@ -29,7 +29,7 @@ export interface ActorState {
   moviesOfActor: [];
   actorSelected: {};
   searched?: [];
-  error?: string | undefined;
+  error?: string;
 }
 
 export interface ReviewState {

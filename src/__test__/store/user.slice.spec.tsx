@@ -8,11 +8,7 @@ import reducer, {
   registerUser,
 } from "../../store/user.slice";
 import { UserState } from "../../store/types";
-import {
-  actorsMock,
-  currentUserMock,
-  userMock,
-} from "../components/mockValues";
+import { currentUserMock, userMock } from "../components/mockValues";
 
 describe("User Slice ExtraReducers", () => {
   const initialState: UserState = {

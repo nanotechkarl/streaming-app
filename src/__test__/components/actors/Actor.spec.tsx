@@ -13,17 +13,6 @@ import {
   moviesOfActorMock,
   actorSelectedMock,
 } from "../mockValues";
-import store from "../../../store";
-import { addActor } from "../../../store/actor.slice";
-import { useAppSelector } from "../../../hooks/useTypedSelector";
-
-// jest.mock("../../../store/actor.slice", () => {
-//   return {
-//     addActor({ firstName, lastName, gender, age, imgUrl }: any) {
-//       return {};
-//     },
-//   };
-// });
 
 describe("<Actor/>", () => {
   afterEach(cleanup);
@@ -50,7 +39,6 @@ describe("<Actor/>", () => {
 
   beforeEach(() => {
     renderApp();
-    // useAppSelector.mockImplementation()
   });
 
   it("Display Actor info", async () => {
@@ -66,17 +54,5 @@ describe("<Actor/>", () => {
   it("Should display movies of actor and their link", () => {
     const count = screen.getAllByText("Check Reviews");
     expect(count.length === moviesOfActorMock.length).toBeTruthy();
-  });
-
-  it("Should dispatch", () => {
-    // store.dispatch(
-    //   addActor({
-    //     firstName: "hello",
-    //     lastName: "hi",
-    //     gender: "male",
-    //     age: 2,
-    //     imgUrl: "string",
-    //   })
-    // );
   });
 });

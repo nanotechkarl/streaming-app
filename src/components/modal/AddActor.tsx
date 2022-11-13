@@ -169,6 +169,7 @@ export default function AddActor(props: Props) {
                   <Form.Group controlId="formBasicFirstName">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control
+                      data-testid="fName-addActor"
                       type="text"
                       name="fName"
                       placeholder="Enter first name"
@@ -179,6 +180,7 @@ export default function AddActor(props: Props) {
                   <Form.Group controlId="formBasicLastName">
                     <Form.Label>Last Name</Form.Label>
                     <Form.Control
+                      data-testid="lName-addActor"
                       type="text"
                       name="lName"
                       placeholder="Enter Last name"
@@ -189,6 +191,7 @@ export default function AddActor(props: Props) {
                   <Form.Group controlId="formBasicLastName">
                     <Form.Label>gender</Form.Label>
                     <Form.Control
+                      data-testid="gender-addActor"
                       type="text"
                       name="gender"
                       placeholder="Enter gender"
@@ -199,6 +202,7 @@ export default function AddActor(props: Props) {
                   <Form.Group controlId="formBasicAge">
                     <Form.Label>Age</Form.Label>
                     <Form.Control
+                      data-testid="age-addActor"
                       type="text"
                       name="age"
                       placeholder="Enter age"
@@ -209,6 +213,7 @@ export default function AddActor(props: Props) {
                   <Form.Group controlId="formBasicAge">
                     <Form.Label>Image URL</Form.Label>
                     <Form.Control
+                      data-testid="imgUrl-addActor"
                       type="text"
                       name="imgUrl"
                       placeholder="Enter image URL"
@@ -223,7 +228,11 @@ export default function AddActor(props: Props) {
                   >
                     Close
                   </Button>
-                  <Button variant="info" type="submit">
+                  <Button
+                    variant="info"
+                    type="submit"
+                    data-testid="submit-addActor"
+                  >
                     Add actor
                   </Button>
                 </Col>
