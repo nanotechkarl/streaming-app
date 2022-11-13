@@ -36,6 +36,7 @@ export default function Reviews() {
   const [edit, setEdit] = useState(false);
   const [comment, setComment] = useState("");
   const [submitCounter, setSubmitCounter] = useState(0);
+  const [submit, setSubmit] = useState(false);
   /* #endregion */
 
   /* #region  - EFFECTS */
@@ -70,7 +71,7 @@ export default function Reviews() {
 
   const refetchReview = async () => {
     const { message }: { message: string } = values as any;
-    if (message) {
+    if (message && submit) {
       setComment(message);
     }
     if (params?.id) {
@@ -100,6 +101,7 @@ export default function Reviews() {
       if (res) {
         setEdit(false);
         setComment(message);
+        setSubmit(true);
       }
     }
 
