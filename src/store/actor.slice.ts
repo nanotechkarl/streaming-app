@@ -34,13 +34,14 @@ export const addActor = createAsyncThunk(
   ) => {
     try {
       token = getCookie("token");
+      const ageInt = parseInt(`${age}`);
       const response = await axios.post(
         `${server.api}/actor-details`,
         {
           firstName,
           lastName,
           gender,
-          age,
+          age: ageInt,
           imgUrl,
         },
         {
@@ -149,13 +150,14 @@ export const editActor = createAsyncThunk(
   ) => {
     try {
       token = getCookie("token");
+      const ageInt = parseInt(`${age}`);
       const response = await axios.patch(
         `${server.api}/actor-details/${id}`,
         {
           firstName,
           lastName,
           gender,
-          age,
+          age: ageInt,
         },
         {
           headers: {

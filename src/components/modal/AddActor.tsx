@@ -49,12 +49,13 @@ export default function AddActor(props: Props) {
       const actorDetailsId: string = obj.data?.data?.id;
       await dispatch(
         addActorToMovie({
-          id: selectedMovie,
+          movieId: selectedMovie,
           actorDetailsId,
         })
       );
       setCounter((prev: number) => prev + 1);
       props.add(counter);
+      setShowActor(false);
     }
   };
 

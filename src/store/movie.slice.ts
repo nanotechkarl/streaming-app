@@ -83,14 +83,14 @@ export const addMovie = createAsyncThunk(
   ) => {
     try {
       token = getCookie("token");
-
+      const revenue = parseInt(`${cost}`);
       const response = await axios.post(
         `${server.api}/movies`,
         {
           title,
           description,
           imgUrl,
-          cost,
+          cost: revenue,
           yearRelease,
         },
         {
@@ -143,11 +143,12 @@ export const editMovie = createAsyncThunk(
   async ({ id, imgUrl, cost }: Partial<Movies>, thunkApi) => {
     try {
       token = getCookie("token");
+      const revenue = parseInt(`${cost}`);
       const response = await axios.patch(
         `${server.api}/movies/${id}`,
         {
           imgUrl,
-          cost,
+          cost: revenue,
         },
         {
           headers: {
