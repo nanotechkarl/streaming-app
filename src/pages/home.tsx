@@ -59,7 +59,7 @@ export default function Home() {
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 4,
+      items: 5,
       slidesToSlide: 3,
     },
     tablet: {
