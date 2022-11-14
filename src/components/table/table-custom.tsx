@@ -27,13 +27,24 @@ export const customDisable = (row: any, props: any) => {
   return "table-options";
 };
 
+export const customDisableEdit = (row: any, props: any) => {
+  if (props.custom?.disableDelete?.root) {
+    return row?.permissions?.includes("root") ||
+      props.custom?.disableDelete?.user?.id === row?.id
+      ? "table-options disabled"
+      : "table-options";
+  }
+
+  return "table-options";
+};
+
 export const customButtons = (row: string, index: number, props: any) => {
   return (
     (props.onEdit || props.onDelete) && (
       <td key={`edit-${index}`}>
         {props.onEdit && (
           <button
-            className="table-options"
+            className={customDisableEdit(row, props)}
             onClick={() =>
               props.onEdit(props.functionKey ? row[props.functionKey] : row)
             }
