@@ -29,7 +29,8 @@ export const customDisable = (row: any, props: any) => {
 
 export const customDisableEdit = (row: any, props: any) => {
   if (props.custom?.disableDelete?.root) {
-    return row?.permissions?.includes("root")
+    return row?.permissions?.includes("root") ||
+      props.custom?.disableDelete?.user?.id === row?.id
       ? "table-options disabled"
       : "table-options";
   }
