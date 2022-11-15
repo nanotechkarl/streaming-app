@@ -77,7 +77,7 @@ export default function Control() {
 
   useEffect(() => {
     fetchPendingReviews();
-  }, [reviewCounter]); //eslint-disable-line
+  }, [reviewCounter, usersCounter]); //eslint-disable-line
 
   const fetchMovies = async () => {
     await dispatch(getMovies());

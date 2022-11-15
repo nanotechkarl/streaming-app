@@ -32,7 +32,7 @@ export default function Register() {
 
     if (register.payload) {
       navigate(pages.registerSuccess);
-      alertSuccess("Success. Wait for approval");
+      alertSuccess("Successfully Registered");
     }
   };
   //#endregion
