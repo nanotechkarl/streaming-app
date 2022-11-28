@@ -18,10 +18,12 @@ const initialState: MovieState = {
   error: "",
   yourReview: {},
   pendingReviews: [],
+  latest: [],
+  paginationSettings: {},
 };
 /* #endregion */
 
-/* #region - Get all movies latest*/
+/* #region - Get all movies*/
 export const getMovies = createAsyncThunk(
   "movie/getMovies",
   async (arg, thunkApi) => {
@@ -34,6 +36,30 @@ export const getMovies = createAsyncThunk(
       });
 
       return response.data.data;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+/* #endregion */
+
+/* #region - Get paginated movies*/
+export const getMoviesPaginated = createAsyncThunk(
+  "movie/getMoviesPaginated",
+  async ({ page, limit }: { page: number; limit: number }, thunkApi) => {
+    try {
+      token = getCookie("token");
+      const response = await axios.get(
+        `${server.api}/movies/page/${page}/limit/${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
     }
@@ -207,7 +233,7 @@ const movie = createSlice({
     },
   },
   extraReducers: (builder) => {
-    /* #region - Get movies */
+    /* #region - Get all movies */
     builder.addCase(getMovies.pending, (state) => {
       state.loading = true;
     });
@@ -219,6 +245,25 @@ const movie = createSlice({
     builder.addCase(getMovies.rejected, (state, action) => {
       state.loading = false;
       state.movies = [];
+      state.error = action.error.message;
+    });
+    /* #endregion */
+
+    /* #region - Get all movies */
+    builder.addCase(getMoviesPaginated.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getMoviesPaginated.fulfilled, (state, action) => {
+      console.log("action :", action);
+      state.loading = false;
+      state.latest = action.payload.data;
+      state.paginationSettings = action.payload.settings;
+      state.error = "";
+    });
+    builder.addCase(getMoviesPaginated.rejected, (state, action) => {
+      state.loading = false;
+      state.latest = [];
+      state.paginationSettings = {};
       state.error = action.error.message;
     });
     /* #endregion */

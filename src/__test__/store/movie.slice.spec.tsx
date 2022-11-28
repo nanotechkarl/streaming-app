@@ -24,6 +24,8 @@ describe("Movie Slice ExtraReducers", () => {
     error: "",
     yourReview: {},
     pendingReviews: [],
+    paginationSettings: {},
+    latest: [],
   };
 
   describe("getMovies", () => {

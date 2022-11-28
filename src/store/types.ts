@@ -20,6 +20,8 @@ export interface MovieState {
   yourReview?: {};
   pendingReviews?: [];
   error: string | undefined;
+  latest?: [];
+  paginationSettings?: {};
 }
 
 export interface ActorState {
