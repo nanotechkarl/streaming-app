@@ -8,7 +8,6 @@ import {
   searchActor,
   searchMovie,
   searchByMovie,
-  getMovies,
   getMoviesPaginated,
 } from "../store/movie.slice";
 import {
@@ -18,8 +17,7 @@ import {
 } from "../store/actor.slice";
 import MovieList from "../components/home/MovieList";
 import SearchResult from "../components/home/SearchResult";
-import { Button } from "react-bootstrap";
-
+import ReactPaginate from "react-paginate";
 export default function Home() {
   //#region - HOOKS
   const dispatch = useAppDispatch();
@@ -33,7 +31,6 @@ export default function Home() {
     useAppSelector((state) => state.actor);
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
-  const [pageCount, setPageCount] = useState(1);
   useDebounce(() => handleSearch(search), 1000, [count]);
   const limitPerPage = 5;
   //#endregion
@@ -41,12 +38,9 @@ export default function Home() {
   //#region - EFFECT
   useEffect(() => {
     fetchData();
-  }, [pageCount]); //eslint-disable-line
+  }, []); //eslint-disable-line
 
   const fetchData = async () => {
-    await dispatch(
-      getMoviesPaginated({ page: pageCount, limit: limitPerPage })
-    );
     await dispatch(getAllActors());
   };
 
@@ -60,23 +54,10 @@ export default function Home() {
   //#endregion
 
   /* #region  - UTILS */
-  const nextPage = () => {
-    setPageCount((prev) => prev + 1);
-  };
-
-  const prevPage = () => {
-    setPageCount((prev) => prev - 1);
-  };
-
-  const minPageRange = () => {
-    if (pageCount === 1) return true;
-    return false;
-  };
-
-  const maxPageRange = () => {
-    const pageLimit = paginationSettings.count / limitPerPage;
-    if (Math.ceil(pageLimit) === pageCount) return true;
-    return false;
+  const handlePageClick = async (data: any) => {
+    await dispatch(
+      getMoviesPaginated({ page: data.selected + 1, limit: limitPerPage })
+    );
   };
 
   const responsive = {
@@ -181,21 +162,25 @@ export default function Home() {
         <h3 className="mb-4 mt-5"> LATEST MOVIES</h3>
         <MovieList responsive={responsive} movies={latest} />
         <div className="mt-3">
-          <Button
-            className="mr-2"
-            variant="secondary"
-            onClick={prevPage}
-            disabled={minPageRange()}
-          >
-            prev
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={nextPage}
-            disabled={maxPageRange()}
-          >
-            next
-          </Button>
+          <ReactPaginate
+            previousLabel={"previous"}
+            nextLabel={"next"}
+            breakLabel={"..."}
+            pageCount={Math.ceil(paginationSettings.count / limitPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            breakClassName={"page-item"}
+            breakLinkClassName={"page-link"}
+            activeClassName={"active"}
+          />
         </div>
       </div>
       <div className="mt-5">{renderSearch()}</div>
