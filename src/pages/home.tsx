@@ -26,6 +26,8 @@ export default function Home() {
     searchBy,
     searched,
     paginationSettings,
+    movieSearchSettings,
+    searchedWord,
   }: { [key: string]: any } = useAppSelector((state) => state.movie);
   const { actors, searched: searchedActors }: { [key: string]: any } =
     useAppSelector((state) => state.actor);
@@ -42,11 +44,26 @@ export default function Home() {
 
   const fetchData = async () => {
     await dispatch(getAllActors());
+    if (searchedWord && searchBy === "movie") {
+      dispatch(
+        searchByMovie({
+          title: searchedWord,
+          page: 1,
+          limit: limitPerPage,
+        })
+      );
+    }
   };
 
   const handleSearch = (text: any) => {
     if (text && searchBy === "movie") {
-      dispatch(searchByMovie(text));
+      dispatch(
+        searchByMovie({
+          title: text,
+          page: 1,
+          limit: limitPerPage,
+        })
+      );
     } else if (text && searchBy === "actor") {
       dispatch(searchActors(text));
     }
@@ -54,6 +71,18 @@ export default function Home() {
   //#endregion
 
   /* #region  - UTILS */
+  const handleMoviePageSearch = async (data: any) => {
+    if (searchedWord && searchBy === "movie") {
+      dispatch(
+        searchByMovie({
+          title: searchedWord,
+          page: data.selected + 1,
+          limit: limitPerPage,
+        })
+      );
+    }
+  };
+
   const handlePageClick = async (data: any) => {
     await dispatch(
       getMoviesPaginated({ page: data.selected + 1, limit: limitPerPage })
@@ -167,8 +196,8 @@ export default function Home() {
             nextLabel={"next"}
             breakLabel={"..."}
             pageCount={Math.ceil(paginationSettings.count / limitPerPage)}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={2}
+            marginPagesDisplayed={5}
+            pageRangeDisplayed={5}
             onPageChange={handlePageClick}
             containerClassName={"pagination"}
             pageClassName={"page-item"}
@@ -190,6 +219,29 @@ export default function Home() {
         searchedActors={searchedActors?.length ? searchedActors : actors}
         responsive={responsive}
       />
+      <div className="mt-3">
+        {searchBy === "movie" && searched.length !== 0 && (
+          <ReactPaginate
+            previousLabel={"previous"}
+            nextLabel={"next"}
+            breakLabel={"..."}
+            pageCount={Math.ceil(movieSearchSettings.count / limitPerPage)}
+            marginPagesDisplayed={5}
+            pageRangeDisplayed={5}
+            onPageChange={handleMoviePageSearch}
+            containerClassName={"pagination"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            breakClassName={"page-item"}
+            breakLinkClassName={"page-link"}
+            activeClassName={"active"}
+          />
+        )}
+      </div>
     </div>
   );
 }

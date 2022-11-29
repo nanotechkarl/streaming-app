@@ -20,6 +20,8 @@ const initialState: MovieState = {
   pendingReviews: [],
   latest: [],
   paginationSettings: {},
+  movieSearchSettings: {},
+  searchedWord: "",
 };
 /* #endregion */
 
@@ -71,13 +73,17 @@ export const getMoviesPaginated = createAsyncThunk(
 /* #region - Search a movie */
 export const searchByMovie = createAsyncThunk(
   "movie/searchMovies",
-  async (title: string, thunkApi) => {
+  async (
+    { title, page, limit }: { title: string; page: number; limit: number },
+    thunkApi
+  ) => {
     try {
       const response = await axios.get(
-        `${server.api}/movies/search/movie/${title}`
+        `${server.api}/movies/search/movie/${title}/page/${page}/limit/${limit}`
       );
 
-      return response.data.data;
+      response.data.title = title;
+      return response.data;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
     }
@@ -274,12 +280,15 @@ const movie = createSlice({
     });
     builder.addCase(searchByMovie.fulfilled, (state, action) => {
       state.loading = false;
-      state.searched = action.payload;
+      state.searched = action.payload.data;
+      state.searchedWord = action.payload.title;
+      state.movieSearchSettings = action.payload.settings;
       state.error = "";
     });
     builder.addCase(searchByMovie.rejected, (state, action) => {
       state.loading = false;
       state.searched = [];
+      state.movieSearchSettings = {};
       state.error = action.error.message;
     });
     /* #endregion */

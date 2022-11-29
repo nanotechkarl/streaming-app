@@ -22,6 +22,8 @@ export interface MovieState {
   error: string | undefined;
   latest?: [];
   paginationSettings?: {};
+  movieSearchSettings?: {};
+  searchedWord?: "";
 }
 
 export interface ActorState {
